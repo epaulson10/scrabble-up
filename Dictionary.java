@@ -5,10 +5,13 @@ import java.io.*;
 
 /** Dictionary
  * 
- * Contains  a list of words that are considered legal. Contains the
- * words dictated by Tournament Word List (TWL).
+ * Contains  a list of words that are considered legal.
+ * The file "word-list.txt" contains the Tournament Word List (TWL) 
+ * with one word per line. Provides a method to check if a certain
+ * word is within the dictionary or not.
  */
-public class Dictionary {
+public class Dictionary 
+{
 
 	public static HashSet<String> wordList;
 
@@ -19,8 +22,7 @@ public class Dictionary {
 	 */
 	public Dictionary() throws IOException 
 	{
-		// bufferReader for the file containing the TWL reading one word per
-		// line and storing it into the hashSet
+		// read one word per line and store it into the hashSet
 		BufferedReader in = new BufferedReader(new FileReader("word_list.txt"));
 		String word = in.readLine();
 		while(word != null)
@@ -34,7 +36,6 @@ public class Dictionary {
 	 * checks to see if the word submitted is inside of the wordList.
 	 * @param word - A String that is equal to the word to be checked.
 	 * @return true of word is contained in the wordList. False otherwise.
-	 * public static boolean isValidWord(String word) 
 	 */
 	public static boolean isValidWord (String word) 
 	{
