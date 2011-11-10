@@ -33,7 +33,8 @@ public class ScrabbleMoveAction extends GameMoveAction {
 		return null;
 	}
 	
-    
+	/*added*/
+    /***********************************************************/
     /**
      * tells whether this action is a "play" move
      */
@@ -41,8 +42,7 @@ public class ScrabbleMoveAction extends GameMoveAction {
     {
     	return true;
     }
-	/*added*/
-    /***********************************************************/
+
     /**
      * tells whether this action is a "discard" move
      */

@@ -65,33 +65,49 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	{
 		/*added*/
 		/***********************************************************************/
+		// typecast the GameMoveAction to a ScrabbleMoveAction
 		ScrabbleMoveAction mv = (ScrabbleMoveAction)move;
+		// typecast the GamePlayer to a ScrabblePlayer
 		ScrabblePlayer plr = (ScrabblePlayer)thePlayer;
+		
 		// get the 0/1 id of our player
-		int playerId = indexOf(thePlayer);
+		int playerID = indexOf(thePlayer);
 
 		// if the player is not a player for our game, indicate an illegal
 		// move
-		if (playerId < 0) return false;
+		if (playerID < 0 || playerID > 1) return false;
 
+		// if the move is a discard move
 		if(mv.isDiscard())
 		{
+			// Create a new Vector to store the player's hand
 			Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
 			hand = plr.getHand();
+			
+			// for each tile to remove, remove it from the player's hand
 			for(ScrabbleTile tile : mv.getTiles())
 			{
 				hand.remove(tile);
 			}
+			// create a random number generator to get a random tile
+			// and an index to store where that 
 			Random ran = new Random();
 			int index;
 
+			// for each tile that was removed
 			for(int i = 0; i < mv.getTiles().size(); i++)
 			{
+				// choose an int from 0 to the size of bag
 				index = ran.nextInt(bag.size());
+				
+				// add a new random tile to the player's hand
+				// and remove that tile from the bag
 				hand.add(bag.elementAt(index));
 				bag.remove(index);
 			}
+			// update the player's hand
 			plr.updateHand(hand);
+			// the player cannot discard again this turn
 			plr.noDiscard();
 		}
 

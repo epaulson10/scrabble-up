@@ -11,6 +11,7 @@ import java.util.*;
 class ScrabbleDiscardAction extends ScrabbleMoveAction 
 {
 	protected Vector<ScrabbleTile> tilesDiscarded;
+	// variable to check
 	protected boolean discardable;
 
 
@@ -30,8 +31,23 @@ class ScrabbleDiscardAction extends ScrabbleMoveAction
 		this.discardable = plyr.getDiscard();
 		/****************************/
 	}
+
 	/*added*/
 	/****************************/
+	
+	/**
+	 * Get the tiles to be discarded
+	 * @return Vector of tiles to be discarded
+	 */
+	public Vector<ScrabbleTile> getTiles()
+	{
+		return tilesDiscarded;
+	}
+	
+	/**
+	 * Check if the deck is discardable
+	 * @return Boolean if discardable
+	 */
 	public boolean isDiscard() {
 		//maybe source.discardable
         return discardable;
