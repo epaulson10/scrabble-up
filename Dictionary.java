@@ -17,7 +17,7 @@ public class Dictionary
 
 	/** 
 	 * Initializes the hashSet wordList to include all of the words
-	 * within the TWL. Takes approximately 326 milliseconds.
+	 * within the TWL.
 	 * @throws IOException 
 	 */
 	public Dictionary() throws IOException 
@@ -33,7 +33,7 @@ public class Dictionary
 	}
 
 	/** 
-	 * checks to see if the word submitted is inside of the wordList.
+	 * checks to see if the word submitted is within the TWL
 	 * @param word - A String that is equal to the word to be checked.
 	 * @return true of word is contained in the wordList. False otherwise.
 	 */

@@ -8,9 +8,10 @@ import java.util.*;
  * This class is also used for passing a turn, as a pass is simply a discard of
  * zero tiles.
  */
-class ScrabbleDiscardAction extends GameMoveAction 
+class ScrabbleDiscardAction extends ScrabbleMoveAction 
 {
 	protected Vector<ScrabbleTile> tilesDiscarded;
+	protected boolean discardable;
 
 
 	/** Constructor.
@@ -19,18 +20,21 @@ class ScrabbleDiscardAction extends GameMoveAction
 	 */
 	public ScrabbleDiscardAction (GamePlayer source, Vector<ScrabbleTile> initTiles) 
 	{
-		super(source);
-		for(ScrabbleTile tile : initTiles)
-		{
-			ScrabblePlayer.curHand.remove(tile);
-		}
-		Random ran = new Random();
-		int index;
-		for(int i; i < initTiles.size(); i++)
-		{
-			index = ran.nextInt(bag.size());
-			ScrabblePlayer.curHand.add(bag.elementAt(index));
-		}
+		super(source, initTiles);
+		this.tilesDiscarded = initTiles;
+		
+		
+		/*added*/
+		/****************************/
+		ScrabblePlayer plyr = (ScrabblePlayer)source;
+		this.discardable = plyr.getDiscard();
+		/****************************/
 	}
-
+	/*added*/
+	/****************************/
+	public boolean isDiscard() {
+		//maybe source.discardable
+        return discardable;
+    }
+	/****************************/
 }

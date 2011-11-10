@@ -4,11 +4,17 @@ import game.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 /**Class representing a human Scrabble player.*/
 public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener {
 	public final static int GUI_HEIGHT = 720;
 	public final static int GUI_WIDTH = 700;
+	
+	/*added*/
+	public boolean discardable = true;
+	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+
 
 	/** Returns the initial height of the GUI.
 
@@ -52,7 +58,35 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	public void stateChanged () {
 		
 	}
-
+	
+	/*added*/
+	/****************************/
+	public void noDiscard()
+	{
+		discardable = false;
+	}
+	public void yesDiscard()
+	{
+		discardable = true;
+	}
+	
+	public boolean getDiscard()
+	{
+		return discardable;
+	}
+	
+	public Vector<ScrabbleTile> getHand()
+	{
+		return hand;
+	}
+	
+	public void updateHand(Vector<ScrabbleTile> newHand)
+	{
+		hand = newHand;
+	}
+	
+	
+	/****************************/
 	public void mouseClicked (MouseEvent me) {
 		
 	}

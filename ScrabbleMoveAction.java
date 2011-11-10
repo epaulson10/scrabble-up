@@ -10,12 +10,12 @@ public class ScrabbleMoveAction extends GameMoveAction {
 	private Vector<Point> positionsPlayed;
 
 	/** Constructor.
-
-@param source  player who made this move
-@param initTiles  tiles used in this play
-@param initPositions  A vector of Point representing the positions of each tile
-                      in initTiles */
-	public ScrabbleMoveAction (GamePlayer source, Vector<ScrabbleTile> initTiles, Vector<Point> initPositions) {
+	 * @param source  player who made this move
+	 * @param initTiles  tiles used in this play
+	 * @param initPositions  A vector of Point representing the positions of each tile in initTiles 
+	 */
+	public ScrabbleMoveAction (GamePlayer source, Vector<ScrabbleTile> initTiles) 
+	{
 		super (source);
 	}
 
@@ -32,5 +32,24 @@ public class ScrabbleMoveAction extends GameMoveAction {
 	public Vector<Point> getPositions () {
 		return null;
 	}
+	
+    
+    /**
+     * tells whether this action is a "play" move
+     */
+    public boolean isPlay()
+    {
+    	return true;
+    }
+	/*added*/
+    /***********************************************************/
+    /**
+     * tells whether this action is a "discard" move
+     */
+    public boolean isDiscard()
+    {
+    	return false;
+    }
+    /***********************************************************/
 
 }
