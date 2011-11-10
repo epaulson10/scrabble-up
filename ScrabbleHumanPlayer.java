@@ -11,8 +11,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	public final static int GUI_HEIGHT = 720;
 	public final static int GUI_WIDTH = 700;
 	
-	/*added*/
-	public boolean discardable = true;
+	// Player's hand
 	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
 
 
@@ -63,30 +62,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/****************************/
 	
 	/**
-	 * Set it so the player cannot discard
-	 */
-	public void noDiscard()
-	{
-		discardable = false;
-	}
-	
-	/**
-	 * Set it so the player can discard
-	 */
-	public void yesDiscard()
-	{
-		discardable = true;
-	}
-	
-	/**
-	 * Get the current discard state
-	 */
-	public boolean getDiscard()
-	{
-		return discardable;
-	}
-	
-	/**
 	 * Get the player's hand
 	 */
 	public Vector<ScrabbleTile> getHand()
@@ -123,11 +98,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    return null;
 	}
 
-	/** Adds tiles to the player's hand.
-
-@param tilesToAdd  the tiles to add, contained in an array */
-	public void updateHand (ScrabbleTile[] tilesToAdd) {
-		
-	}
+	
 
 }

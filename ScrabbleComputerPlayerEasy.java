@@ -1,5 +1,7 @@
 package scrabble;
 
+import java.util.Vector;
+
 /** * Class representing an unskilled AI player.
  * 
  * @author Aaron Dobbe, Steven Beyer, Erik Paulson, and Andrew Meyer
@@ -15,11 +17,16 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         
     }
 
-    /** Adds tiles to the player's hand.
+	@Override
+	public Vector<ScrabbleTile> getHand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-@param tilesToAdd  the tiles to add, contained in an array */
-    public void updateHand (ScrabbleTile[] tilesToAdd) {
-        
-    }
+	@Override
+	public void updateHand(Vector<ScrabbleTile> newHand) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
