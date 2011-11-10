@@ -63,10 +63,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @return true if the move was valid, false otherwise */
 	protected boolean makeMove (GamePlayer thePlayer, GameMoveAction move) 
 	{
-		/*added*/
-		/***********************************************************************/
 		// typecast the GameMoveAction to a ScrabbleMoveAction
-		ScrabbleMoveAction mv = (ScrabbleMoveAction)move;
+		//ScrabbleMoveAction mv = (ScrabbleMoveAction)move;
 		// typecast the GamePlayer to a ScrabblePlayer
 		ScrabblePlayer plr = (ScrabblePlayer)thePlayer;
 		
@@ -78,24 +76,26 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		if (playerID < 0 || playerID > 1) return false;
 
 		// if the move is a discard move
-		if(mv.isDiscard())
+		if(move instanceof ScrabbleDiscardAction)
 		{
 			// Create a new Vector to store the player's hand
 			Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
 			hand = plr.getHand();
 			
 			// for each tile to remove, remove it from the player's hand
-			for(ScrabbleTile tile : mv.getTiles())
+			// and add it to the bag
+			for(ScrabbleTile tile : ((ScrabbleDiscardAction)move).getTiles())
 			{
 				hand.remove(tile);
+				bag.add(tile);
 			}
 			// create a random number generator to get a random tile
-			// and an index to store where that 
+			// and an index to store random num
 			Random ran = new Random();
 			int index;
 
 			// for each tile that was removed
-			for(int i = 0; i < mv.getTiles().size(); i++)
+			for(int i = 0; i < ((ScrabbleDiscardAction)move).getTiles().size(); i++)
 			{
 				// choose an int from 0 to the size of bag
 				index = ran.nextInt(bag.size());
@@ -107,11 +107,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			}
 			// update the player's hand
 			plr.updateHand(hand);
-			// the player cannot discard again this turn
-			plr.noDiscard();
 		}
 
-		else if(mv.isPlay())
+		else if(move instanceof ScrabbleMoveAction)
 		{
 
 		}
