@@ -13,12 +13,19 @@ public interface ScrabblePlayer extends GamePlayer {
 	
 	/*added*/
 	/****************************/
+	// Vector representing the player's hand of tiles
 	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+	// Is the player able to discard tiles
 	public boolean discardable = true;
+	// Set it so the player cannot discard
 	public void noDiscard();
+	// Set it so the player can discard
 	public void yesDiscard();
+	// Get the current discard state
 	public boolean getDiscard();
-	public void updateHand(Vector<ScrabbleTile> newHand);
+	// Get the player's hand
 	public Vector<ScrabbleTile> getHand();
+	// Update the hand with a newHand
+	public void updateHand(Vector<ScrabbleTile> newHand);
 	/****************************/
 }

@@ -61,25 +61,42 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	
 	/*added*/
 	/****************************/
+	
+	/**
+	 * Set it so the player cannot discard
+	 */
 	public void noDiscard()
 	{
 		discardable = false;
 	}
+	
+	/**
+	 * Set it so the player can discard
+	 */
 	public void yesDiscard()
 	{
 		discardable = true;
 	}
 	
+	/**
+	 * Get the current discard state
+	 */
 	public boolean getDiscard()
 	{
 		return discardable;
 	}
 	
+	/**
+	 * Get the player's hand
+	 */
 	public Vector<ScrabbleTile> getHand()
 	{
 		return hand;
 	}
 	
+	/**
+	 * Update the hand with a newHand
+	 */
 	public void updateHand(Vector<ScrabbleTile> newHand)
 	{
 		hand = newHand;
