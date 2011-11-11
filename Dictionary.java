@@ -33,7 +33,7 @@ public class Dictionary
 	}
 
 	/** 
-	 * checks to see if the word submitted is within the TWL
+	 * checks to see if the word submitted is in the TWL
 	 * @param word - A String that is equal to the word to be checked.
 	 * @return true of word is contained in the wordList. False otherwise.
 	 */
