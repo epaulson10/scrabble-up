@@ -37,7 +37,7 @@ public class Dictionary
 	 * @param word - A String that is equal to the word to be checked.
 	 * @return true of word is contained in the wordList. False otherwise.
 	 */
-	public static boolean isValidWord (String word) 
+	public boolean isValidWord (String word) 
 	{
 		if(wordList.contains(word)) return true;
 		else return false;

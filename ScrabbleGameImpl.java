@@ -3,6 +3,7 @@ package scrabble;
 import game.*;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 
 import ttt.TTTMoveAction;
@@ -15,10 +16,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
+	private Dictionary dictionary;
 
 	/** Constructor - initializes instance variables */
 	public ScrabbleGameImpl () {
-
+		try {
+			dictionary = new Dictionary();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** Determines if a given game player can make a move
@@ -151,19 +157,61 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 
 	private boolean checkValMove(Vector<Point> pos, 
 			Vector<ScrabbleTile> tiles) {
-		String word;
+		
+		char word[] = new char[10];
+		int count1;
+		int count2;
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			board.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
+		
 		for(int i = 0; i < board.size; i++)
 		{
 			for(int j = 0; j < board.size; j++)
 			{
-				board.getTileAt(i, j).getLetter();
+				if(board.getTileAt(i, j) != null);
+				{
+					count1 = i;
+					count2 = j;
+					int index = 0;
+					while(board.getTileAt(count1,count2) != null)
+					{
+						word[index] = board.getTileAt(count1, count2).getLetter();
+						count2++;
+						index++;
+					}
+					if(!dictionary.isValidWord(word.toString()))
+					{
+						return false;
+					}
+					resetWord(word);
+					count1 = i;
+					count2 = j;
+					index = 0;
+					while(board.getTileAt(count1++, count2) != null)
+					{
+						word[index] = board.getTileAt(count1, count2).getLetter();
+						count1++;
+						index++;
+					}
+					if(!dictionary.isValidWord(word.toString()))
+					{
+						return false;
+					}
+					return true;
+				}	
 			}
 		}
 		return false;
+	}
+
+	private void resetWord(char[] word) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < word.length; i++)
+		{
+			word[i] = 0;
+		}
 	}
 
 	/** Determines the score of a Scrabble play
