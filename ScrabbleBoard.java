@@ -14,11 +14,12 @@ public class ScrabbleBoard {
 	}
 
 	/** Returns the tile at the specified position
-@param row the row that is being looked in
-@param col the colum that is being looked in
-@return A copy of the ScrabbleTile that is in the specified row and column
-@throws If invalid row or col is out of bounds then a
-nonValidBoardSpaceException is thrown */
+	 * @param row the row that is being looked in
+	 * @param col the colum that is being looked in
+	 * @return A copy of the ScrabbleTile that is in the specified row and column
+	 * @throws If invalid row or col is out of bounds then a
+	 * nonValidBoardSpaceException is thrown 
+	 * */
 	public ScrabbleTile getTileAt (int row, int col) {
 		return tilePositions[row][col];
 	}
