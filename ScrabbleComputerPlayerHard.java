@@ -11,7 +11,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
     public ScrabbleComputerPlayerHard() {
         
     }
-
+    
     /**  * Respond to a move request by making a move. */
     protected void doRequestMove () {
         

@@ -4,6 +4,7 @@ package scrabble;
 
 Represents the Scrabble Game Board*/
 public class ScrabbleBoard {
+	public final static int size = 15;
 	private ScrabbleTile[][] tilePositions;
 	private int[][] bonusPositions;
 
@@ -19,7 +20,7 @@ public class ScrabbleBoard {
 @throws If invalid row or col is out of bounds then a
 nonValidBoardSpaceException is thrown */
 	public ScrabbleTile getTileAt (int row, int col) {
-		return null;
+		return tilePositions[row][col];
 	}
 
 	/** Returns the integer code of the bonus at the specified tile
@@ -30,6 +31,11 @@ nonValidBoardSpaceException is thrown */
 nonValidBoardSpaceException is thrown */
 	public int getBonusAt (int row, int col) {
 		return 0;
+	}
+	
+	public void putTile(int row, int col, ScrabbleTile tile)
+	{
+		tilePositions[row][col] = tile;
 	}
 
 }
