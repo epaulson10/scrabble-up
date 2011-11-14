@@ -6,8 +6,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 
-import ttt.TTTMoveAction;
-
 /**ScrabbleGameImpl
 Enforces the Scrabble game rules and sets the game state.*/
 public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
@@ -116,10 +114,27 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// vector of the tiles played
 			Vector<ScrabbleTile> tiles = mv.getTiles();
 			
+			// if number of tiles and number of positions are unequal, this
+			// was a bad move
+			if (tiles.size() != pos. size())
+			{
+			    return false;
+			}
+			
 			// check if it was a valid move
 			if(checkValMove(pos, tiles))
 			{
 				updateHand(hand, tiles, plr);
+				
+				// apply move to master board
+				for (int i = 0; i < tiles.size(); i++)
+				{
+				    Point curPos = pos.get(i);
+				    ScrabbleTile curTile = tiles.get(i);
+				    board.putTile(curPos.y, curPos.x, curTile);
+				}
+				
+				// move was legal
 				return true;
 			}
 			return false;
@@ -150,6 +165,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			hand.remove(tile);
 			index = ran.nextInt(bag.size());
 			hand.add(bag.elementAt(index));
+			bag.removeElementAt(index);
 		}
 		// update the player's hand with this new hand
 		plr.updateHand(hand);
