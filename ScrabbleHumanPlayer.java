@@ -6,55 +6,63 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 
+import javax.swing.Box;
+
 /**Class representing a human Scrabble player.*/
 public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener {
-	public final static int GUI_HEIGHT = 720;
-	public final static int GUI_WIDTH = 700;
+	private final static int GUI_HEIGHT = 720;
+	private final static int GUI_WIDTH = 700;
 	
 	// Player's hand
 	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+	private ScrabblePlayerUI ui;
 
 
 	/** Returns the initial height of the GUI.
-
-@return the initial height of the GUI, in pixels */
-	protected int initialHeight () {
-		return 0;
+	 * @return the initial height of the GUI, in pixels 
+	 */
+	protected int initialHeight () 
+	{
+	    return GUI_HEIGHT;
 	}
 
 	/** Returns the initial width of the GUI.
-
-@return the initial width of the GUI, in pixels */
-	protected int initialWidth () {
-	    return 0;
+	 * @return the initial width of the GUI, in pixels 
+	 **/
+	protected int initialWidth () 
+	{
+	    return GUI_WIDTH;
 	}
 
 	/** Constructor */
-	public ScrabbleHumanPlayer () {
-		
+	public ScrabbleHumanPlayer () 
+	{
+	    super();
 	}
 
 	/** Actions to be taken after the game is initialized */
-	protected void setGameMore () {
-		
+	protected void setGameMore () 
+	{
+
 	}
 
 	/** Gets the default title of the game window.
-
-@return the initial window title */
+	 * @return the initial window title 
+	 */
 	protected String defaultTitle () {
-	    return null;
+	    return "Scrabble";
 	}
 
 	/** Creates a GUI object for this player.
-
-@return a new ScrabblePlayerUI */
+	 * @return a new ScrabblePlayerUI *
+	 * /
 	protected ScrabblePlayerUI createUI () {
 	    return null;
 	}
 
 	/** Actions to be taken after we're notified of a state change. */
-	public void stateChanged () {
+	public void stateChanged () 
+	{
 		
 	}
 	
@@ -89,8 +97,21 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/** Creates the graphical component of the application.
 
 @return a JPanel with the game's GUI */
-	protected Component createApplComponent () {
-	    return null;
+	protected Component createApplComponent () 
+	{
+	    Panel canvasPanel = new Panel();
+	    ui = makeUI();
+	    ui.addMouseListener(this);
+	    Box vBox = Box.createHorizontalBox();
+	    vBox.add(ui);
+        canvasPanel.add(vBox);
+        
+        return canvasPanel;
+	}
+	
+	protected ScrabblePlayerUI makeUI()
+	{
+	    return new ScrabblePlayerUI(this);
 	}
 
 	
