@@ -19,7 +19,7 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void paint (Graphics g) 
     {
-        
+
     }
 
     /** constructor

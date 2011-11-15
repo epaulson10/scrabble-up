@@ -23,6 +23,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/** Determines if a given game player can make a move
@@ -249,7 +250,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 
 @return The number representing the winning player or -1 if no one has won yet */
 	public int getWinner () {
-		return 0;
+		return -1;
 	}
 
 	/** Returns the maximum allowed number of players
@@ -257,7 +258,7 @@ Note: this implemenation is for a two player game only
 
 @return the max number of players */
 	public int maxPlayersAllowed () {
-		return 0;
+		return 2;
 	}
 
 	/** Returns the minimum allowed  number of players
@@ -265,7 +266,7 @@ Note: This implementation is for a two player game only
 
 @return the min number of players */
 	public int minPlayersAllowed () {
-		return 0;
+		return 2;
 	}
 
 	/** Returns whether or not null players are allowed
