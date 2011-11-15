@@ -4,8 +4,9 @@ import java.util.*;
 
 import game.*;
 
-/**Interface representing a player. Should be subclassed by classes represeting individual player types.*/
-public interface ScrabblePlayer extends GamePlayer {
+/**Interface representing a player. Should be subclassed by classes representing individual player types.*/
+public interface ScrabblePlayer extends GamePlayer 
+{
 	
 	// Vector representing the player's hand of tiles
 	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
