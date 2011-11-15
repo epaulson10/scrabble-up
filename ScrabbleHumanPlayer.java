@@ -99,14 +99,12 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 @return a JPanel with the game's GUI */
 	protected Component createApplComponent () 
 	{
-	    Panel canvasPanel = new Panel();
+	    Panel uiPanel = new Panel();
 	    ui = makeUI();
 	    ui.addMouseListener(this);
-	    Box vBox = Box.createHorizontalBox();
-	    vBox.add(ui);
-        canvasPanel.add(vBox);
-        
-        return canvasPanel;
+        uiPanel.add(ui);
+       
+        return uiPanel;
 	}
 	
 	protected ScrabblePlayerUI makeUI()
