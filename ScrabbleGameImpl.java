@@ -14,6 +14,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
+	private int winner;
 	private Dictionary dictionary;
 
 	/** Constructor - initializes instance variables */
@@ -31,7 +32,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param gp the GamePlayer in question
 @return true if the player can move, false otherwise */
 	protected boolean canMove (GamePlayer gp) {
-		return false;
+		return gp.getId() == playerToMove;
 	}
 
 	/** Determines if the player has the ability to quit.
@@ -39,7 +40,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param gp the GamePlayer in question
 @return true if the player can quit, false otherwise */
 	protected boolean canQuit (GamePlayer gp) {
-		return false;
+		return true;
 	}
 
 	/** Determines if the game is over.
@@ -55,7 +56,22 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param stateType This value is ignored in our implementation
 @return the current GameState */
 	protected GameState getGameState (GamePlayer gp, int stateType) {
-		return null;
+	    // make copy of master board
+	    ScrabbleBoard newBoard = new ScrabbleBoard();
+	    for (int row = 0; row < ScrabbleBoard.size; row++)
+	    {
+	        for (int col = 0; col < ScrabbleBoard.size; col++)
+	        {
+	            // copy tile from master board to same position on copy board
+	            newBoard.putTile(row, col, board.getTileAt(row, col));
+	        }
+	    }
+	    
+	    // get the player's hand
+	    ScrabblePlayer sp = (ScrabblePlayer)gp;
+	    Vector<ScrabbleTile> curHand = sp.getHand();
+	    
+		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score);
 	}
 
 	/** Initializes the starting state of the game */
@@ -103,6 +119,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// new tiles from the bag
 			updateHand(hand, discTiles, plr);
 			
+			// pass control to the other player
+            playerToMove = 1 - playerToMove;
+			
 			return true;
 		}
 
@@ -127,6 +146,18 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			{
 				updateHand(hand, tiles, plr);
 				
+				// get this move's score and add it to the appropriate
+				// player's score
+				int moveScore = getMoveScore(mv);
+				if (playerID == 0)
+				{
+				    p0Score += moveScore;
+				}
+				else
+				{
+				    p1Score += moveScore;
+				}
+				
 				// apply move to master board
 				for (int i = 0; i < tiles.size(); i++)
 				{
@@ -134,6 +165,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				    ScrabbleTile curTile = tiles.get(i);
 				    board.putTile(curPos.y, curPos.x, curTile);
 				}
+				
+				// pass control to the other player
+				playerToMove = 1 - playerToMove;
 				
 				// move was legal
 				return true;
@@ -183,9 +217,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			board.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		for(int i = 0; i < board.size; i++)
+		for(int i = 0; i < ScrabbleBoard.size; i++)
 		{
-			for(int j = 0; j < board.size; j++)
+			for(int j = 0; j < ScrabbleBoard.size; j++)
 			{
 				if(board.getTileAt(i, j) != null);
 				{
@@ -250,7 +284,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 
 @return The number representing the winning player or -1 if no one has won yet */
 	public int getWinner () {
-		return -1;
+		return winner;
 	}
 
 	/** Returns the maximum allowed number of players
