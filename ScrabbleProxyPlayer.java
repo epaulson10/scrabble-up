@@ -7,7 +7,8 @@ import java.util.*;
 class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
 
     /** Constructor - Calls super */
-    public ScrabbleProxyPlayer () {
+    public ScrabbleProxyPlayer () 
+    {
         super();
     }
 
@@ -17,16 +18,18 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
      * @param s The string containing the encoded gameAction
      * @return the decoded gameAction
      */
-    protected GameAction decodeAction (String s) {
+    protected GameAction decodeAction (String s) 
+    {
         return null;
     }
 
     /** Encodes the updated game state after a network player makes a move
-to send the information to the next player
-
-@param gs the GameState being encoded
-@return A string containing the encoded game state */
-    protected String encodeState (GameState gs) {
+     * to send the information to the next player
+     * @param gs the GameState being encoded
+     * @return A string containing the encoded game state 
+     **/
+    protected String encodeState (GameState gs) 
+    {
         return null;
     }
 
@@ -34,17 +37,19 @@ to send the information to the next player
      * Returns the port number used for the network game mode
      * @return the port number being used
      */
-    protected int getAdmPortNum () {
+    protected int getAdmPortNum () 
+    {
         return -1;
     }
 
     /** Adds tiles to the player's hand.
+    * @param tilesToAdd  the tiles to add, contained in an array
+    **/
+    public void updateHand (Vector<ScrabbleTile> tilesToAdd) 
+    {
 
-    @param tilesToAdd  the tiles to add, contained in an array */
-    public void updateHand (Vector<ScrabbleTile> tilesToAdd) {
-        
     }
-    
+
     /**
      *  Retrieves the player's hand.
      *  

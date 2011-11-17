@@ -4,7 +4,8 @@ package scrabble;
 
 Represents the Scrabble Game Board*/
 public class ScrabbleBoard
-{	
+{
+	
 	private final int BOARD_HEIGHT = 15;
 	private final int BOARD_WIDTH = 15;
 	private ScrabbleTile[][] tilePositions = 
@@ -30,12 +31,11 @@ public class ScrabbleBoard
 	/** Returns the tile at the specified position
 @param row the row that is being looked in [0,BOARD_HEIGHT)
 @param col the column that is being looked in [0, BOARD_WIDTH)
-	 * @return A copy of the ScrabbleTile that is in the specified row and column
-	 * @throws If invalid row or col is out of bounds then a
-	 * nonValidBoardSpaceException is thrown 
-	 * */
+@return A copy of the ScrabbleTile that is in the specified row and column
+@throws If invalid row or col is out of bounds then a
+nonValidBoardSpaceException is thrown */
 	public ScrabbleTile getTileAt (int row, int col)
-										throws NonValidBoardSpaceException
+									throws NonValidBoardSpaceException
 	{
 		if(row >= BOARD_HEIGHT || row < 0)
 		{
@@ -69,53 +69,5 @@ nonValidBoardSpaceException is thrown */
 		
 		return bonusPositions[col][row];
 	}
-	
-	/** Sets the tile at the given location
-@param row the row that is being set
-@param col the column that is being set
-@param sct the scrabble tile that is being placed
-	 * @throws NonValidBoardSpaceException
-	 */
-	public void putTileAt(int row, int col, ScrabbleTile sct) 
-	 									throws NonValidBoardSpaceException
-		{
-			if(row >= BOARD_HEIGHT || row < 0)
-			{
-				throw new NonValidBoardSpaceException("Invalid Row");
-			}
-			if(col >= BOARD_HEIGHT || col < 0)
-			{
-				throw new NonValidBoardSpaceException("Invalid Column");
-			}
-			
-			tilePositions[row][col] = sct;
-		}
-	
-	/**Returns an array of strings to locate the tile image folders
-@return a two dimensional array of Strings with the file locations of the
-		image file
-	 */
-	public String[][] getTileImages()
-	{
-		String[][] images = new String[BOARD_WIDTH][BOARD_HEIGHT];
-		
-		ScrabbleTile tester;
-		for(int i = 0; i<BOARD_WIDTH; i++)
-		{
-			for(int j = 0; j<BOARD_HEIGHT; j++)
-			{
-				tester = tilePositions[i][j];
-				if(tester == null)
-				{
-					images[i][j] =  "Tiles/ScrabbleTileBlank.jpg";
-				}
-				else
-				{
-					images[i][j] = tester.getFileName();
-				}
-			}
-		}
-		
-		return images;
-	}
+
 }
