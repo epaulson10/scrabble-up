@@ -69,9 +69,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	protected GameState getGameState (GamePlayer gp, int stateType) {
 	    // make copy of master board
 	    ScrabbleBoard newBoard = new ScrabbleBoard();
-	    for (int row = 0; row < ScrabbleBoard.size; row++)
+	    for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
 	    {
-	        for (int col = 0; col < ScrabbleBoard.size; col++)
+	        for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
 	        {
 	            // copy tile from master board to same position on copy board
 	            newBoard.putTileAt(row, col, board.getTileAt(row, col));
@@ -209,7 +209,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				{
 				    Point curPos = pos.get(i);
 				    ScrabbleTile curTile = tiles.get(i);
-				    board.putTile(curPos.y, curPos.x, curTile);
+				    board.putTileAt(curPos.y, curPos.x, curTile);
 				}
 				
 				// pass control to the other player
@@ -270,19 +270,19 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		ScrabbleBoard copyBoard = board;
 		
 		// array for the word to check
-		char word[] = new char[copyBoard.];
+		char word[] = new char[ScrabbleBoard.BOARD_HEIGHT];
 		
 		// counter 
 		int count1;
 		int count2;
 		for(int i = 0; i < tiles.size(); i++)
 		{
-			copyBoard.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
+			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		for(int i = 0; i < ScrabbleBoard.size; i++)
+		for(int i = 0; i < ScrabbleBoard.BOARD_HEIGHT; i++)
 		{
-			for(int j = 0; j < ScrabbleBoard.size; j++)
+			for(int j = 0; j < ScrabbleBoard.BOARD_WIDTH; j++)
 			{
 				if(copyBoard.getTileAt(i, j) != null);
 				{
@@ -338,9 +338,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	{
 	    // make copy of master board
         ScrabbleBoard newBoard = new ScrabbleBoard();
-        for (int row = 0; row < ScrabbleBoard.size; row++)
+        for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
         {
-            for (int col = 0; col < ScrabbleBoard.size; col++)
+            for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
                 // copy tile from master board to same position on copy board
                 newBoard.putTileAt(row, col, board.getTileAt(row, col));
@@ -365,16 +365,16 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                 return -1;
             }
             ScrabbleTile tilePlayed = tiles.get(i);
-            newBoard.putTile(row, col, tilePlayed);
+            newBoard.putTileAt(row, col, tilePlayed);
         }
         
         // Scan for words formed or modified:
         
         // Move's score so far
         int score = 0;
-        for (int row = 0; row < ScrabbleBoard.size; row++)
+        for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
         {
-            for (int col = 0; col < ScrabbleBoard.size; col++)
+            for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
                 if (board.getTileAt(row, col) != null)
                 {                    
@@ -384,7 +384,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
-                        for (int dRow = 1; (row+dRow < ScrabbleBoard.size)
+                        for (int dRow = 1; (row+dRow < ScrabbleBoard.BOARD_HEIGHT)
                                         && (newBoard.getTileAt(row+dRow, col) != null);
                                         dRow++)
                         {
@@ -421,7 +421,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
-                        for (int dCol = 1; (col+dCol < ScrabbleBoard.size)
+                        for (int dCol = 1; (col+dCol < ScrabbleBoard.BOARD_WIDTH)
                                         && (newBoard.getTileAt(row, col+dCol) != null);
                                         dCol++)
                         {
