@@ -5,8 +5,8 @@ package scrabble;
 Represents the Scrabble Game Board*/
 public class ScrabbleBoard
 {	
-	private final int BOARD_HEIGHT = 15;
-	private final int BOARD_WIDTH = 15;
+	public static final int BOARD_HEIGHT = 15;
+	public static final int BOARD_WIDTH = 15;
 	private ScrabbleTile[][] tilePositions = 
 			new ScrabbleTile[BOARD_WIDTH][BOARD_HEIGHT]; //[col][row]
 	private int[][] bonusPositions =
@@ -35,17 +35,7 @@ public class ScrabbleBoard
 	 * nonValidBoardSpaceException is thrown 
 	 * */
 	public ScrabbleTile getTileAt (int row, int col)
-										throws NonValidBoardSpaceException
-	{
-		if(row >= BOARD_HEIGHT || row < 0)
-		{
-			throw new NonValidBoardSpaceException("Invalid Row");
-		}
-		if(col >= BOARD_HEIGHT || col < 0)
-		{
-			throw new NonValidBoardSpaceException("Invalid Column");
-		}
-		
+	{	
 		return tilePositions[col][row];
 	}
 
@@ -56,17 +46,9 @@ public class ScrabbleBoard
 	 * @throws NonValidBoardSpaceException 
 @throws If invalid row or col is out of bounds then a
 nonValidBoardSpaceException is thrown */
-	public int getBonusAt (int row, int col) throws NonValidBoardSpaceException
+	public int getBonusAt (int row, int col)
 	{
-		if(row >= BOARD_HEIGHT || row < 0)
-		{
-			throw new NonValidBoardSpaceException("Invalid Row");
-		}
-		if(col >= BOARD_HEIGHT || col < 0)
-		{
-			throw new NonValidBoardSpaceException("Invalid Column");
-		}
-		
+
 		return bonusPositions[col][row];
 	}
 	
@@ -77,17 +59,8 @@ nonValidBoardSpaceException is thrown */
 	 * @throws NonValidBoardSpaceException
 	 */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
-	 									throws NonValidBoardSpaceException
+
 		{
-			if(row >= BOARD_HEIGHT || row < 0)
-			{
-				throw new NonValidBoardSpaceException("Invalid Row");
-			}
-			if(col >= BOARD_HEIGHT || col < 0)
-			{
-				throw new NonValidBoardSpaceException("Invalid Column");
-			}
-			
 			tilePositions[row][col] = sct;
 		}
 	
