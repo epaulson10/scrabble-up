@@ -12,6 +12,12 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 
     /**  * Respond to a move request by making a move. */
     protected void doRequestMove () {
+    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         game.applyAction(new ScrabbleDiscardAction(this, hand));
     }
 
