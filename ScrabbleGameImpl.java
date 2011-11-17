@@ -63,13 +63,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	protected GameState getGameState (GamePlayer gp, int stateType) {
 	    // make copy of master board
 	    ScrabbleBoard newBoard = new ScrabbleBoard();
-	    for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
+	    for (int row = 0; row < ScrabbleBoard.size; row++)
 	    {
-	        for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
+	        for (int col = 0; col < ScrabbleBoard.size; col++)
 	        {
 	            // copy tile from master board to same position on copy board
-					newBoard.putTileAt(row, col, board.getTileAt(row, col));
-					
+	            newBoard.putTileAt(row, col, board.getTileAt(row, col));
 	        }
 	    }
 	    
@@ -91,6 +90,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	                      + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
 	                      + "mmpp|ffhhvvwwyy|k|||jx||qz";
 	    int curValue = 0;
+	    
 	    for (int i = 0; i < letterDist.length(); i++)
 	    {
 	        char curChar = letterDist.charAt(i);
@@ -102,6 +102,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	        {
 	            // reached a value threshold; following letters will be worth
 	            // more points
+	            
 	            curValue++;
 	        }
 	        else
@@ -117,14 +118,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         winner = -1;
 	}
 
-	/** Processes a GameMoveAction from a given player
-
-@param thePlayer the player making a move
-@param move the move the player is making
-@return true if the move was valid, false otherwise */
+	/** 
+	 * Processes a GameMoveAction from a given player
+	 * @param thePlayer the player making a move
+	 * @param move the move the player is making
+	 * @return true if the move was valid, false otherwise 
+	 */
 	protected boolean makeMove (GamePlayer thePlayer, GameMoveAction move) 
 	{
-
 		// typecast the GamePlayer to a ScrabblePlayer
 		ScrabblePlayer plr = (ScrabblePlayer)thePlayer;
 		
@@ -163,6 +164,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			return true;
 		}
 
+		
 		else if(move instanceof ScrabbleMoveAction)
 		{
 			// Typecast the GameMoveAction to a ScrabbleMoveAction
@@ -180,7 +182,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			}
 			
 			// check if it was a valid move
-			if(checkValMove(pos, tiles))
+			if(checkValidMove(pos, tiles))
 			{
 				updateHand(hand, tiles, plr);
 				
@@ -201,7 +203,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				{
 				    Point curPos = pos.get(i);
 				    ScrabbleTile curTile = tiles.get(i);
-				    board.putTileAt(curPos.y, curPos.x, curTile);
+				    board.putTile(curPos.y, curPos.x, curTile);
 				}
 				
 				// pass control to the other player
@@ -233,40 +235,57 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		
 		// for each tile played remove it from the player's hand
 		// and add a new tile to the player's hand
+		// remove that tile from the bag
 		for(ScrabbleTile tile : tiles)
 		{
 			hand.remove(tile);
-			index = ran.nextInt(bag.size());
-			hand.add(bag.elementAt(index));
-			bag.removeElementAt(index);
+			// if bag is not empty
+			if(bag.size() != 0)
+			{
+				index = ran.nextInt(bag.size());
+				hand.add(bag.elementAt(index));
+				bag.removeElementAt(index);
+			}
 		}
 		// update the player's hand with this new hand
 		plr.updateHand(hand);
 	}
 
-	private boolean checkValMove(Vector<Point> pos, 
+	/**
+	 * Checks if the move made by a player is valid
+	 * @param pos vector of the positions of the tiles played
+	 * @param tiles tiles played in move
+	 * @return if valid move
+	 */
+	private boolean checkValidMove(Vector<Point> pos, 
 			Vector<ScrabbleTile> tiles) {
 		
-		char word[] = new char[10];
+		// copy of the board before the move
+		ScrabbleBoard copyBoard = board;
+		
+		// array for the word to check
+		char word[] = new char[copyBoard.];
+		
+		// counter 
 		int count1;
 		int count2;
 		for(int i = 0; i < tiles.size(); i++)
 		{
-			board.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
+			copyBoard.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		for(int i = 0; i < ScrabbleBoard.BOARD_WIDTH; i++)
+		for(int i = 0; i < ScrabbleBoard.size; i++)
 		{
-			for(int j = 0; j < ScrabbleBoard.BOARD_HEIGHT; j++)
+			for(int j = 0; j < ScrabbleBoard.size; j++)
 			{
-				if(board.getTileAt(i, j) != null);
+				if(copyBoard.getTileAt(i, j) != null);
 				{
 					count1 = i;
 					count2 = j;
 					int index = 0;
-					while(board.getTileAt(count1,count2) != null)
+					while(copyBoard.getTileAt(count1,count2) != null)
 					{
-						word[index] = board.getTileAt(count1, count2).getLetter();
+						word[index] = copyBoard.getTileAt(count1, count2).getLetter();
 						count2++;
 						index++;
 					}
@@ -278,9 +297,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					count1 = i;
 					count2 = j;
 					index = 0;
-					while(board.getTileAt(count1++, count2) != null)
+					while(copyBoard.getTileAt(count1++, count2) != null)
 					{
-						word[index] = board.getTileAt(count1, count2).getLetter();
+						word[index] = copyBoard.getTileAt(count1, count2).getLetter();
 						count1++;
 						index++;
 					}
@@ -313,9 +332,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	{
 	    // make copy of master board
         ScrabbleBoard newBoard = new ScrabbleBoard();
-        for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
+        for (int row = 0; row < ScrabbleBoard.size; row++)
         {
-            for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
+            for (int col = 0; col < ScrabbleBoard.size; col++)
             {
                 // copy tile from master board to same position on copy board
                 newBoard.putTileAt(row, col, board.getTileAt(row, col));
@@ -340,16 +359,16 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                 return -1;
             }
             ScrabbleTile tilePlayed = tiles.get(i);
-            newBoard.putTileAt(row, col, tilePlayed);
+            newBoard.putTile(row, col, tilePlayed);
         }
         
         // Scan for words formed or modified:
         
         // Move's score so far
         int score = 0;
-        for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
+        for (int row = 0; row < ScrabbleBoard.size; row++)
         {
-            for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
+            for (int col = 0; col < ScrabbleBoard.size; col++)
             {
                 if (board.getTileAt(row, col) != null)
                 {                    
@@ -359,7 +378,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
-                        for (int dRow = 1; (row+dRow < ScrabbleBoard.BOARD_HEIGHT)
+                        for (int dRow = 1; (row+dRow < ScrabbleBoard.size)
                                         && (newBoard.getTileAt(row+dRow, col) != null);
                                         dRow++)
                         {
@@ -396,7 +415,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
-                        for (int dCol = 1; (col+dCol < ScrabbleBoard.BOARD_WIDTH)
+                        for (int dCol = 1; (col+dCol < ScrabbleBoard.size)
                                         && (newBoard.getTileAt(row, col+dCol) != null);
                                         dCol++)
                         {
