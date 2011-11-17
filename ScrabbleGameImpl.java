@@ -24,7 +24,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		board = new ScrabbleBoard();
+		bag = new Vector<ScrabbleTile>();
+		p0Score = 0;
+		p1Score = 0;
+		playerToMove = 0;
+		winner = -1;
 	}
 
 	/** Determines if a given game player can make a move
@@ -75,8 +80,40 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	}
 
 	/** Initializes the starting state of the game */
-	protected void initializeGame () {
-
+	protected void initializeGame ()
+	{
+	    // Populate bag with tiles:
+	    bag.removeAllElements();
+	    // letters to add to bag; pipe chars separate letters of different
+	    // value
+	    String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+	                      + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
+	                      + "mmpp|ffhhvvwwyy|k|||jx||qz";
+	    int curValue = 0;
+	    for (int i = 0; i < letterDist.length(); i++)
+	    {
+	        char curChar = letterDist.charAt(i);
+	        if (curChar == ' ')
+	        {
+	            bag.add(new ScrabbleBlankTile());
+	        }
+	        else if (curChar == '|')
+	        {
+	            // reached a value threshold; following letters will be worth
+	            // more points
+	            curValue++;
+	        }
+	        else
+	        {
+	            bag.add(new ScrabbleTile(curChar, curValue, false));
+	        }
+	    }
+	    
+	    // set other instance vars
+	    p0Score = 0;
+        p1Score = 0;
+        playerToMove = 0;
+        winner = -1;
 	}
 
 	/** Processes a GameMoveAction from a given player
