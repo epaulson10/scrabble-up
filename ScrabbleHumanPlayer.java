@@ -16,7 +16,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	private String buttonNames[] = {"Quit", "Discard", "Pass", "Shuffle"};
 	
 	// Player's hand
-	public Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+	private Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
 	private ScrabblePlayerUI ui;
 	
 
