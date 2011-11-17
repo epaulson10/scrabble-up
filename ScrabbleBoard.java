@@ -4,8 +4,7 @@ package scrabble;
 
 Represents the Scrabble Game Board*/
 public class ScrabbleBoard
-{
-	
+{	
 	private final int BOARD_HEIGHT = 15;
 	private final int BOARD_WIDTH = 15;
 	private ScrabbleTile[][] tilePositions = 
@@ -31,11 +30,12 @@ public class ScrabbleBoard
 	/** Returns the tile at the specified position
 @param row the row that is being looked in [0,BOARD_HEIGHT)
 @param col the column that is being looked in [0, BOARD_WIDTH)
-@return A copy of the ScrabbleTile that is in the specified row and column
-@throws If invalid row or col is out of bounds then a
-nonValidBoardSpaceException is thrown */
+	 * @return A copy of the ScrabbleTile that is in the specified row and column
+	 * @throws If invalid row or col is out of bounds then a
+	 * nonValidBoardSpaceException is thrown 
+	 * */
 	public ScrabbleTile getTileAt (int row, int col)
-									throws NonValidBoardSpaceException
+										throws NonValidBoardSpaceException
 	{
 		if(row >= BOARD_HEIGHT || row < 0)
 		{
@@ -69,5 +69,19 @@ nonValidBoardSpaceException is thrown */
 		
 		return bonusPositions[col][row];
 	}
-
+	
+	public void putTileAt(int row, int col, ScrabbleTile sct) 
+	 									throws NonValidBoardSpaceException
+		{
+			if(row >= BOARD_HEIGHT || row < 0)
+			{
+				throw new NonValidBoardSpaceException("Invalid Row");
+			}
+			if(col >= BOARD_HEIGHT || col < 0)
+			{
+				throw new NonValidBoardSpaceException("Invalid Column");
+			}
+			
+			tilePositions[row][col] = sct;
+		}
 }
