@@ -46,9 +46,9 @@ initLetter is not a valid letter then letter is set to %.
 	public String getFileName ()
 	{
 		if(!fromBlank)
-			return "ScrabbleTile"+letter+".jpg";
+			return "Tiles/ScrabbleTile"+letter+".jpg";
 		else
-			return "ScrabbleTile"+letter+"blank.jpg";
+			return "Tiles/ScrabbleTile"+letter+"blank.jpg";
 	}
 
 }

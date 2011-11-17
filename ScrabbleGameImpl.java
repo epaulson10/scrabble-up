@@ -14,6 +14,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
+	private int winner;
 	private Dictionary dictionary;
 
 	/** Constructor - initializes instance variables */
@@ -23,6 +24,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		board = new ScrabbleBoard();
+		bag = new Vector<ScrabbleTile>();
+		p0Score = 0;
+		p1Score = 0;
+		playerToMove = 0;
+		winner = -1;
 	}
 
 	/** Determines if a given game player can make a move
@@ -30,7 +37,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param gp the GamePlayer in question
 @return true if the player can move, false otherwise */
 	protected boolean canMove (GamePlayer gp) {
-		return false;
+		return gp.getId() == playerToMove;
 	}
 
 	/** Determines if the player has the ability to quit.
@@ -38,7 +45,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param gp the GamePlayer in question
 @return true if the player can quit, false otherwise */
 	protected boolean canQuit (GamePlayer gp) {
-		return false;
+		return true;
 	}
 
 	/** Determines if the game is over.
@@ -54,12 +61,60 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @param stateType This value is ignored in our implementation
 @return the current GameState */
 	protected GameState getGameState (GamePlayer gp, int stateType) {
-		return null;
+	    // make copy of master board
+	    ScrabbleBoard newBoard = new ScrabbleBoard();
+	    for (int row = 0; row < ScrabbleBoard.size; row++)
+	    {
+	        for (int col = 0; col < ScrabbleBoard.size; col++)
+	        {
+	            // copy tile from master board to same position on copy board
+	            newBoard.putTile(row, col, board.getTileAt(row, col));
+	        }
+	    }
+	    
+	    // get the player's hand
+	    ScrabblePlayer sp = (ScrabblePlayer)gp;
+	    Vector<ScrabbleTile> curHand = sp.getHand();
+	    
+		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score);
 	}
 
 	/** Initializes the starting state of the game */
-	protected void initializeGame () {
-
+	protected void initializeGame ()
+	{
+	    // Populate bag with tiles:
+	    bag.removeAllElements();
+	    // letters to add to bag; pipe chars separate letters of different
+	    // value
+	    String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+	                      + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
+	                      + "mmpp|ffhhvvwwyy|k|||jx||qz";
+	    int curValue = 0;
+	    for (int i = 0; i < letterDist.length(); i++)
+	    {
+	        char curChar = letterDist.charAt(i);
+	        if (curChar == ' ')
+	        {
+	            bag.add(new ScrabbleBlankTile());
+	        }
+	        else if (curChar == '|')
+	        {
+	            // reached a value threshold; following letters will be worth
+	            // more points
+	            
+	            curValue++;
+	        }
+	        else
+	        {
+	            bag.add(new ScrabbleTile(curChar, curValue, false));
+	        }
+	    }
+	    
+	    // set other instance vars
+	    p0Score = 0;
+        p1Score = 0;
+        playerToMove = 0;
+        winner = -1;
 	}
 
 	/** Processes a GameMoveAction from a given player
@@ -102,6 +157,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// new tiles from the bag
 			updateHand(hand, discTiles, plr);
 			
+			// pass control to the other player
+            playerToMove = 1 - playerToMove;
+			
 			return true;
 		}
 
@@ -126,6 +184,18 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			{
 				updateHand(hand, tiles, plr);
 				
+				// get this move's score and add it to the appropriate
+				// player's score
+				int moveScore = getMoveScore(mv);
+				if (playerID == 0)
+				{
+				    p0Score += moveScore;
+				}
+				else
+				{
+				    p1Score += moveScore;
+				}
+				
 				// apply move to master board
 				for (int i = 0; i < tiles.size(); i++)
 				{
@@ -133,6 +203,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				    ScrabbleTile curTile = tiles.get(i);
 				    board.putTile(curPos.y, curPos.x, curTile);
 				}
+				
+				// pass control to the other player
+				playerToMove = 1 - playerToMove;
 				
 				// move was legal
 				return true;
@@ -182,9 +255,9 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			board.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		for(int i = 0; i < board.size; i++)
+		for(int i = 0; i < ScrabbleBoard.size; i++)
 		{
-			for(int j = 0; j < board.size; j++)
+			for(int j = 0; j < ScrabbleBoard.size; j++)
 			{
 				if(board.getTileAt(i, j) != null);
 				{
@@ -230,12 +303,135 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		}
 	}
 
-	/** Determines the score of a Scrabble play
-
-@param move The ScrabbleMoveAction being analyzed
-@return the score of the move */
-	public int getMoveScore (ScrabbleMoveAction move) {
-		return 0;
+	/**
+	 * Determines the score of a Scrabble play.
+	 * 
+     * @param move The ScrabbleMoveAction being analyzed
+     * @return the score of the move, or -1 if move is invalid
+     */
+	public int getMoveScore (ScrabbleMoveAction move)
+	{
+	    // make copy of master board
+        ScrabbleBoard newBoard = new ScrabbleBoard();
+        for (int row = 0; row < ScrabbleBoard.size; row++)
+        {
+            for (int col = 0; col < ScrabbleBoard.size; col++)
+            {
+                // copy tile from master board to same position on copy board
+                newBoard.putTile(row, col, board.getTileAt(row, col));
+            }
+        }
+        
+        // Get tiles played and add them to the test board
+        Vector<ScrabbleTile> tiles = move.getTiles();
+        Vector<Point> positions = move.getPositions();
+        if (tiles.size() != positions.size())
+        {
+            // bad move action
+            return -1;
+        }
+        for (int i = 0; i < tiles.size(); i++)
+        {
+            int row = positions.get(i).y;
+            int col = positions.get(i).x;
+            if (newBoard.getTileAt(row, col) != null)
+            {
+                // Trying to play a tile on an occupied space
+                return -1;
+            }
+            ScrabbleTile tilePlayed = tiles.get(i);
+            newBoard.putTile(row, col, tilePlayed);
+        }
+        
+        // Scan for words formed or modified:
+        
+        // Move's score so far
+        int score = 0;
+        for (int row = 0; row < ScrabbleBoard.size; row++)
+        {
+            for (int col = 0; col < ScrabbleBoard.size; col++)
+            {
+                if (board.getTileAt(row, col) != null)
+                {                    
+                    // Could this tile begin a vertical word?
+                    if (row-1 < 0 || newBoard.getTileAt(row-1, col) == null)
+                    {
+                        Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
+                        word.add(newBoard.getTileAt(row,col));
+                        // Get rest of tiles in this word
+                        for (int dRow = 1; (row+dRow < ScrabbleBoard.size)
+                                        && (newBoard.getTileAt(row+dRow, col) != null);
+                                        dRow++)
+                        {
+                            word.add(newBoard.getTileAt(row+dRow, col));
+                        }//for
+                        
+                        // Is this a 2+ letter word?
+                        if (word.size() > 1)
+                        {
+                            // Is this a new/changed word?
+                            boolean isNew = false;
+                            for (int i = 0; i < word.size(); i++)
+                            {
+                                if (tiles.contains(word.get(i)))
+                                {
+                                    isNew = true;
+                                }//if
+                            }//for
+                            
+                            if (isNew)
+                            {
+                                // Add value of each letter to the score
+                                for (int i = 0; i < word.size(); i++)
+                                {
+                                    score += word.get(i).getValue();
+                                }//for
+                            }//if
+                        }//if
+                    }//if
+                    
+                    // Could this tile begin a horizontal word?
+                    if (col-1 < 0 || newBoard.getTileAt(row, col-1) == null)
+                    {
+                        Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
+                        word.add(newBoard.getTileAt(row,col));
+                        // Get rest of tiles in this word
+                        for (int dCol = 1; (col+dCol < ScrabbleBoard.size)
+                                        && (newBoard.getTileAt(row, col+dCol) != null);
+                                        dCol++)
+                        {
+                            word.add(newBoard.getTileAt(row, col+dCol));
+                        }//for
+                        
+                        // Is this a 2+ letter word?
+                        if (word.size() > 1)
+                        {
+                            // Is this a new/changed word?
+                            boolean isNew = false;
+                            for (int i = 0; i < word.size(); i++)
+                            {
+                                if (tiles.contains(word.get(i)))
+                                {
+                                    isNew = true;
+                                }//if
+                            }//for
+                            
+                            if (isNew)
+                            {
+                                // Add value of each letter to the score
+                                for (int i = 0; i < word.size(); i++)
+                                {
+                                    score += word.get(i).getValue();
+                                }//for
+                            }//if
+                        }//if
+                    }//if
+                }//if
+            }//for
+        }//for
+        
+        // Return total move score
+        return score;
 	}
 
 	/** Checks to see if a player has won the game
@@ -249,7 +445,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 
 @return The number representing the winning player or -1 if no one has won yet */
 	public int getWinner () {
-		return 0;
+		return winner;
 	}
 
 	/** Returns the maximum allowed number of players
@@ -257,7 +453,7 @@ Note: this implemenation is for a two player game only
 
 @return the max number of players */
 	public int maxPlayersAllowed () {
-		return 0;
+		return 2;
 	}
 
 	/** Returns the minimum allowed  number of players
@@ -265,7 +461,7 @@ Note: This implementation is for a two player game only
 
 @return the min number of players */
 	public int minPlayersAllowed () {
-		return 0;
+		return 2;
 	}
 
 	/** Returns whether or not null players are allowed
