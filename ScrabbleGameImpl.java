@@ -314,14 +314,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             for (int col = 0; col < ScrabbleBoard.size; col++)
             {
                 if (board.getTileAt(row, col) != null)
-                {
-                    // Tiles used in this word, if applicable
-                    Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
-                    
+                {                    
                     // Could this tile begin a vertical word?
                     if (row-1 < 0 || newBoard.getTileAt(row-1, col) == null)
                     {
-                        word = new Vector<ScrabbleTile>();
+                        Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dRow = 1; (row+dRow < ScrabbleBoard.size)
@@ -330,12 +327,35 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         {
                             word.add(newBoard.getTileAt(row+dRow, col));
                         }//for
+                        
+                        // Is this a 2+ letter word?
+                        if (word.size() > 1)
+                        {
+                            // Is this a new/changed word?
+                            boolean isNew = false;
+                            for (int i = 0; i < word.size(); i++)
+                            {
+                                if (tiles.contains(word.get(i)))
+                                {
+                                    isNew = true;
+                                }//if
+                            }//for
+                            
+                            if (isNew)
+                            {
+                                // Add value of each letter to the score
+                                for (int i = 0; i < word.size(); i++)
+                                {
+                                    score += word.get(i).getValue();
+                                }//for
+                            }//if
+                        }//if
                     }//if
                     
                     // Could this tile begin a horizontal word?
                     if (col-1 < 0 || newBoard.getTileAt(row, col-1) == null)
                     {
-                        word = new Vector<ScrabbleTile>();
+                        Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dCol = 1; (col+dCol < ScrabbleBoard.size)
@@ -344,28 +364,28 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                         {
                             word.add(newBoard.getTileAt(row, col+dCol));
                         }//for
-                    }//if
-                    
-                    // Is this a 2+ letter word?
-                    if (word.size() > 1)
-                    {
-                        // Is this a new/changed word?
-                        boolean isNew = false;
-                        for (int i = 0; i < word.size(); i++)
-                        {
-                            if (tiles.contains(word.get(i)))
-                            {
-                                isNew = true;
-                            }//if
-                        }//for
                         
-                        if (isNew)
+                        // Is this a 2+ letter word?
+                        if (word.size() > 1)
                         {
-                            // Add value of each letter to the score
+                            // Is this a new/changed word?
+                            boolean isNew = false;
                             for (int i = 0; i < word.size(); i++)
                             {
-                                score += word.get(i).getValue();
+                                if (tiles.contains(word.get(i)))
+                                {
+                                    isNew = true;
+                                }//if
                             }//for
+                            
+                            if (isNew)
+                            {
+                                // Add value of each letter to the score
+                                for (int i = 0; i < word.size(); i++)
+                                {
+                                    score += word.get(i).getValue();
+                                }//for
+                            }//if
                         }//if
                     }//if
                 }//if
