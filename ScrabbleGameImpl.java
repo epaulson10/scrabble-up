@@ -16,8 +16,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int playerToMove;
 	private int winner;
 	private Dictionary dictionary;
-	private boolean emptyHand0;
-	private boolean emptyHand1;
+	private boolean handIsEmpty;
 
 	/** Constructor - initializes instance variables */
 	public ScrabbleGameImpl () {
@@ -32,8 +31,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		p1Score = 0;
 		playerToMove = 0;
 		winner = -1;
-		emptyHand0 = false;
-		emptyHand1 = false;
+		handIsEmpty = false;
 	}
 
 	/** Determines if a given game player can make a move
@@ -253,6 +251,13 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				bag.removeElementAt(index);
 			}
 		}
+		
+		// Check if game-over conditions are met
+		if (bag.size() == 0 && hand.size() == 0)
+		{
+		    handIsEmpty = true;
+		}
+		
 		// update the player's hand with this new hand
 		plr.updateHand(hand);
 	}
@@ -464,7 +469,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @return true if someone has won, false otherwise */
 	protected boolean checkWinner()
 	{
-		if (bag.size() == 0 && (emptyHand0 || emptyHand1))
+		if (bag.size() == 0 && handIsEmpty)
 		{
 		    if (p0Score > p1Score)
 		    {
