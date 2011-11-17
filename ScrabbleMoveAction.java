@@ -17,19 +17,21 @@ public class ScrabbleMoveAction extends GameMoveAction {
 	public ScrabbleMoveAction (GamePlayer source, Vector<ScrabbleTile> initTiles, Vector<Point> positionsPlayed) 
 	{
 		super (source);
+		tilesPlayed = initTiles;
+		this.positionsPlayed = positionsPlayed;
 	}
 
 	/** Gets the tiles used in this play.
 
 @return a Vector containing all tiles used in this play */
 	public Vector<ScrabbleTile> getTiles () {
-		return null;
+		return tilesPlayed;
 	}
 
 	/** Gets the positions of the tiles used in this play.
 
 @return a Vector containing the board positions of the tiles used in this play */
 	public Vector<Point> getPositions () {
-		return null;
+		return positionsPlayed;
 	}
 }

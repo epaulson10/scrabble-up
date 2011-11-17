@@ -1,9 +1,10 @@
 package scrabble;
 
 import game.*;
-import java.util.*;
 
-import ttt.TTTMoveAction;
+import java.awt.*;
+import java.io.IOException;
+import java.util.*;
 
 /**ScrabbleGameImpl
 Enforces the Scrabble game rules and sets the game state.*/
@@ -13,10 +14,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
+	private Dictionary dictionary;
 
 	/** Constructor - initializes instance variables */
 	public ScrabbleGameImpl () {
-
+		try {
+			dictionary = new Dictionary();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** Determines if a given game player can make a move
@@ -63,10 +69,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @return true if the move was valid, false otherwise */
 	protected boolean makeMove (GamePlayer thePlayer, GameMoveAction move) 
 	{
-		// typecast the GameMoveAction to a ScrabbleMoveAction
-		//ScrabbleMoveAction mv = (ScrabbleMoveAction)move;
+
 		// typecast the GamePlayer to a ScrabblePlayer
 		ScrabblePlayer plr = (ScrabblePlayer)thePlayer;
+		
+		// Create a new Vector to store the player's hand
+		Vector<ScrabbleTile> hand = plr.getHand();
 		
 		// get the 0/1 id of our player
 		int playerID = indexOf(thePlayer);
@@ -78,43 +86,148 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// if the move is a discard move
 		if(move instanceof ScrabbleDiscardAction)
 		{
-			// Create a new Vector to store the player's hand
-			Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
-			hand = plr.getHand();
+			// Typecast the GameMoveAction to a ScrabbleDiscardAction
+			ScrabbleDiscardAction discMv = (ScrabbleDiscardAction)move;
 			
-			// for each tile to remove, remove it from the player's hand
-			// and add it to the bag
-			for(ScrabbleTile tile : ((ScrabbleDiscardAction)move).getTiles())
+			// Tiles to be discarded
+			Vector<ScrabbleTile> discTiles = discMv.getTiles();
+			
+			// for each tile to remove
+			// add it to the bag
+			for(ScrabbleTile tile : discTiles)
 			{
-				hand.remove(tile);
 				bag.add(tile);
 			}
-			// create a random number generator to get a random tile
-			// and an index to store random num
-			Random ran = new Random();
-			int index;
-
-			// for each tile that was removed
-			for(int i = 0; i < ((ScrabbleDiscardAction)move).getTiles().size(); i++)
-			{
-				// choose an int from 0 to the size of bag
-				index = ran.nextInt(bag.size());
-				
-				// add a new random tile to the player's hand
-				// and remove that tile from the bag
-				hand.add(bag.elementAt(index));
-				bag.remove(index);
-			}
-			// update the player's hand
-			plr.updateHand(hand);
+			// remove the tiles played and pick
+			// new tiles from the bag
+			updateHand(hand, discTiles, plr);
+			
+			return true;
 		}
 
 		else if(move instanceof ScrabbleMoveAction)
 		{
-
+			// Typecast the GameMoveAction to a ScrabbleMoveAction
+			ScrabbleMoveAction mv = (ScrabbleMoveAction)move;
+			// vector of the position where the tiles were played
+			Vector<Point> pos = mv.getPositions();
+			// vector of the tiles played
+			Vector<ScrabbleTile> tiles = mv.getTiles();
+			
+			// if number of tiles and number of positions are unequal, this
+			// was a bad move
+			if (tiles.size() != pos. size())
+			{
+			    return false;
+			}
+			
+			// check if it was a valid move
+			if(checkValMove(pos, tiles))
+			{
+				updateHand(hand, tiles, plr);
+				
+				// apply move to master board
+				for (int i = 0; i < tiles.size(); i++)
+				{
+				    Point curPos = pos.get(i);
+				    ScrabbleTile curTile = tiles.get(i);
+				    board.putTile(curPos.y, curPos.x, curTile);
+				}
+				
+				// move was legal
+				return true;
+			}
+			return false;
 		}
-		/***********************************************************************/
 		return false;
+	}
+	
+	/**
+	 * Removes tiles played from the player's hand
+	 * and adds new tiles to the players hand
+	 * CAVEAT: Might move all code into the Player's version
+	 * @param hand Vector of current tiles in plyrs hand
+	 * @param tiles Vector of tiles played during move
+	 * @param plr Player who made the move
+	 */
+	private void updateHand(Vector<ScrabbleTile> hand,
+			Vector<ScrabbleTile> tiles, ScrabblePlayer plr) 
+	{
+		// create a random number generator to get a random tile
+		// and an index to store random num
+		Random ran = new Random();
+		int index;
+		
+		// for each tile played remove it from the player's hand
+		// and add a new tile to the player's hand
+		for(ScrabbleTile tile : tiles)
+		{
+			hand.remove(tile);
+			index = ran.nextInt(bag.size());
+			hand.add(bag.elementAt(index));
+			bag.removeElementAt(index);
+		}
+		// update the player's hand with this new hand
+		plr.updateHand(hand);
+	}
+
+	private boolean checkValMove(Vector<Point> pos, 
+			Vector<ScrabbleTile> tiles) {
+		
+		char word[] = new char[10];
+		int count1;
+		int count2;
+		for(int i = 0; i < tiles.size(); i++)
+		{
+			board.putTile(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
+		}
+		
+		for(int i = 0; i < board.size; i++)
+		{
+			for(int j = 0; j < board.size; j++)
+			{
+				if(board.getTileAt(i, j) != null);
+				{
+					count1 = i;
+					count2 = j;
+					int index = 0;
+					while(board.getTileAt(count1,count2) != null)
+					{
+						word[index] = board.getTileAt(count1, count2).getLetter();
+						count2++;
+						index++;
+					}
+					if(!dictionary.isValidWord(word.toString()))
+					{
+						return false;
+					}
+					resetWord(word);
+					count1 = i;
+					count2 = j;
+					index = 0;
+					while(board.getTileAt(count1++, count2) != null)
+					{
+						word[index] = board.getTileAt(count1, count2).getLetter();
+						count1++;
+						index++;
+					}
+					if(!dictionary.isValidWord(word.toString()))
+					{
+						return false;
+					}
+					return true;
+				}	
+			}
+		}
+		return false;
+	}
+
+	private void resetWord(char[] word) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < word.length; i++)
+		{
+			word[i] = 0;
+		}
 	}
 
 	/** Determines the score of a Scrabble play

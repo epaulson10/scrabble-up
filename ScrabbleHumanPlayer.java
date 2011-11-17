@@ -58,9 +58,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 		
 	}
 	
-	/*added*/
-	/****************************/
-	
 	/**
 	 * Get the player's hand
 	 */
@@ -77,8 +74,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 		hand = newHand;
 	}
 	
-	
-	/****************************/
 	public void mouseClicked (MouseEvent me) {
 		
 	}
