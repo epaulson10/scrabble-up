@@ -101,6 +101,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	        {
 	            // reached a value threshold; following letters will be worth
 	            // more points
+	            
 	            curValue++;
 	        }
 	        else
