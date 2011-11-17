@@ -19,7 +19,7 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void paint (Graphics g) 
     {
-
+        g.fillRect(0,0, this.getSize().width, this.getSize().height);
     }
 
     /** constructor
@@ -29,11 +29,10 @@ public class ScrabblePlayerUI extends JPanel
     public ScrabblePlayerUI (ScrabbleHumanPlayer initPlayer) 
     {
         player = initPlayer;
-        this.setSize(player.initialWidth(), player.initialHeight());
+        this.setSize(player.initialWidth(), player.initialHeight()-100);
         this.setPreferredSize(this.getSize());
         this.setMinimumSize(this.getSize());
         this.setBackground(Color.lightGray);
-        
     }
 
     /**  * Updates the stored game state. */
