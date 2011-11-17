@@ -16,6 +16,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int playerToMove;
 	private int winner;
 	private Dictionary dictionary;
+	private boolean emptyHand0;
+	private boolean emptyHand1;
 
 	/** Constructor - initializes instance variables */
 	public ScrabbleGameImpl () {
@@ -30,6 +32,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		p1Score = 0;
 		playerToMove = 0;
 		winner = -1;
+		emptyHand0 = false;
+		emptyHand1 = false;
 	}
 
 	/** Determines if a given game player can make a move
@@ -51,8 +55,10 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	/** Determines if the game is over.
 
 @return true if the game is over, false otherwise */
-	public boolean gameOver () {
-		return false;
+	public boolean gameOver ()
+	{
+	    // If a player has won, the game is over
+		return winner >= 0;
 	}
 
 	/** Returns the current GameState relative to the given player.
@@ -456,13 +462,34 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	/** Checks to see if a player has won the game
 
 @return true if someone has won, false otherwise */
-	private static boolean checkWinner () {
-		return false;
+	protected boolean checkWinner()
+	{
+		if (bag.size() == 0 && (emptyHand0 || emptyHand1))
+		{
+		    if (p0Score > p1Score)
+		    {
+		        winner = 0;
+		    }
+		    else if (p1Score > p0Score)
+		    {
+		        winner = 1;
+		    }
+		    else
+		    {
+		        winner = 2;
+		    }
+		    return true;
+		}
+		else
+		{
+		    winner = -1;
+		    return false;
+		}
 	}
 
 	/** Returns an integer representing the player who has won the game. Returns -1 if no player has won.
 
-@return The number representing the winning player or -1 if no one has won yet */
+@return The number representing the winning player, -1 if no one has won yet, 2 for a tie*/
 	public int getWinner () {
 		return winner;
 	}
