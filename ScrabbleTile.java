@@ -1,5 +1,7 @@
 package scrabble;
 
+import java.awt.Point;
+
 /**Scrabble Tile
 
 A scrabble tile used in playing the game.*/
@@ -7,6 +9,7 @@ class ScrabbleTile {
 	private char letter;
 	private int value;
 	private boolean fromBlank;
+	private Point location;
 
 	/** Initializes letter to initLetter and value to initValue. If 
 initLetter is not a valid letter then letter is set to %.
@@ -49,6 +52,18 @@ initLetter is not a valid letter then letter is set to %.
 			return "Tiles/ScrabbleTile"+letter+".jpg";
 		else
 			return "Tiles/ScrabbleTile"+letter+"blank.jpg";
+	}
+	
+	/** Set the tile's point */
+	public void setLocation(int x, int y)
+	{
+		location.x = x;
+		location.y = y;
+	}
+	
+	public Point getLocation()
+	{
+		return location;
 	}
 
 }
