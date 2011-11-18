@@ -80,7 +80,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	    ScrabblePlayer sp = (ScrabblePlayer)gp;
 	    Vector<ScrabbleTile> curHand = sp.getHand();
 	    
-		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score);
+		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score, dictionary);
 	}
 
 	/** Initializes the starting state of the game */
