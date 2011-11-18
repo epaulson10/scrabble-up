@@ -66,4 +66,8 @@ initLetter is not a valid letter then letter is set to %.
 		return location;
 	}
 
+	public String toString()
+	{
+		return ""+letter;
+	}
 }
