@@ -2,7 +2,6 @@ package scrabble;
 
 import java.awt.Point;
 import java.util.Vector;
-import game.*;
 
 /** * Class representing an unskilled AI player.
  * 
@@ -90,7 +89,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         				}
         				for(String s: combinations)
         				{
-        					if (game.getDictionary.isValidWord(s))
+        					if (myState.getDictionary().isValidWord(s))
         					{
         						int loc1 = findTile(s.substring(1,2), handContainer);
         						int loc2 = findTile(s.substring(2), handContainer);

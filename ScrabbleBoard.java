@@ -61,7 +61,7 @@ nonValidBoardSpaceException is thrown */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
 
 		{
-			tilePositions[row][col] = sct;
+			tilePositions[col][row] = sct;
 		}
 	
 	/**Returns an array of strings to locate the tile image folders
