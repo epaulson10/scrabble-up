@@ -23,7 +23,7 @@ public class Dictionary
 	public Dictionary() throws IOException 
 	{
 		// read one word per line and store it into the hashSet
-		BufferedReader in = new BufferedReader(new FileReader("word_list.txt"));
+		BufferedReader in = new BufferedReader(new FileReader("./src/scrabble/word_list.txt"));
 		String word = in.readLine();
 		while(word != null)
 		{
