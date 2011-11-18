@@ -1,6 +1,11 @@
 package scrabble;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /**Scrabble Tile
 
@@ -49,9 +54,9 @@ initLetter is not a valid letter then letter is set to %.
 	public String getFileName ()
 	{
 		if(!fromBlank)
-			return "Tiles/ScrabbleTile"+letter+".jpg";
+			return "./src/scrabble/Tiles/ScrabbleTile"+letter+".jpg";
 		else
-			return "Tiles/ScrabbleTile"+letter+"blank.jpg";
+			return "./src/scrabble/Tiles/ScrabbleTile"+letter+"blank.jpg";
 	}
 	
 	/** Set the tile's point */
@@ -64,6 +69,41 @@ initLetter is not a valid letter then letter is set to %.
 	public Point getLocation()
 	{
 		return location;
+	}
+	
+	/**
+	 * Determines if a given point is inside the tile
+	 * 
+	 * @return true if the point is inside the tile, false otherwise
+	 */
+	public boolean pointInside(int x, int y)
+	{
+	    if (x > location.x && x < location.x + ScrabblePlayerUI.TILE_SIZE &&
+	        y > location.y && y < location.y+ ScrabblePlayerUI.TILE_SIZE)
+	    {
+	        return true;
+	    }
+	    else
+	        return false;
+	}
+	
+	/**
+	 * Creates and returns the tile's image
+	 * @return the tile's BufferedImage
+	 */
+	public BufferedImage getPicture()
+	{
+	    BufferedImage img = null;
+	    try 
+	    {
+	        img = ImageIO.read(new File(getFileName()));
+	    }
+	    catch (IOException ioe)
+	    {
+	        ioe.printStackTrace();
+	    }
+	    
+	    return img;
 	}
 
 	public String toString()
