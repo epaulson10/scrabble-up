@@ -40,7 +40,7 @@ public class Dictionary
 	 */
 	public boolean isValidWord (String word) 
 	{
-		if(wordList.contains(word)) return true;
+		if(wordList.contains(word.toLowerCase())) return true;
 		else return false;
 	}
 
