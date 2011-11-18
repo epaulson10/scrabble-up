@@ -38,7 +38,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    return GUI_WIDTH;
 	}
 
-	/** Constructor */
+	/** 
+	 * Constructor 
+	 */
 	public ScrabbleHumanPlayer () 
 	{
 	    super();
@@ -106,9 +108,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	protected Component createApplComponent () 
 	{
 	    JButton resignButton = new JButton("Resign");
-	    JButton discardButton = new JButton("Discard");
-	    JButton passButton = new JButton("Pass");
-	    JButton shuffleButton = new JButton("Shuffle");
+        JButton discardButton = new JButton("Discard");
+        JButton passButton = new JButton("Pass");
+        JButton shuffleButton = new JButton("Shuffle");
 
 	    resignButton.setSize(300, 100);
 	    resignButton.setMinimumSize(resignButton.getSize());
@@ -127,9 +129,10 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         shuffleButton.setMaximumSize(shuffleButton.getSize());
 	    
 	    Panel uiPanel = new Panel();
-	    uiPanel.setSize(initialWidth(), initialHeight());
+	    
 	    ui = createUI();
 	    ui.addMouseListener(this);
+	    uiPanel.setSize(ui.getSize());
 	    Box vBox = Box.createVerticalBox();
 	    uiPanel.add(vBox);
 	    Box hBoxTop = Box.createHorizontalBox();

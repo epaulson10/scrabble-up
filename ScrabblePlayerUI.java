@@ -9,6 +9,9 @@ import java.awt.*;
  */
 public class ScrabblePlayerUI extends JPanel 
 {
+    private final static int BOARD_SIZE = 15;
+    private final static int TILE_SIZE = 35;
+    private final static int UI_SIZE = BOARD_SIZE*TILE_SIZE+1;
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
@@ -19,7 +22,16 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void paint (Graphics g) 
     {
-        g.fillRect(0,0, this.getSize().width, this.getSize().height);
+        //Draw the vertical lines of the grid
+        for (int i = 0; i <= BOARD_SIZE; i++)
+        {
+            g.drawLine(TILE_SIZE*i, 0, TILE_SIZE*i, UI_SIZE);
+        }
+        //Draw the horizontal lines of the grid
+        for (int i = 0; i <= BOARD_SIZE; i++)
+        {
+            g.drawLine(0, TILE_SIZE*i, UI_SIZE, TILE_SIZE*i);
+        }
     }
 
     /** constructor
@@ -29,7 +41,7 @@ public class ScrabblePlayerUI extends JPanel
     public ScrabblePlayerUI (ScrabbleHumanPlayer initPlayer) 
     {
         player = initPlayer;
-        this.setSize(player.initialWidth(), player.initialHeight()-100);
+        this.setSize(UI_SIZE, UI_SIZE);
         this.setPreferredSize(this.getSize());
         this.setMinimumSize(this.getSize());
         this.setBackground(Color.lightGray);
