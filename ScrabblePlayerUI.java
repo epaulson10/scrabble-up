@@ -2,6 +2,7 @@ package scrabble;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Vector;
 
 /** A canvas that draws a Scrabble Game State
  * @author Aaron Dobbe, Steven Beyer, Erik Paulson, and Andrew Meyer
@@ -14,8 +15,10 @@ public class ScrabblePlayerUI extends JPanel
     public final static int BOARD_SIZE = 15;
     public final static int TILE_SIZE = 35;
     public final static int UI_SIZE = BOARD_SIZE*TILE_SIZE+1;
+    
     //The amount of space between the board and the hand.
     private final static int SPACE = 20;
+    
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
@@ -38,8 +41,8 @@ public class ScrabblePlayerUI extends JPanel
             g.drawLine(0, TILE_SIZE*i, UI_SIZE, TILE_SIZE*i);
         }
         
+        //Draw Hand rack
         g.drawLine(4*TILE_SIZE, TILE_SIZE*15+SPACE, TILE_SIZE*11, TILE_SIZE*15+SPACE);
-        //Draw Bottom line
         g.drawLine(4*TILE_SIZE, TILE_SIZE*16+SPACE, TILE_SIZE*11, TILE_SIZE*16+SPACE);
         for (int i = 4; i <= 11; i++)
         {
@@ -47,6 +50,17 @@ public class ScrabblePlayerUI extends JPanel
         }
         
         g.drawImage(test.getPicture(), 0,0,TILE_SIZE, TILE_SIZE,null,null);
+        drawHand(g, player.getHand());
+    }
+    
+    public void drawHand(Graphics g, Vector<ScrabbleTile> hand)
+    {
+        int count = 4;
+        for (ScrabbleTile tile : hand)
+        {
+            g.drawImage(tile.getPicture(),TILE_SIZE*count,TILE_SIZE*15+SPACE,TILE_SIZE, TILE_SIZE,null,null);
+            count++;
+        }
     }
 
     /** constructor
