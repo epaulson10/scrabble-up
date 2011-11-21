@@ -10,13 +10,16 @@ import javax.swing.Box;
 import javax.swing.JButton;
 
 /**Class representing a human Scrabble player.*/
-public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener, ActionListener {
+public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener, ActionListener,MouseListener 
+{
 	private final static int GUI_HEIGHT = 720;
 	private final static int GUI_WIDTH = 700;
 	private String buttonNames[] = {"Quit", "Discard", "Pass", "Shuffle"};
 	
 	// Player's hand
-	private Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+	private Vector<ScrabbleTile> hand;
+	
+	//The UI that the game is drawn on
 	private ScrabblePlayerUI ui;
 	
 
@@ -44,7 +47,12 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	public ScrabbleHumanPlayer () 
 	{
 	    super();
-	}
+	    hand = new Vector<ScrabbleTile>();
+	    for (int i = 0; i < 6; i++)
+	    {
+	    hand.add(new ScrabbleTile('A',1,false));
+	    }
+;	}
 
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
