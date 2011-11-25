@@ -10,11 +10,13 @@ import javax.swing.Box;
 import javax.swing.JButton;
 
 /**Class representing a human Scrabble player.*/
-public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener, ActionListener,MouseListener 
+public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener
 {
 	private final static int GUI_HEIGHT = 720;
 	private final static int GUI_WIDTH = 700;
 	private String buttonNames[] = {"Quit", "Discard", "Pass", "Shuffle"};
+	//A reference to the tile that is being dragged
+	private ScrabbleTile moveTile;
 	
 	// Player's hand
 	private Vector<ScrabbleTile> hand;
@@ -22,9 +24,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	//The UI that the game is drawn on
 	private ScrabblePlayerUI ui;
 	
-
-
-
 	/** Returns the initial height of the GUI.
 	 * @return the initial height of the GUI, in pixels 
 	 */
@@ -97,16 +96,43 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 		hand = newHand;
 	}
 	
-	public void mouseClicked (MouseEvent me) {
-		
+	public void mouseClicked (MouseEvent me) 
+	{
+
 	}
 
-	public void mouseDragged (MouseEvent me) {
-		
+	/**
+	 * When the mouse is dragged and there is a tile being pressed on
+	 * move the tile relative to the mouse. The mouse will be on the center of the tile.
+	 * @param me the Mouse
+	 */
+	public void mouseDragged (MouseEvent me) 
+	{
+		if (moveTile != null)
+		{
+		    moveTile.setLocation(me.getX()-ScrabblePlayerUI.TILE_SIZE/2, me.getY()-ScrabblePlayerUI.TILE_SIZE/2);
+		    ui.repaint();
+		}
 	}
 
-	public void mouseMoved (MouseEvent me) {
+	public void mouseMoved (MouseEvent me) 
+	{
 		
+	}
+	public void mousePressed (MouseEvent me)
+	{
+	   moveTile = ui.tileOnPosition(me.getPoint());
+	  
+	   
+	}
+	public void mouseReleased (MouseEvent me)
+	{
+	    if (moveTile != null)
+	    {
+	        ui.snapTileToGrid(moveTile);
+	        ui.repaint();
+	        moveTile = null;
+	    }
 	}
 
 	/** Creates the graphical component of the application.
@@ -140,6 +166,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    
 	    ui = createUI();
 	    ui.addMouseListener(this);
+	    ui.addMouseMotionListener(this);
 	    uiPanel.setSize(ui.getSize());
 	    Box vBox = Box.createVerticalBox();
 	    uiPanel.add(vBox);

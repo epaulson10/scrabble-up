@@ -36,7 +36,7 @@ public class ScrabbleBoard
 	 * */
 	public ScrabbleTile getTileAt (int row, int col)
 	{	
-		return tilePositions[col][row];
+	    return tilePositions[row][col];
 	}
 
 	/** Returns the integer code of the bonus at the specified tile
@@ -49,7 +49,7 @@ nonValidBoardSpaceException is thrown */
 	public int getBonusAt (int row, int col)
 	{
 
-		return bonusPositions[col][row];
+		return bonusPositions[row][col];
 	}
 	
 	/** Sets the tile at the given location
@@ -59,9 +59,9 @@ nonValidBoardSpaceException is thrown */
 	 * @throws NonValidBoardSpaceException
 	 */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
-
 		{
-			tilePositions[col][row] = sct;
+			tilePositions[row][col] = sct;
+			sct.setLocation(row, col);
 		}
 	
 	/**Returns an array of strings to locate the tile image folders
