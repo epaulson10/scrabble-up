@@ -34,6 +34,7 @@ initLetter is not a valid letter then letter is set to %.
 		else
 			value = 0;
 		fromBlank = initFromBlank;
+		location = new Point();
 	}
 
 	/** Gets the letter of the tile
@@ -62,8 +63,7 @@ initLetter is not a valid letter then letter is set to %.
 	/** Set the tile's point */
 	public void setLocation(int x, int y)
 	{
-		location.x = x;
-		location.y = y;
+		location.setLocation(x,y);
 	}
 	
 	public Point getLocation()

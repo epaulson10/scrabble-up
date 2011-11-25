@@ -8,7 +8,7 @@ import java.util.Vector;
  * @author Aaron Dobbe, Steven Beyer, Erik Paulson, and Andrew Meyer
  * @version Yet to be implemented
  * 
- * NOTE: Find x,y values of where you clicked and divide by 15 = position.
+ * 
  */
 public class ScrabblePlayerUI extends JPanel 
 {
@@ -23,6 +23,8 @@ public class ScrabblePlayerUI extends JPanel
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
     private ScrabbleTile test;
+    private ScrabbleBoard board;
+    
 
     /** 
      * Paints the game state
@@ -30,6 +32,11 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void paint (Graphics g) 
     {
+        //Clear the board
+        g.setColor(Color.white);
+        g.fillRect(0, 0, UI_SIZE, UI_SIZE+SPACE+TILE_SIZE);
+        
+        g.setColor(Color.black);
         //Draw the vertical lines of the grid
         for (int i = 0; i <= BOARD_SIZE; i++)
         {
@@ -49,10 +56,35 @@ public class ScrabblePlayerUI extends JPanel
             g.drawLine(TILE_SIZE*i, TILE_SIZE*15+SPACE, TILE_SIZE*i, TILE_SIZE*16+SPACE);
         }
         
-        g.drawImage(test.getPicture(), 0,0,TILE_SIZE, TILE_SIZE,null,null);
-        drawHand(g, player.getHand());
+        drawBoard(g,board);
     }
     
+    /**
+     * Draws the tiles on the board from the given ScrabbleBoard
+     * @param g Graphics context that's being drawn to
+     * @param board The scrabble board for a given player
+     */
+    public void drawBoard(Graphics g, ScrabbleBoard board)
+    {
+        for (int i = 0; i < BOARD_SIZE; i++)
+        {
+            for (int k = 0; k < BOARD_SIZE; k++)
+            {
+                ScrabbleTile temp = board.getTileAt(i,k);
+                if (temp != null)
+                {
+                    g.drawImage(temp.getPicture(), temp.getLocation().x, temp.getLocation().y, TILE_SIZE, TILE_SIZE, null,null);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Draws the tiles in the players "hand"
+     * 
+     * @param g graphics object which we are drawing on
+     * @param hand The vector containing the player's hand
+     */
     public void drawHand(Graphics g, Vector<ScrabbleTile> hand)
     {
         int count = 4;
@@ -74,7 +106,9 @@ public class ScrabblePlayerUI extends JPanel
         this.setPreferredSize(this.getSize());
         this.setMinimumSize(this.getSize());
         this.setBackground(Color.lightGray);
+        board = new ScrabbleBoard();
         test = new ScrabbleTile('A',1,false);
+        board.putTileAt(0, 0, test);
     }
 
     /**  * Updates the stored game state. */
@@ -82,6 +116,8 @@ public class ScrabblePlayerUI extends JPanel
     {
         state = (ScrabbleGameState)model.getState(player, 0);
     }
+    
+    
 
     /**  * Set the canvas to model the given game.
      *
@@ -90,6 +126,57 @@ public class ScrabblePlayerUI extends JPanel
     public void setModel (ScrabbleGame game) 
     {
         model = game;
+    }
+    
+    /**
+     * Returns the ScrabbleTile that was clicked on
+     * 
+     * @param p the Point where the user clicked
+     * @return the tile on the point or null if there is none
+     */
+    public ScrabbleTile tileOnPosition(Point p)
+    {
+        for (int i = 0; i < BOARD_SIZE; i++)
+        {
+            for (int k = 0; k < BOARD_SIZE; k++)
+            {
+                if (board.getTileAt(i, k) != null)
+                {
+                    if (board.getTileAt(i,k).pointInside(p.x, p.y))
+                    {
+                        return board.getTileAt(i,k);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * "Snaps" the tile image to the board grid when released.
+     * This works by using integer division by 15 to truncate the decimal
+     * and then multiplying by 15 to restore the location.
+     * 
+     * NOTE: Find x,y values of where you clicked and divide by 15 = position
+     */
+    public void snapTileToGrid(ScrabbleTile st)
+    {
+        Point location = st.getLocation();
+        int x = location.x+TILE_SIZE/2;
+        int y = location.y+TILE_SIZE/2;
+        
+        for (int row = 0; row < BOARD_SIZE; row++)
+        {
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                if (x >= row*TILE_SIZE && x < row*TILE_SIZE + TILE_SIZE &&
+                        y >= col*TILE_SIZE && y < col*TILE_SIZE + TILE_SIZE)
+                {
+                    st.setLocation(row*TILE_SIZE, col*TILE_SIZE);
+                }
+            }
+        }
+
     }
 
 }
