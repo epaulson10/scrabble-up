@@ -8,21 +8,30 @@ import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**Class representing a human Scrabble player.*/
 public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener
 {
 	private final static int GUI_HEIGHT = 720;
 	private final static int GUI_WIDTH = 700;
+	
 	private String buttonNames[] = {"Quit", "Discard", "Pass", "Shuffle"};
 	//A reference to the tile that is being dragged
 	private ScrabbleTile moveTile;
+	
+	//Labels representing the score
+	private JLabel p0score;
+	private JLabel p1score;
 	
 	// Player's hand
 	private Vector<ScrabbleTile> hand;
 	
 	//The UI that the game is drawn on
 	private ScrabblePlayerUI ui;
+	
+	//A reference to the play/pass button
+	private JButton playPassButton;
 	
 	/** Returns the initial height of the GUI.
 	 * @return the initial height of the GUI, in pixels 
@@ -47,11 +56,12 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	{
 	    super();
 	    hand = new Vector<ScrabbleTile>();
-	    for (int i = 0; i < 6; i++)
+	    for (int i = 0; i < 2; i++)
 	    {
-	    hand.add(new ScrabbleTile('A',1,false));
+	        hand.add(new ScrabbleTile('A',1,false));
 	    }
-;	}
+	    ui.putInHand(hand);
+	}
 
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
@@ -77,7 +87,13 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/** Actions to be taken after we're notified of a state change. */
 	public void stateChanged () 
 	{
-		
+	    super.stateChanged();
+	    ScrabbleGameState state = (ScrabbleGameState)game.getState(this, 0);
+	    p0score.setText(""+state.getScore(0));
+	    p1score.setText(""+ state.getScore(1));
+		ui.updateState();
+		ui.repaint();
+		repaint();
 	}
 	
 	/**
@@ -119,20 +135,38 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	{
 		
 	}
+	/**
+	 * When the mouse is pressed, get a reference to the tile it was pressed on
+	 * @param me the MouseEvent being processed
+	 */
 	public void mousePressed (MouseEvent me)
 	{
 	   moveTile = ui.tileOnPosition(me.getPoint());
-	  
-	   
+	   if (moveTile == null)
+	       moveTile = ui.tileInHand(me.getPoint());
 	}
+	/**
+	 * When the mouse is released, snaps the tile moved to the grid
+	 * and nulls the reference
+	 * 
+	 * @param me the MouseEvent being processed
+	 */
 	public void mouseReleased (MouseEvent me)
 	{
 	    if (moveTile != null)
 	    {
 	        ui.snapTileToGrid(moveTile);
+	        ui.snapToRack(hand);
 	        ui.repaint();
 	        moveTile = null;
 	    }
+	    //Change the text of the play/pass button
+	    if (ui.tilesPlayed())
+	    {
+	        playPassButton.setText("Play");
+	    }
+	    else
+	        playPassButton.setText("Pass");
 	}
 
 	/** Creates the graphical component of the application.
@@ -141,6 +175,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	 */
 	protected Component createApplComponent () 
 	{
+	    p0score = new JLabel("Player 0: 0");
+	    p1score = new JLabel("Player 1: 0");
 	    JButton resignButton = new JButton("Resign");
         JButton discardButton = new JButton("Discard");
         JButton passButton = new JButton("Pass");
@@ -149,19 +185,24 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    resignButton.setSize(300, 100);
 	    resignButton.setMinimumSize(resignButton.getSize());
 	    resignButton.setMaximumSize(resignButton.getSize());
+	    resignButton.addActionListener(this);
 	   
 	    discardButton.setSize(300, 100);
         discardButton.setMinimumSize(discardButton.getSize());
         discardButton.setMaximumSize(discardButton.getSize());
+        discardButton.addActionListener(this);
 	    
 	    passButton.setSize(300, 100);
         passButton.setMinimumSize(passButton.getSize());
         passButton.setMaximumSize(passButton.getSize());
+        passButton.addActionListener(this);
 	    
 	    shuffleButton.setSize(300, 100);
         shuffleButton.setMinimumSize(shuffleButton.getSize());
         shuffleButton.setMaximumSize(shuffleButton.getSize());
+        shuffleButton.addActionListener(this);
 	    
+        playPassButton = passButton;
 	    Panel uiPanel = new Panel();
 	    
 	    ui = createUI();
@@ -172,9 +213,12 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    uiPanel.add(vBox);
 	    Box hBoxTop = Box.createHorizontalBox();
 	    Box hBoxBot = Box.createHorizontalBox();
+	    Box hBoxScore = Box.createHorizontalBox();
 	    vBox.add(hBoxTop);
 	    vBox.add(Box.createVerticalGlue());
 	    vBox.add(hBoxBot);
+	    vBox.add(Box.createVerticalGlue());
+	    vBox.add(hBoxScore);
 	    
 	    //Add UI buttons
 	    hBoxBot.add(Box.createHorizontalGlue());
@@ -186,6 +230,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         hBoxBot.add(Box.createHorizontalGlue());
         hBoxBot.add(shuffleButton);
         hBoxBot.add(Box.createHorizontalGlue());
+        hBoxScore.add(p0score);
+        hBoxScore.add(Box.createHorizontalGlue());
+        hBoxScore.add(p1score);
 	   
 	    hBoxTop.add(ui);
 	    
@@ -193,14 +240,44 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	}
 	
 	/**
-	 * This is an override of the superclass's actionPerformed method.
+	 * 
 	 * This handles button press events.
 	 * 
 	 * @param ae The ActionEvent being passed in
 	 */
-	public void actionPerformed(ActionEvent ae)
+	protected void moreActionPerformed(ActionEvent ae)
 	{
-	   super.actionPerformed(ae);
+	   String cmd = ae.getActionCommand();
+	   if (cmd.equals("Play"))
+	   {
+	       Vector<ScrabbleTile> tiles = ui.tilesToPlay();
+	       Vector<Point> positions = new Vector<Point>();
+	       for (ScrabbleTile tile : tiles)
+	       {
+	           Point p = tile.getLocation();
+	           p.setLocation((p.x)/ScrabblePlayerUI.TILE_SIZE, (p.y)/ScrabblePlayerUI.TILE_SIZE);
+	           positions.add(p);
+	           
+	       }
+	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
+	   }
+	   else if (cmd.equals("Discard"))
+	   {
+	       game.applyAction(new ScrabbleDiscardAction(this,ui.tilesToDiscard()));
+	   }
+	   else if (cmd.equals("Pass"))
+	   {
+	       Vector<ScrabbleTile> blankHand = new Vector<ScrabbleTile>();
+	       game.applyAction(new ScrabbleDiscardAction(this, blankHand));
+	   }
+	   else if (cmd.equals("Resign"))
+	   {
+	       
+	   }
+	   else if (cmd.equals("Shuffle"))
+	   {
+	       
+	   }
 	}
 
 	

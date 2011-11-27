@@ -25,12 +25,47 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
 
     /** Encodes the updated game state after a network player makes a move
      * to send the information to the next player
+     * 
      * @param gs the GameState being encoded
      * @return A string containing the encoded game state 
      **/
     protected String encodeState (GameState gs) 
     {
-        return null;
+        ScrabbleGameState state = (ScrabbleGameState)gs;
+        String str = "[";
+        for (ScrabbleTile tile : state.getHand())
+        {
+            str += tile.getLetter();
+        }
+        str += "]";
+        str += "[";
+        for (int i = 0; i < ScrabblePlayerUI.BOARD_SIZE; i++)
+        {
+            for (int k = 0; k < ScrabblePlayerUI.BOARD_SIZE; k++)
+            {
+                ScrabbleTile tile = state.getBoard().getTileAt(i, k);
+                if (tile != null)
+                {
+                    str += tile.getLetter();
+                    str += tile.getValue();
+                    if (tile.isBlank())
+                    {
+                        str+= "-";
+                    }
+                    else
+                        str+="+";
+                }
+            }
+        }
+        str += "][";
+        str += state.getScore(0);
+        str += ":";
+        str += state.getScore(1);
+        str += "][";
+        str += state.whoseMove();
+        str += "]";
+        
+        return str;
     }
 
     /**

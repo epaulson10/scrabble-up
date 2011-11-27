@@ -258,6 +258,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		    handIsEmpty = true;
 		}
 		
+		
 		// update the player's hand with this new hand
 		plr.updateHand(hand);
 	}

@@ -17,19 +17,20 @@ class ScrabbleTile {
 	private Point location;
 
 	/** Initializes letter to initLetter and value to initValue. If 
-initLetter is not a valid letter then letter is set to %.
-@param initLetter the letter that the tile represents.
-@param initValue the value of the tile.
-@param initFromBlank if the tile is coming from a blank */
+	 * initLetter is not a valid letter then letter is set to %.
+	 * @param initLetter the letter that the tile represents.
+	 * @param initValue the value of the tile.
+	 * @param initFromBlank if the tile is coming from a blank 
+	 */
 	public ScrabbleTile (char initLetter, int initValue, boolean initFromBlank) 
 	{
-		if(Character.isLetter(initLetter))
-			letter = Character.toUpperCase(initLetter);
-		else if(initLetter == ' ')
-			letter = initLetter;
-		else
-			letter = '%';
-		if(initValue > 0)
+	    if(Character.isLetter(initLetter))
+	        letter = Character.toUpperCase(initLetter);
+	    else if(initLetter == ' ')
+	        letter = initLetter;
+	    else
+	        letter = '%';
+	    if(initValue > 0)
 			value = initValue;
 		else
 			value = 0;
@@ -50,6 +51,15 @@ initLetter is not a valid letter then letter is set to %.
 	{
 		return value;
 	}
+	
+	/**
+	 * Determines whether this is a blank tile or not
+	 * @return true if from a blank, false otherwise
+	 */
+	public boolean isBlank()
+	{
+	    return fromBlank;
+	}
 
 	/** The location of the tile's image */
 	public String getFileName ()
@@ -60,12 +70,23 @@ initLetter is not a valid letter then letter is set to %.
 			return "./src/scrabble/Tiles/ScrabbleTile"+letter+"blank.jpg";
 	}
 	
-	/** Set the tile's point */
+	/** 
+	 * Set the tile's point 
+	 * 
+	 * @param x the x location
+	 * @param y the y location
+	 */
 	public void setLocation(int x, int y)
 	{
 		location.setLocation(x,y);
 	}
 	
+	/**
+	 * get the location of this tile
+	 * 
+	 * @return Point representing where the tile is
+	 * 
+	 */
 	public Point getLocation()
 	{
 		return location;

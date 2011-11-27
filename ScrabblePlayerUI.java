@@ -8,7 +8,7 @@ import java.util.Vector;
  * @author Aaron Dobbe, Steven Beyer, Erik Paulson, and Andrew Meyer
  * @version Yet to be implemented
  * 
- * 
+ * NOTE: Find x,y values of where you clicked and divide by 15 = position
  */
 public class ScrabblePlayerUI extends JPanel 
 {
@@ -17,7 +17,7 @@ public class ScrabblePlayerUI extends JPanel
     public final static int UI_SIZE = BOARD_SIZE*TILE_SIZE+1;
     
     //The amount of space between the board and the hand.
-    private final static int SPACE = 20;
+    public final static int SPACE = 20;
     
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
@@ -57,6 +57,7 @@ public class ScrabblePlayerUI extends JPanel
         }
         
         drawBoard(g,board);
+        drawHand(g,player.getHand());
     }
     
     /**
@@ -80,6 +81,24 @@ public class ScrabblePlayerUI extends JPanel
     }
     
     /**
+     * Gives a vector of tiles from the hand which are on the board
+     * @return a vector of tiles from the player's hand which are now on the board
+     */
+    public Vector<ScrabbleTile> tilesToPlay()
+    {
+        Vector<ScrabbleTile> playedTiles = new Vector<ScrabbleTile>();
+        for (ScrabbleTile tile : player.getHand())
+        {
+            Point p = tile.getLocation();
+            if (p.x >= 0 && p.x < UI_SIZE && p.y >= 0 && p.y < UI_SIZE)
+            {
+                playedTiles.add(tile);
+            }
+        }
+        return playedTiles;
+    }
+    
+    /**
      * Draws the tiles in the players "hand"
      * 
      * @param g graphics object which we are drawing on
@@ -87,11 +106,45 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void drawHand(Graphics g, Vector<ScrabbleTile> hand)
     {
+        for (ScrabbleTile tile : hand)
+        {
+            g.drawImage(tile.getPicture(),tile.getLocation().x,tile.getLocation().y,TILE_SIZE, TILE_SIZE,null,null);
+        }
+    }
+    
+    /**
+     * Assigns each tile in the hand a x,y coordinate
+     * @param hand The player's hand
+     */
+    public void putInHand(Vector<ScrabbleTile> hand)
+    {
         int count = 4;
         for (ScrabbleTile tile : hand)
         {
-            g.drawImage(tile.getPicture(),TILE_SIZE*count,TILE_SIZE*15+SPACE,TILE_SIZE, TILE_SIZE,null,null);
+            tile.setLocation(TILE_SIZE*count,TILE_SIZE*15+SPACE);
             count++;
+        }
+        
+    }
+    
+    /**
+     * Snaps a tile from the rack to its position on the rack
+     * 
+     * @param hand the players hand
+     */
+    public void snapToRack(Vector<ScrabbleTile> hand)
+    {
+        int count = 4;
+        int rackLoc;
+        for (ScrabbleTile tile : hand)
+        {
+            Point loc = tile.getLocation();
+            rackLoc = TILE_SIZE*count;
+            if (loc.x +TILE_SIZE/2 >= rackLoc && loc.x+TILE_SIZE/2 < rackLoc+TILE_SIZE &&
+                    loc.y+TILE_SIZE/2 >= TILE_SIZE*15+SPACE && loc.y+TILE_SIZE/2 < TILE_SIZE*16+SPACE)
+                tile.setLocation(rackLoc,TILE_SIZE*15+SPACE);
+            count++;
+            
         }
     }
 
@@ -107,8 +160,6 @@ public class ScrabblePlayerUI extends JPanel
         this.setMinimumSize(this.getSize());
         this.setBackground(Color.lightGray);
         board = new ScrabbleBoard();
-        test = new ScrabbleTile('A',1,false);
-        board.putTileAt(0, 0, test);
     }
 
     /**  * Updates the stored game state. */
@@ -153,11 +204,68 @@ public class ScrabblePlayerUI extends JPanel
     }
     
     /**
-     * "Snaps" the tile image to the board grid when released.
-     * This works by using integer division by 15 to truncate the decimal
-     * and then multiplying by 15 to restore the location.
+     * Determines if a point is on a tile that is in the hand
+     * @param p the point being processed
+     * @return the tile that the point was within
+     */
+    public ScrabbleTile tileInHand(Point p)
+    {
+        for (ScrabbleTile tile : player.getHand())
+        {
+            if (tile.pointInside(p.x, p.y))
+                return tile;
+        }
+        return null;
+    }
+    /**
+     * Determines if a player has placed tiles on the board
      * 
-     * NOTE: Find x,y values of where you clicked and divide by 15 = position
+     * @return true if the player has played 1 or more tiles, false otherwise
+     */
+    public boolean tilesPlayed()
+    {
+        for (ScrabbleTile tile : player.getHand())
+        {
+            Point loc = tile.getLocation();
+            if (loc.x > 0 && loc.x < UI_SIZE && loc.y > 0 && loc.y < UI_SIZE)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if tiles should be discarded
+     * 
+     * @return A vector containing the tiles to be discarded
+     */
+    public Vector<ScrabbleTile> tilesToDiscard()
+    {
+        Vector<ScrabbleTile> toDiscard = new Vector<ScrabbleTile>();
+        for (ScrabbleTile tile : player.getHand())
+        {
+            Point loc = tile.getLocation();
+            if ((loc.x >= 0 && loc.x < UI_SIZE && loc.y >= 0 && loc.y < UI_SIZE))
+            {
+                //Do Nothing, the tile is on the board
+            }
+            else if (loc.x >= TILE_SIZE*4 && loc.x < TILE_SIZE * 11 && loc.y >= TILE_SIZE*15+SPACE && loc.y <= TILE_SIZE*16+SPACE)
+            {
+                //Do nothing, the tile is in the player's hand
+            }
+            else
+                toDiscard.add(tile); 
+        }
+        
+        return toDiscard;
+        
+    }
+    
+    /**
+     * "Snaps" the tile image to the board grid when released.
+     * 
+     * @param st the ScrabbleTile being moved
      */
     public void snapTileToGrid(ScrabbleTile st)
     {
