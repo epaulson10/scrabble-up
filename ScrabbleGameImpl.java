@@ -9,13 +9,13 @@ import java.util.*;
 /**ScrabbleGameImpl
 Enforces the Scrabble game rules and sets the game state.*/
 public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
-	private ScrabbleBoard board;
+	private static ScrabbleBoard board;
 	private Vector<ScrabbleTile> bag;
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
 	private int winner;
-	private Dictionary dictionary;
+	private static Dictionary dictionary;
 	private boolean handIsEmpty;
 
 	/** Constructor - initializes instance variables */
@@ -269,14 +269,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	 * @param tiles tiles played in move
 	 * @return if valid move
 	 */
-	private boolean checkValidMove(Vector<Point> pos, 
+	public static boolean checkValidMove(Vector<Point> pos, 
 			Vector<ScrabbleTile> tiles) {
 		
 		// copy of the board before the move
 		ScrabbleBoard copyBoard = board;
 		
-		// array for the word to check
-		char word[] = new char[ScrabbleBoard.BOARD_HEIGHT];
+		// string to test
+		String testString = "";
 		
 		// counters to iterate through the characters of the word to check
 		int rowCount;
@@ -290,75 +290,65 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		
 		// check that all of the words on the board are still valid after
 		// playing the played word
-		// ******Need to fix******
-		// Starts at the first letter of a word checks it horizontally-
-		// if there is a valid word there then checks the next letter in that word but should
-		// only check if there is a word going down from that letter and not the substring
-		// horizontally.
 		for(int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
 		{
 			for(int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
 			{
 				// Find a letter tile
-				if(copyBoard.getTileAt(row, col) != null);
+				if(copyBoard.getTileAt(row, col) != null)
 				{
+					testString = "";
 					rowCount = row;
 					colCount = col;
 					int index = 0;
 					
 					// If this is the start of a word in the row check the word down
-					if(copyBoard.getTileAt(rowCount,colCount-1) == null)
+					if(col == 0 || copyBoard.getTileAt(rowCount,colCount-1) == null)
 					{
 						// get the whole word
 						while(copyBoard.getTileAt(rowCount,colCount) != null)
 						{
-							word[index] = copyBoard.getTileAt(rowCount, colCount).getLetter();
+							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							colCount++;
 							index++;
 						}
-						// check to see if word is valid
-						if(!dictionary.isValidWord(word.toString()))
+						if(index > 1)
 						{
-							return false;
+							// check to see if word is valid
+							if(!dictionary.isValidWord(testString))
+							{
+								return false;
+							}
 						}
 						// reset variables
-						resetWord(word);
+						testString = "";
 						rowCount = row;
 						colCount = col;
 						index = 0;
 					}
 					// If this is the start of a word in the column check the word down
-					if(copyBoard.getTileAt(rowCount-1, colCount) != null)
+					if(row == 0 || copyBoard.getTileAt(rowCount-1, colCount) == null)
 					{
 						// get the whole word
 						while(copyBoard.getTileAt(rowCount, colCount) != null)
 						{
-							word[index] = copyBoard.getTileAt(rowCount, colCount).getLetter();
+							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							rowCount++;
 							index++;
 						}
-						// check to see if word is valid
-						if(!dictionary.isValidWord(word.toString()))
-						{
-							return false;
+						if(index > 1)
+						{	
+							// check to see if word is valid
+							if(!dictionary.isValidWord(testString))
+							{
+								return false;
+							}
 						}
 					}
 				}	
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Helper function to reset char arrays
-	 * @param word char array to reset
-	 */
-	private void resetWord(char[] word) {
-		// TODO Auto-generated method stub
-		for(int i = 0; i < word.length; i++)
-		{
-			word[i] = 0;
-		}
 	}
 
 	/**
