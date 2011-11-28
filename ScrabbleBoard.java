@@ -36,7 +36,10 @@ public class ScrabbleBoard
 	 * */
 	public ScrabbleTile getTileAt (int row, int col)
 	{	
-	    return tilePositions[row][col];
+		if(tilePositions[row][col] == null)
+			return null;
+		else
+			return tilePositions[row][col];
 	}
 
 	/** Returns the integer code of the bonus at the specified tile
@@ -60,6 +63,7 @@ nonValidBoardSpaceException is thrown */
 	 */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
 		{
+			// if tilePosition == null
 			tilePositions[row][col] = sct;
 			sct.setLocation(row*ScrabblePlayerUI.TILE_SIZE, col*ScrabblePlayerUI.TILE_SIZE);
 		}
