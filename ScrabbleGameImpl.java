@@ -278,54 +278,81 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// array for the word to check
 		char word[] = new char[ScrabbleBoard.BOARD_HEIGHT];
 		
-		// counter 
-		int count1;
-		int count2;
+		// counters to iterate through the characters of the word to check
+		int rowCount;
+		int colCount;
+		
+		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		for(int i = 0; i < ScrabbleBoard.BOARD_HEIGHT; i++)
+		// check that all of the words on the board are still valid after
+		// playing the played word
+		// ******Need to fix******
+		// Starts at the first letter of a word checks it horizontally-
+		// if there is a valid word there then checks the next letter in that word but should
+		// only check if there is a word going down from that letter and not the substring
+		// horizontally.
+		for(int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
 		{
-			for(int j = 0; j < ScrabbleBoard.BOARD_WIDTH; j++)
+			for(int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
 			{
-				if(copyBoard.getTileAt(i, j) != null);
+				// Find a letter tile
+				if(copyBoard.getTileAt(row, col) != null);
 				{
-					count1 = i;
-					count2 = j;
+					rowCount = row;
+					colCount = col;
 					int index = 0;
-					while(copyBoard.getTileAt(count1,count2) != null)
+					
+					// If this is the start of a word in the row check the word down
+					if(copyBoard.getTileAt(rowCount,colCount-1) == null)
 					{
-						word[index] = copyBoard.getTileAt(count1, count2).getLetter();
-						count2++;
-						index++;
+						// get the whole word
+						while(copyBoard.getTileAt(rowCount,colCount) != null)
+						{
+							word[index] = copyBoard.getTileAt(rowCount, colCount).getLetter();
+							colCount++;
+							index++;
+						}
+						// check to see if word is valid
+						if(!dictionary.isValidWord(word.toString()))
+						{
+							return false;
+						}
+						// reset variables
+						resetWord(word);
+						rowCount = row;
+						colCount = col;
+						index = 0;
 					}
-					if(!dictionary.isValidWord(word.toString()))
+					// If this is the start of a word in the column check the word down
+					if(copyBoard.getTileAt(rowCount-1, colCount) != null)
 					{
-						return false;
+						// get the whole word
+						while(copyBoard.getTileAt(rowCount, colCount) != null)
+						{
+							word[index] = copyBoard.getTileAt(rowCount, colCount).getLetter();
+							rowCount++;
+							index++;
+						}
+						// check to see if word is valid
+						if(!dictionary.isValidWord(word.toString()))
+						{
+							return false;
+						}
 					}
-					resetWord(word);
-					count1 = i;
-					count2 = j;
-					index = 0;
-					while(copyBoard.getTileAt(count1++, count2) != null)
-					{
-						word[index] = copyBoard.getTileAt(count1, count2).getLetter();
-						count1++;
-						index++;
-					}
-					if(!dictionary.isValidWord(word.toString()))
-					{
-						return false;
-					}
-					return true;
 				}	
 			}
 		}
-		return false;
+		return true;
 	}
 
+	/**
+	 * Helper function to reset char arrays
+	 * @param word char array to reset
+	 */
 	private void resetWord(char[] word) {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < word.length; i++)
