@@ -65,7 +65,11 @@ nonValidBoardSpaceException is thrown */
 		{
 			// if tilePosition == null
 			tilePositions[row][col] = sct;
-			sct.setLocation(row*ScrabblePlayerUI.TILE_SIZE, col*ScrabblePlayerUI.TILE_SIZE);
+			// CHANGED: Allow null positions without error
+			if (sct != null)
+			{
+			    sct.setLocation(row*ScrabblePlayerUI.TILE_SIZE, col*ScrabblePlayerUI.TILE_SIZE);
+			}
 		}
 	
 	/**Returns an array of strings to locate the tile image folders
