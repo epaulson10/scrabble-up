@@ -22,10 +22,37 @@ public class ScrabblePlayerUI extends JPanel
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
-    private ScrabbleTile test;
     private ScrabbleBoard board;
     
 
+    /** constructor
+     * 
+     * @param initPlayer The human player we are representing 
+     */
+    public ScrabblePlayerUI (ScrabbleHumanPlayer initPlayer, ScrabbleGame game) 
+    {
+        player = initPlayer;
+        this.setSize(UI_SIZE, UI_SIZE+TILE_SIZE+SPACE+1);
+        this.setPreferredSize(this.getSize());
+        this.setMinimumSize(this.getSize());
+        this.setBackground(Color.lightGray);
+        board = new ScrabbleBoard();
+    }
+
+    /**  * Updates the stored game state. */
+    protected void updateState ()
+    {
+        state = (ScrabbleGameState)model.getState(player, 0);
+    }
+    
+    /**  * Set the canvas to model the given game.
+     *
+     * @param game The ScrabbleGame this canvas to model.
+     */
+    public void setModel (ScrabbleGame game) 
+    {
+        model = game;
+    }
     /** 
      * Paints the game state
      * @param g The graphics object to be used 
@@ -55,7 +82,6 @@ public class ScrabblePlayerUI extends JPanel
         {
             g.drawLine(TILE_SIZE*i, TILE_SIZE*15+SPACE, TILE_SIZE*i, TILE_SIZE*16+SPACE);
         }
-        //I cheated and hard coded this
         g.fillOval((BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4,(BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4, TILE_SIZE/2, TILE_SIZE/2);
         
         drawBoard(g,board);
@@ -152,36 +178,7 @@ public class ScrabblePlayerUI extends JPanel
         }
     }
 
-    /** constructor
-     * 
-     * @param initPlayer The human player we are representing 
-     */
-    public ScrabblePlayerUI (ScrabbleHumanPlayer initPlayer) 
-    {
-        player = initPlayer;
-        this.setSize(UI_SIZE, UI_SIZE+TILE_SIZE+SPACE+1);
-        this.setPreferredSize(this.getSize());
-        this.setMinimumSize(this.getSize());
-        this.setBackground(Color.lightGray);
-        board = new ScrabbleBoard();
-    }
 
-    /**  * Updates the stored game state. */
-    protected void updateState ()
-    {
-        state = (ScrabbleGameState)model.getState(player, 0);
-    }
-    
-    
-
-    /**  * Set the canvas to model the given game.
-     *
-     * @param game The ScrabbleGame this canvas to model.
-     */
-    public void setModel (ScrabbleGame game) 
-    {
-        model = game;
-    }
     
     /**
      * Returns the ScrabbleTile that was clicked on
