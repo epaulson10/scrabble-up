@@ -79,7 +79,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	 */ 
 	protected ScrabblePlayerUI createUI () 
 	{
-	    return new ScrabblePlayerUI(this);
+	    return new ScrabblePlayerUI(this,(ScrabbleGame) game);
 	}
 
 	/** Actions to be taken after we're notified of a state change. */
@@ -261,6 +261,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
+	       ui.putInHand(hand);
+	       ui.repaint();
 	   }
 	   else if (cmd.equals("Discard"))
 	   {

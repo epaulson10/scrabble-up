@@ -95,7 +95,7 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
      */
     public Vector<ScrabbleTile> getHand()
     {
-        return null;
+        return hand;
     }
 
 }

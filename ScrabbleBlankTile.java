@@ -21,7 +21,7 @@ public class ScrabbleBlankTile extends ScrabbleTile {
 	public String getFileName ()
 	{
 	    //Erik modified the file location to make it work 11-29-2011
-		return "./src/scrabble/Tiles/Tiles/ScrabbleTileBlank.jpg";
+		return "./src/scrabble/Tiles/ScrabbleTileBlank.jpg";
 	}
 
 }

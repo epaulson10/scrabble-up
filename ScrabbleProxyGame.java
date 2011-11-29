@@ -125,4 +125,11 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
 		return false;
 	}
 
+    @Override
+    public void drawInitialHand(ScrabblePlayer sp)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
