@@ -25,6 +25,7 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
 
     /** Encodes the updated game state after a network player makes a move
      * to send the information to the next player
+     * TODO: Test this.
      * 
      * @param gs the GameState being encoded
      * @return A string containing the encoded game state 
@@ -55,6 +56,8 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
                     else
                         str+="+";
                 }
+                else
+                    str += "|"; //represent an empty board space with this character
             }
         }
         str += "][";

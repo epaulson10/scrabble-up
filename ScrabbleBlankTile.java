@@ -20,7 +20,8 @@ public class ScrabbleBlankTile extends ScrabbleTile {
 	/** The location of the tile's image */
 	public String getFileName ()
 	{
-		return "Tiles/ScrabbleTileBlank.jpg";
+	    //Erik modified the file location to make it work 11-29-2011
+		return "./src/scrabble/Tiles/Tiles/ScrabbleTileBlank.jpg";
 	}
 
 }
