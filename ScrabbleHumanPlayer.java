@@ -255,8 +255,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	       for (ScrabbleTile tile : tiles)
 	       {
 	           Point p = tile.getLocation();
-	           p.setLocation((p.x)/ScrabblePlayerUI.TILE_SIZE, (p.y)/ScrabblePlayerUI.TILE_SIZE);
-	           positions.add(p);
+	           Point newPoint = new Point((p.x)/ScrabblePlayerUI.TILE_SIZE, (p.y)/ScrabblePlayerUI.TILE_SIZE);
+	           positions.add(newPoint);
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
