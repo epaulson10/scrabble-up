@@ -57,17 +57,14 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	public ScrabbleHumanPlayer () 
 	{
 	    super();
-	    hand = new Vector<ScrabbleTile>();
-	    hand.add(new ScrabbleTile('A',1,false));
-	    hand.add(new ScrabbleTile('B',1,false));
-	    hand.add(new ScrabbleTile('C',1,false));
-	    ui.putInHand(hand);
 	}
 
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
 	{
-
+	    hand = new Vector<ScrabbleTile>();
+        ((ScrabbleGame)game).drawInitialHand(this);
+        ui.putInHand(hand);
 	}
 
 	/** Gets the default title of the game window.

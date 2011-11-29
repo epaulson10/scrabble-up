@@ -32,6 +32,36 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		playerToMove = 0;
 		winner = -1;
 		handIsEmpty = false;
+		
+		// Populate bag with tiles:
+        bag.removeAllElements();
+        // letters to add to bag; pipe chars separate letters of different
+        // value
+        String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+                          + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
+                          + "mmpp|ffhhvvwwyy|k|||jx||qz";
+        int curValue = 0;
+        
+        for (int i = 0; i < letterDist.length(); i++)
+        {
+            char curChar = letterDist.charAt(i);
+            if (curChar == ' ')
+            {
+                bag.add(new ScrabbleBlankTile());
+            }
+            else if (curChar == '|')
+            {
+                // reached a value threshold; following letters will be worth
+                // more points
+                
+                curValue++;
+            }
+            else
+            {
+                bag.add(new ScrabbleTile(curChar, curValue, false));
+            }
+        }
+        Collections.shuffle(bag);
 	}
 
 	/** Determines if a given game player can make a move
@@ -86,35 +116,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	/** Initializes the starting state of the game */
 	protected void initializeGame ()
 	{
-	    // Populate bag with tiles:
-	    bag.removeAllElements();
-	    // letters to add to bag; pipe chars separate letters of different
-	    // value
-	    String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
-	                      + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
-	                      + "mmpp|ffhhvvwwyy|k|||jx||qz";
-	    int curValue = 0;
-	    
-	    for (int i = 0; i < letterDist.length(); i++)
-	    {
-	        char curChar = letterDist.charAt(i);
-	        if (curChar == ' ')
-	        {
-	            bag.add(new ScrabbleBlankTile());
-	        }
-	        else if (curChar == '|')
-	        {
-	            // reached a value threshold; following letters will be worth
-	            // more points
-	            
-	            curValue++;
-	        }
-	        else
-	        {
-	            bag.add(new ScrabbleTile(curChar, curValue, false));
-	        }
-	    }
-	    
 	    // set other instance vars
 	    p0Score = 0;
         p1Score = 0;
@@ -219,6 +220,26 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			return false;
 		}
 		return false;
+	}
+	
+	/**
+	 * Draws an initial 7-tile hand for the given player.
+	 * 
+	 * @param player  Player whose hand to draw
+	 */
+	public synchronized void drawInitialHand(ScrabblePlayer player)
+	{
+	    Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+        
+        // Draw initial hands
+        for (int i = 0; i < 7; i++)
+        {
+            ScrabbleTile drawnTile = bag.lastElement();
+            hand.add(drawnTile);
+            bag.remove(drawnTile);
+        }
+        
+        player.updateHand(hand);
 	}
 	
 	/**
