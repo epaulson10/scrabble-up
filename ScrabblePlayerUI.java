@@ -55,6 +55,8 @@ public class ScrabblePlayerUI extends JPanel
         {
             g.drawLine(TILE_SIZE*i, TILE_SIZE*15+SPACE, TILE_SIZE*i, TILE_SIZE*16+SPACE);
         }
+        //I cheated and hard coded this
+        g.fillOval((BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4,(BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4, TILE_SIZE/2, TILE_SIZE/2);
         
         drawBoard(g,board);
         drawHand(g,player.getHand());
@@ -106,8 +108,10 @@ public class ScrabblePlayerUI extends JPanel
      */
     public void drawHand(Graphics g, Vector<ScrabbleTile> hand)
     {
-        for (ScrabbleTile tile : hand)
+        ScrabbleTile tile = null;
+        for (int i = 0; i < player.getHand().size(); i++)
         {
+            tile = player.getHand().elementAt(i);
             g.drawImage(tile.getPicture(),tile.getLocation().x,tile.getLocation().y,TILE_SIZE, TILE_SIZE,null,null);
         }
     }

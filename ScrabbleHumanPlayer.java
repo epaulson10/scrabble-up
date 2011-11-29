@@ -4,6 +4,8 @@ import game.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -56,10 +58,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	{
 	    super();
 	    hand = new Vector<ScrabbleTile>();
-	    for (int i = 0; i < 2; i++)
-	    {
-	        hand.add(new ScrabbleTile('A',1,false));
-	    }
+	    hand.add(new ScrabbleTile('A',1,false));
+	    hand.add(new ScrabbleTile('B',1,false));
+	    hand.add(new ScrabbleTile('C',1,false));
 	    ui.putInHand(hand);
 	}
 
@@ -129,11 +130,12 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 		    moveTile.setLocation(me.getX()-ScrabblePlayerUI.TILE_SIZE/2, me.getY()-ScrabblePlayerUI.TILE_SIZE/2);
 		    ui.repaint();
 		}
+		
 	}
 
 	public void mouseMoved (MouseEvent me) 
 	{
-		
+
 	}
 	/**
 	 * When the mouse is pressed, get a reference to the tile it was pressed on
@@ -168,6 +170,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    else
 	        playPassButton.setText("Pass");
 	}
+
 
 	/** Creates the graphical component of the application.
 	 * 
@@ -264,11 +267,15 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	   else if (cmd.equals("Discard"))
 	   {
 	       game.applyAction(new ScrabbleDiscardAction(this,ui.tilesToDiscard()));
+	       ui.putInHand(this.getHand());
+	       ui.repaint();
+	      
 	   }
 	   else if (cmd.equals("Pass"))
 	   {
 	       Vector<ScrabbleTile> blankHand = new Vector<ScrabbleTile>();
 	       game.applyAction(new ScrabbleDiscardAction(this, blankHand));
+	       ui.repaint();
 	   }
 	   else if (cmd.equals("Resign"))
 	   {
@@ -276,7 +283,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	   }
 	   else if (cmd.equals("Shuffle"))
 	   {
-	       
+	       Collections.shuffle(hand);
+	       ui.putInHand(hand);
+	       ui.repaint();
 	   }
 	}
 
