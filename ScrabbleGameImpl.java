@@ -303,12 +303,18 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int rowCount;
 		int colCount;
 		
-		
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
+		
+		// if there is not a piece played in the center
+		if(copyBoard.getTileAt(7, 7) == null)
+		{
+			return false;
+		}
+		
 		
 		// check that all of the words on the board are still valid after
 		// playing the played word
@@ -333,21 +339,24 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							colCount++;
 							index++;
-						}
+						}//while
+						
 						if(index > 1)
 						{
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
 								return false;
-							}
-						}
+							}//if
+						}//if
+						
 						// reset variables
 						testString = "";
 						rowCount = row;
 						colCount = col;
 						index = 0;
-					}
+					}//if
+					
 					// If this is the start of a word in the column check the word down
 					if(row == 0 || copyBoard.getTileAt(rowCount-1, colCount) == null)
 					{
@@ -357,19 +366,20 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							rowCount++;
 							index++;
-						}
+						}//while
+						
 						if(index > 1)
 						{	
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
 								return false;
-							}
-						}
-					}
-				}	
-			}
-		}
+							}//if
+						}//if
+					}//if
+				}//if
+			}//for
+		}//for
 		board = copyBoard;
 		return true;
 	}
