@@ -304,13 +304,25 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// counters to iterate through the characters of the word to check
 		int rowCount;
 		int colCount;
+		Boolean valid = false;
 		
-		// check that the played word will be connected to another word
-		// except for first turn (when space 7,7 is empty)
-		if(copyBoard.getTileAt(7, 7) != null)
+		
+		// if first turn (when space 7,7 is empty)
+		if(copyBoard.getTileAt(7, 7) == null)
 		{
-			Boolean valid = false;
+			// check to make sure that one of the potential points
+			// is at the center
+			for(Point p :pos)
+			{
+				if(p.x == 7 && p.y == 7) valid = true;
+			}
+		}
+		// else it is not the first turn
+		else
+		{
 			// check that the played word is connected to another word
+			// check each adjacent space for each potential position
+			// and make sure that there is another tile.
 			for(Point p : pos)
 			{
 				if(p.x-1 >0 && board.getTileAt(p.x-1, p.y) != null)
@@ -334,22 +346,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					break;
 				}
 			}
-			if(!valid) return INVALID_MOVE;
 		}
+		if(!valid) return INVALID_MOVE;
 		
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
-		
-		// check that there is a piece played at the center
-		if(copyBoard.getTileAt(7, 7) == null)
-		{
-			return INVALID_MOVE;
-		}
-
-		
 		
 		// check that all of the words on the board are still valid after
 		// playing the played word
