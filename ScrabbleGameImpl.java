@@ -138,11 +138,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		Vector<ScrabbleTile> hand = plr.getHand();
 		
 		// get the 0/1 id of our player
-		//int playerID = indexOf(thePlayer);
+		int playerID = indexOf(thePlayer);
 
 		// if the player is not a player for our game, indicate an illegal
 		// move
-		//if (playerID < 0 || playerID > 1) return false;
+		if (playerID < 0 || playerID > 1) return false;
 
 		// if the move is a discard move
 		if(move instanceof ScrabbleDiscardAction)
@@ -194,14 +194,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				// get this move's score and add it to the appropriate
 				int moveScore = getMoveScore(pos);
 				// player's score
-				/*if (playerID == 0)
+				if (playerID == 0)
 				{
 				    p0Score += moveScore;
 				}
 				else
 				{
 				    p1Score += moveScore;
-				}*/
+				}
 				
 				// apply move to master board
 				for (int i = 0; i < tiles.size(); i++)
