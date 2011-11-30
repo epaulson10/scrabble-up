@@ -137,11 +137,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		Vector<ScrabbleTile> hand = plr.getHand();
 		
 		// get the 0/1 id of our player
-		int playerID = indexOf(thePlayer);
+		//int playerID = indexOf(thePlayer);
 
 		// if the player is not a player for our game, indicate an illegal
 		// move
-		if (playerID < 0 || playerID > 1) return false;
+		//if (playerID < 0 || playerID > 1) return false;
 
 		// if the move is a discard move
 		if(move instanceof ScrabbleDiscardAction)
@@ -191,16 +191,16 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				updateHand(hand, tiles, plr);
 				
 				// get this move's score and add it to the appropriate
+				int moveScore = getMoveScore(pos);
 				// player's score
-				int moveScore = getMoveScore(mv);
-				if (playerID == 0)
+				/*if (playerID == 0)
 				{
 				    p0Score += moveScore;
 				}
 				else
 				{
 				    p1Score += moveScore;
-				}
+				}*/
 				
 				// apply move to master board
 				for (int i = 0; i < tiles.size(); i++)
@@ -282,6 +282,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int rowCount;
 		int colCount;
 		
+		
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
@@ -348,7 +349,111 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				}	
 			}
 		}
+		board = copyBoard;
 		return true;
+	}
+	
+	/**
+	 * Gets the score of the current move.
+	 * @param positions positions of the tiles played
+	 * @return the score of the move
+	 */
+	public int getMoveScore(Vector<Point> positions)
+	{
+		int score = 0;
+		Point pos = positions.elementAt(0);
+		
+		// if there is only one tile played
+		if(positions.size() == 1)
+		{
+			// add the score of the tile played
+			score += board.getTileAt(pos.x, pos.y).getValue();
+			// add the score of connected tiles in the x-direction
+			score += xDir(pos);
+			// add the score of connected tiles in the y-direction
+			score += yDir(pos);
+		}
+		// if the tiles were laid down in the same row
+		else if(pos.x == positions.elementAt(1).x)
+		{
+			// add the score of the first tile
+			score += board.getTileAt(pos.x, pos.y).getValue();
+			// add all other tiles connected in the row
+			score += yDir(positions.elementAt(0));
+			
+			for(Point pos2 : positions)
+			{
+				// add tiles values of tiles in adjacent col 
+				score += xDir(pos2);
+			}
+		}
+		// if the tiles were laid down in the same col
+		else if(pos.y == positions.elementAt(1).y)
+		{
+			// add the score of the first tile
+			score += board.getTileAt(pos.x, pos.y).getValue();
+			// add all other tiles connected in col
+			score += xDir(positions.elementAt(0));
+			
+			for(Point pos2 : positions)
+			{
+				// add tile values of tiles in adjacent row
+				score += yDir(pos2);
+			}
+		}
+		return score;
+	}
+	
+	/**
+	 * Helper method get the score in the x direction
+	 * not including the tile at point pos
+	 * @param pos point of the tile to check values around
+	 * @return int of the total score in the row
+	 */
+	public int xDir(Point pos)
+	{
+		int score = 0;
+		int x = pos.x - 1;;
+		int y = pos.y;
+		while(board.getTileAt(x, y) != null)
+		{
+			score += board.getTileAt(x,y).getValue();
+			x--;
+		}
+		x = pos.x + 1;
+		y = pos.y;
+		while(board.getTileAt(x, y) != null)
+		{
+			score += board.getTileAt(x,y).getValue();
+			x++;
+		}
+		return score;
+	}
+	
+	/**
+	 * Helper method get the score in the y direction
+	 * not including the tile at point pos
+	 * @param pos point of the tile to check values around
+	 * @return int of the total score in the col
+	 */
+	public int yDir(Point pos)
+	{
+		int score = 0;
+		int x = pos.x;
+		int y = pos.y -1;
+		while(board.getTileAt(x, y) != null)
+		{
+			score += board.getTileAt(x,y).getValue();
+			y--;
+		}
+		x = pos.x;
+		y = pos.y + 1;
+		while(board.getTileAt(x, y) != null)
+		{
+			score += board.getTileAt(x,y).getValue();
+			y++;
+		}
+		return score;
 	}
 
 	/**
