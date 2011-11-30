@@ -11,8 +11,7 @@ public class ScrabbleBoard
 			new ScrabbleTile[BOARD_WIDTH][BOARD_HEIGHT]; //[col][row]
 	private int[][] bonusPositions =
 			new int [BOARD_WIDTH][BOARD_HEIGHT];//[col][row]
-	
-	
+		
 
 	/** Initializes variables. All tilePositions and bonusPositions are null */
 	public ScrabbleBoard () 
