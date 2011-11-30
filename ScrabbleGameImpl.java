@@ -17,6 +17,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int winner;
 	private static Dictionary dictionary;
 	private boolean handIsEmpty;
+	private static final boolean INVALID_MOVE = false;
+	private static final boolean VALID_MOVE = true;
 
 	/** Constructor - initializes instance variables */
 	public ScrabbleGameImpl () {
@@ -303,40 +305,73 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int rowCount;
 		int colCount;
 		
+		// check that the played word will be connected to another word
+		// except for first turn (when space 7,7 is empty)
+		if(copyBoard.getTileAt(7, 7) != null)
+		{
+			Boolean valid = false;
+			// check that the played word is connected to another word
+			for(Point p : pos)
+			{
+				if(p.x-1 >0 && board.getTileAt(p.x-1, p.y) != null)
+				{	
+					valid = true;
+					break;
+				}
+				else if(p.x+1 <15 && board.getTileAt(p.x+1, p.y) != null)
+				{
+					valid = true;
+					break;
+				}
+				else if(p.y-1 > 0 && board.getTileAt(p.x, p.y-1) != null)
+				{
+					valid = true;
+					break;
+				}
+				else if(p.y+1 < 15 && board.getTileAt(p.x, p.y+1) != null)
+				{
+					valid = true;
+					break;
+				}
+			}
+			if(!valid) return INVALID_MOVE;
+		}
+		
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
 		}
 		
-		// if there is not a piece played in the center
+		// check that there is a piece played at the center
 		if(copyBoard.getTileAt(7, 7) == null)
 		{
-			return false;
+			return INVALID_MOVE;
 		}
+
 		
 		
 		// check that all of the words on the board are still valid after
 		// playing the played word
-		for(int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
+		for(int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
 		{
-			for(int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
+			for(int row = 0; row < ScrabbleBoard.BOARD_WIDTH; row++)
 			{
 				// Find a letter tile
-				if(copyBoard.getTileAt(row, col) != null)
+				if(copyBoard.getTileAt(col, row) != null)
 				{
 					testString = "";
 					rowCount = row;
 					colCount = col;
 					int index = 0;
 					
-					// If this is the start of a word in the row check the word down
-					if(col == 0 || copyBoard.getTileAt(rowCount,colCount-1) == null)
+					// If this is the start of a word in the row check the word across
+					if(col == 0 || copyBoard.getTileAt(colCount-1,rowCount) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(rowCount,colCount) != null)
+						while(copyBoard.getTileAt(colCount,rowCount) != null)
 						{
-							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
+							testString += Character.toString(copyBoard.getTileAt(colCount, rowCount).getLetter());
 							colCount++;
 							index++;
 						}//while
@@ -346,7 +381,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
-								return false;
+								return INVALID_MOVE;
 							}//if
 						}//if
 						
@@ -358,12 +393,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					}//if
 					
 					// If this is the start of a word in the column check the word down
-					if(row == 0 || copyBoard.getTileAt(rowCount-1, colCount) == null)
+					if(row == 0 || copyBoard.getTileAt(colCount, rowCount-1) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(rowCount, colCount) != null)
+						while(copyBoard.getTileAt(colCount, rowCount) != null)
 						{
-							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
+							testString += Character.toString(copyBoard.getTileAt(colCount, rowCount).getLetter());
 							rowCount++;
 							index++;
 						}//while
@@ -373,7 +408,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
-								return false;
+								return INVALID_MOVE;
 							}//if
 						}//if
 					}//if
@@ -381,7 +416,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			}//for
 		}//for
 		board = copyBoard;
-		return true;
+		return VALID_MOVE;
 	}
 	
 	/**
@@ -446,14 +481,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int score = 0;
 		int x = pos.x - 1;;
 		int y = pos.y;
-		while(board.getTileAt(x, y) != null)
+		while(x > 0 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			x--;
 		}
 		x = pos.x + 1;
 		y = pos.y;
-		while(board.getTileAt(x, y) != null)
+		while(x < 15 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			x++;
@@ -472,14 +507,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int score = 0;
 		int x = pos.x;
 		int y = pos.y -1;
-		while(board.getTileAt(x, y) != null)
+		while(y > 0 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			y--;
 		}
 		x = pos.x;
 		y = pos.y + 1;
-		while(board.getTileAt(x, y) != null)
+		while(y < 15 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			y++;
