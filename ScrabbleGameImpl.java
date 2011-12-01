@@ -388,7 +388,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
-			copyBoard.putTileAt(pos.elementAt(i).y, pos.elementAt(i).x, tiles.elementAt(i));
+		    ScrabbleTile thisTile = tiles.elementAt(i);
+            ScrabbleTile newTile = null;
+            if (thisTile != null)
+            {
+                newTile = new ScrabbleTile(thisTile.getLetter(),
+                    thisTile.getValue(), thisTile.isBlank());
+            }
+			copyBoard.putTileAt(pos.elementAt(i).y, pos.elementAt(i).x, newTile);
 		}
 		
 		// check that all of the words on the board are still valid after
