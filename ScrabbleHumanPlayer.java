@@ -27,7 +27,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	private JLabel p1score;
 	
 	// Player's hand
-	private Vector<ScrabbleTile> hand;
+	//private Vector<ScrabbleTile> hand;
 	
 	//The UI that the game is drawn on
 	private ScrabblePlayerUI ui;
@@ -62,9 +62,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
 	{
-	    hand = new Vector<ScrabbleTile>();
-        ((ScrabbleGame)game).drawInitialHand(this);
-        ui.putInHand(hand);
+	    
 	}
 
 	/** Gets the default title of the game window.
@@ -99,15 +97,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	 */
 	public Vector<ScrabbleTile> getHand()
 	{
-		return hand;
-	}
-	
-	/**
-	 * Update the hand with a newHand
-	 */
-	public void updateHand(Vector<ScrabbleTile> newHand)
-	{
-		hand = newHand;
+	    ScrabbleGameState curState = (ScrabbleGameState)game.getState(this, 0);
+	    return curState.getHand();
 	}
 	
 	public void mouseClicked (MouseEvent me) 
@@ -155,7 +146,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    if (moveTile != null)
 	    {
 	        ui.snapTileToGrid(moveTile);
-	        ui.snapToRack(hand);
+	        ui.snapToRack(getHand());
 	        ui.repaint();
 	        moveTile = null;
 	    }
@@ -261,7 +252,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
-	       ui.putInHand(hand);
+	       ui.putInHand(getHand());
 	       ui.repaint();
 	   }
 	   else if (cmd.equals("Discard"))
@@ -283,8 +274,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	   }
 	   else if (cmd.equals("Shuffle"))
 	   {
-	       Collections.shuffle(hand);
-	       ui.putInHand(hand);
+	       Vector<ScrabbleTile> myHand = getHand();
+	       Collections.shuffle(myHand);
+	       ui.putInHand(myHand);
 	       ui.repaint();
 	   }
 	}

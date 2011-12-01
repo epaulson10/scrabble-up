@@ -43,6 +43,7 @@ public class ScrabblePlayerUI extends JPanel
     protected void updateState ()
     {
         state = (ScrabbleGameState)model.getState(player, 0);
+        board = state.getBoard();
     }
     
     /**  * Set the canvas to model the given game.

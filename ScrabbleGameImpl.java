@@ -13,6 +13,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private Vector<ScrabbleTile> bag;
 	private int p0Score;
 	private int p1Score;
+	private Vector<ScrabbleTile> p0Hand;
+	private Vector<ScrabbleTile> p1Hand;
 	private int playerToMove;
 	private int winner;
 	private static Dictionary dictionary;
@@ -31,6 +33,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		bag = new Vector<ScrabbleTile>();
 		p0Score = 0;
 		p1Score = 0;
+		p0Hand = new Vector<ScrabbleTile>();
+		p1Hand = new Vector<ScrabbleTile>();
 		playerToMove = 0;
 		winner = -1;
 		handIsEmpty = false;
@@ -64,6 +68,17 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             }
         }
         Collections.shuffle(bag);
+        
+        // Draw initial hands
+        for (int i = 0; i < 7; i++)
+        {
+            ScrabbleTile drawnTile = bag.lastElement();
+            p0Hand.add(drawnTile);
+            bag.remove(drawnTile);
+            drawnTile = bag.lastElement();
+            p1Hand.add(drawnTile);
+            bag.remove(drawnTile);
+        }
 	}
 
 	/** Determines if a given game player can make a move
@@ -109,8 +124,16 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	    }
 	    
 	    // get the player's hand
-	    ScrabblePlayer sp = (ScrabblePlayer)gp;
-	    Vector<ScrabbleTile> curHand = sp.getHand();
+	    Vector<ScrabbleTile> curHand = new Vector<ScrabbleTile>();
+	    if (gp.getId() == 0)
+	    {
+	        curHand = p0Hand;
+	    }
+	    else
+	    {
+	        curHand = p1Hand;
+	    }
+	    
 	    
 		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score, dictionary);
 	}
@@ -137,7 +160,16 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		ScrabblePlayer plr = (ScrabblePlayer)thePlayer;
 		
 		// Create a new Vector to store the player's hand
-		Vector<ScrabbleTile> hand = plr.getHand();
+		Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
+		
+		if (plr.getId() == 0)
+		{
+		    hand = p0Hand;
+		}
+		else
+		{
+		    hand = p1Hand;
+		}
 		
 		// get the 0/1 id of our player
 		int playerID = indexOf(thePlayer);
@@ -225,26 +257,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	}
 	
 	/**
-	 * Draws an initial 7-tile hand for the given player.
-	 * 
-	 * @param player  Player whose hand to draw
-	 */
-	public synchronized void drawInitialHand(ScrabblePlayer player)
-	{
-	    Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
-        
-        // Draw initial hands
-        for (int i = 0; i < 7; i++)
-        {
-            ScrabbleTile drawnTile = bag.lastElement();
-            hand.add(drawnTile);
-            bag.remove(drawnTile);
-        }
-        
-        player.updateHand(hand);
-	}
-	
-	/**
 	 * Removes tiles played from the player's hand
 	 * and adds new tiles to the players hand
 	 * CAVEAT: Might move all code into the Player's version
@@ -281,9 +293,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		    handIsEmpty = true;
 		}
 		
-		
-		// update the player's hand with this new hand
-		plr.updateHand(hand);
+		if (plr.getId() == 0)
+		{
+		    p0Hand = hand;
+		}
+		else
+		{
+		    p1Hand = hand;
+		}
 	}
 
 	/**

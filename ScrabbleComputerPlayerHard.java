@@ -7,7 +7,7 @@ package scrabble;
 public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
 
     public ScrabbleComputerPlayerHard() {
-        
+        super();
     }
     
     /**  * Respond to a move request by making a move. */
@@ -18,7 +18,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        game.applyAction(new ScrabbleDiscardAction(this, hand));
+        game.applyAction(new ScrabbleDiscardAction(this, getHand()));
     }
     
 

@@ -11,20 +11,14 @@ import game.*;
  * @version To Be Implemented
 */
 public abstract class ScrabbleComputerPlayer extends GameComputerPlayer implements ScrabblePlayer {
-
-	
-	protected Vector<ScrabbleTile> hand = new Vector<ScrabbleTile>();
 	
 	public ScrabbleComputerPlayer() {
-		
+		super();
 	}
-	@Override
+	
 	public Vector<ScrabbleTile> getHand() {
-		return hand;
-	}
-
-	public void updateHand(Vector<ScrabbleTile> newHand) {
-		hand = newHand;
+	    ScrabbleGameState curState = (ScrabbleGameState)game.getState(this, 0);
+        return curState.getHand();
 	}
 
 }
