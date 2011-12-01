@@ -2,6 +2,7 @@ package scrabble;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 import java.util.Vector;
 
 /** A canvas that draws a Scrabble Game State
@@ -10,7 +11,7 @@ import java.util.Vector;
  * 
  * NOTE: Find x,y values of where you clicked and divide by 15 = position
  */
-public class ScrabblePlayerUI extends JPanel 
+public class ScrabblePlayerUI extends JPanel
 {
     public final static int BOARD_SIZE = 15;
     public final static int TILE_SIZE = 35;
@@ -23,7 +24,7 @@ public class ScrabblePlayerUI extends JPanel
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
     private ScrabbleBoard board;
-    
+
 
     /** constructor
      * 
@@ -31,6 +32,8 @@ public class ScrabblePlayerUI extends JPanel
      */
     public ScrabblePlayerUI (ScrabbleHumanPlayer initPlayer, ScrabbleGame game) 
     {
+        //Tell the parent constructor to double buffer this
+        super(true);
         player = initPlayer;
         this.setSize(UI_SIZE, UI_SIZE+TILE_SIZE+SPACE+1);
         this.setPreferredSize(this.getSize());
@@ -87,6 +90,7 @@ public class ScrabblePlayerUI extends JPanel
         
         drawBoard(g,board);
         drawHand(g,player.getHand());
+        g.dispose();
     }
     
     /**
@@ -147,7 +151,7 @@ public class ScrabblePlayerUI extends JPanel
      * Assigns each tile in the hand a x,y coordinate
      * @param hand The player's hand
      */
-    public void putInHand(Vector<ScrabbleTile> hand)
+    public static void putInHand(Vector<ScrabbleTile> hand)
     {
         int count = 4;
         for (ScrabbleTile tile : hand)

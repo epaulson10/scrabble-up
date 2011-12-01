@@ -20,6 +20,9 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
      */
     protected GameAction decodeAction (String s) 
     {
+        int player = Integer.parseInt(s.substring(0,1));
+        int i = 2;
+        
         return null;
     }
 

@@ -26,6 +26,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	private JLabel p0score;
 	private JLabel p1score;
 	
+	public Vector<ScrabbleTile> foo;
+	
 	// Player's hand
 	//private Vector<ScrabbleTile> hand;
 	
@@ -229,6 +231,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         hBoxScore.add(p1score);
 	   
 	    hBoxTop.add(ui);
+	    uiPanel.setVisible(true);
 	    
         return uiPanel;
 	}
@@ -255,6 +258,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
+	       foo = this.getHand();
 	       ui.putInHand(this.getHand());
 	       ui.repaint();
 	   }

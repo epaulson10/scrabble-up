@@ -1,5 +1,6 @@
 package scrabble;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -91,14 +92,61 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-	    return new ScrabbleGameState(theBoard,hand,whoseMove,p0score,p1score,theDict);
+        return new ScrabbleGameState(theBoard,hand,whoseMove,p0score,p1score,theDict);
 	}
 
-	/** Encodes the action
-@param ga the game action to encode
-@return returns a string representing the game action */
-	protected String encodeAction (GameAction ga) {
-		return null;
+	/** 
+	 * Encodes the action
+	 *
+	 * @param ga the game action to encode
+	 * @return returns a string representing the game action 
+	 */
+	protected String encodeAction (GameAction ga) 
+	{
+	    String str = "";
+	    int player = ga.getSource().getId();
+	    str += player;
+	    str += "|"; //Delimit
+	    
+	    if (ga instanceof ScrabbleMoveAction)
+	    {
+	        Vector<ScrabbleTile> playedTiles = ((ScrabbleMoveAction)ga).getTiles();
+	        for (ScrabbleTile tile : playedTiles)
+	        {
+	            if (tile.isBlank())
+	                str += "-";
+	            else
+	                str += "+";
+	            str += tile.getLetter();
+	            str += tile.getValue();
+	        }
+	        str += "|";//delimit
+	        Vector<Point> positions = ((ScrabbleMoveAction) ga).getPositions();
+	        for (Point p : positions)
+	        {
+	            str += "(";
+	            str = str + p.x + "," + p.y + ")";
+	        }
+	        return str;
+	    }
+	    else if (ga instanceof ScrabbleDiscardAction)
+	    {
+	        Vector<ScrabbleTile> playedTiles = ((ScrabbleMoveAction)ga).getTiles();
+            for (ScrabbleTile tile : playedTiles)
+            {
+                if (tile.isBlank())
+                    str += "-";
+                else
+                    str += "+";
+                str += tile.getLetter();
+                str += tile.getValue();
+            }
+            
+            return str;
+	     
+	    }
+	    else
+	        return null;
 	}
 
 	/** Gets the port number

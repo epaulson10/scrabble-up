@@ -196,6 +196,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// remove the tiles played and pick
 			// new tiles from the bag
 			updateHand(hand, discTiles, plr);
+			ScrabblePlayerUI.putInHand(((ScrabbleHumanPlayer)plr).getHand());
 			
 			// pass control to the other player
             playerToMove = 1 - playerToMove;
@@ -226,6 +227,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			if(checkValidMove(pos, tiles))
 			{
 				updateHand(hand, tiles, plr);
+				ScrabblePlayerUI.putInHand(((ScrabbleHumanPlayer)plr).getHand());
 				
 				// get this move's score and add it to the appropriate
                 int moveScore = getMoveScore(mv);
