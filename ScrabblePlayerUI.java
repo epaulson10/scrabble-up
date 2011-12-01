@@ -103,7 +103,7 @@ public class ScrabblePlayerUI extends JPanel
                 ScrabbleTile temp = board.getTileAt(i,k);
                 if (temp != null)
                 {
-                    g.drawImage(temp.getPicture(), temp.getLocation().x, temp.getLocation().y, TILE_SIZE, TILE_SIZE, null,null);
+                    g.drawImage(temp.getPicture(), k*TILE_SIZE, i*TILE_SIZE, TILE_SIZE, TILE_SIZE, null,null);
                 }
             }
         }
