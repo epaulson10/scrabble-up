@@ -217,7 +217,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			
 			// if number of tiles and number of positions are unequal, this
 			// was a bad move
-			if (tiles.size() != pos. size())
+			if (tiles.size() != pos.size())
 			{
 			    return false;
 			}
@@ -228,24 +228,24 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				updateHand(hand, tiles, plr);
 				
 				// get this move's score and add it to the appropriate
-				int moveScore = getMoveScore(pos);
-				// player's score
-				if (playerID == 0)
-				{
-				    p0Score += moveScore;
-				}
-				else
-				{
-				    p1Score += moveScore;
-				}
-				
-				// apply move to master board
-				for (int i = 0; i < tiles.size(); i++)
-				{
-				    Point curPos = pos.get(i);
-				    ScrabbleTile curTile = tiles.get(i);
-				    board.putTileAt(curPos.y, curPos.x, curTile);
-				}
+                int moveScore = getMoveScore(mv);
+                // player's score
+                if (playerID == 0)
+                {
+                    p0Score += moveScore;
+                }
+                else
+                {
+                    p1Score += moveScore;
+                }
+
+                // apply move to master board
+                for (int i = 0; i < tiles.size(); i++)
+                {
+                    Point curPos = pos.get(i);
+                    ScrabbleTile curTile = tiles.get(i);
+                    board.putTileAt(curPos.y, curPos.x, curTile);
+                }
 				
 				// pass control to the other player
 				playerToMove = 1 - playerToMove;
@@ -317,7 +317,22 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			Vector<ScrabbleTile> tiles) {
 		
 		// copy of the board before the move
-		ScrabbleBoard copyBoard = board;
+		ScrabbleBoard copyBoard = new ScrabbleBoard();
+        for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
+        {
+            for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
+            {
+                ScrabbleTile thisTile = board.getTileAt(row, col);
+                ScrabbleTile newTile = null;
+                if (thisTile != null)
+                {
+                    newTile = new ScrabbleTile(thisTile.getLetter(),
+                        thisTile.getValue(), thisTile.isBlank());
+                }
+                // copy tile from master board to same position on copy board
+                copyBoard.putTileAt(row, col, newTile);
+            }
+        }
 		
 		// string to test
 		String testString = "";
@@ -383,7 +398,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			for(int row = 0; row < ScrabbleBoard.BOARD_WIDTH; row++)
 			{
 				// Find a letter tile
-				if(copyBoard.getTileAt(col, row) != null)
+				if(copyBoard.getTileAt(row, col) != null)
 				{
 					testString = "";
 					rowCount = row;
@@ -391,12 +406,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					int index = 0;
 					
 					// If this is the start of a word in the row check the word across
-					if(col == 0 || copyBoard.getTileAt(colCount-1,rowCount) == null)
+					if(col == 0 || copyBoard.getTileAt(rowCount, colCount-1) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(colCount,rowCount) != null)
+						while(copyBoard.getTileAt(rowCount,colCount) != null)
 						{
-							testString += Character.toString(copyBoard.getTileAt(colCount, rowCount).getLetter());
+							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							colCount++;
 							index++;
 						}//while
@@ -418,12 +433,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					}//if
 					
 					// If this is the start of a word in the column check the word down
-					if(row == 0 || copyBoard.getTileAt(colCount, rowCount-1) == null)
+					if(row == 0 || copyBoard.getTileAt(rowCount-1, colCount) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(colCount, rowCount) != null)
+						while(copyBoard.getTileAt(rowCount, colCount) != null)
 						{
-							testString += Character.toString(copyBoard.getTileAt(colCount, rowCount).getLetter());
+							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							rowCount++;
 							index++;
 						}//while
@@ -440,7 +455,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				}//if
 			}//for
 		}//for
-		board = copyBoard;
+		// board = copyBoard;
 		return VALID_MOVE;
 	}
 	
@@ -561,8 +576,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         {
             for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
+                ScrabbleTile thisTile = board.getTileAt(row, col);
+                ScrabbleTile newTile = null;
+                if (thisTile != null)
+                {
+                    newTile = new ScrabbleTile(thisTile.getLetter(),
+                        thisTile.getValue(), thisTile.isBlank());
+                }
                 // copy tile from master board to same position on copy board
-                newBoard.putTileAt(row, col, board.getTileAt(row, col));
+                newBoard.putTileAt(row, col, newTile);
             }
         }
         
@@ -583,8 +605,10 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                 // Trying to play a tile on an occupied space
                 return -1;
             }
-            ScrabbleTile tilePlayed = tiles.get(i);
-            newBoard.putTileAt(row, col, tilePlayed);
+            ScrabbleTile thisTile = tiles.get(i);
+            ScrabbleTile newTile = new ScrabbleTile(thisTile.getLetter(),
+                    thisTile.getValue(), thisTile.isBlank());
+            newBoard.putTileAt(row, col, newTile);
         }
         
         // Scan for words formed or modified:
@@ -595,18 +619,21 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         {
             for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
-                if (board.getTileAt(row, col) != null)
+                if (newBoard.getTileAt(row, col) != null)
                 {                    
                     // Could this tile begin a vertical word?
                     if (row-1 < 0 || newBoard.getTileAt(row-1, col) == null)
                     {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
+                        Vector<Point> newPos = new Vector<Point>();
+                        newPos.add(new Point(row,col));
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dRow = 1; (row+dRow < ScrabbleBoard.BOARD_HEIGHT)
                                         && (newBoard.getTileAt(row+dRow, col) != null);
                                         dRow++)
                         {
+                            newPos.add(new Point(row+dRow, col));
                             word.add(newBoard.getTileAt(row+dRow, col));
                         }//for
                         
@@ -617,7 +644,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                             boolean isNew = false;
                             for (int i = 0; i < word.size(); i++)
                             {
-                                if (tiles.contains(word.get(i)))
+                                if (positions.contains(newPos.get(i)))
                                 {
                                     isNew = true;
                                 }//if
@@ -638,12 +665,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                     if (col-1 < 0 || newBoard.getTileAt(row, col-1) == null)
                     {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
+                        Vector<Point> newPos = new Vector<Point>();
+                        newPos.add(new Point(row,col));
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dCol = 1; (col+dCol < ScrabbleBoard.BOARD_WIDTH)
                                         && (newBoard.getTileAt(row, col+dCol) != null);
                                         dCol++)
                         {
+                            newPos.add(new Point(row, col+dCol));
                             word.add(newBoard.getTileAt(row, col+dCol));
                         }//for
                         
@@ -654,7 +684,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                             boolean isNew = false;
                             for (int i = 0; i < word.size(); i++)
                             {
-                                if (tiles.contains(word.get(i)))
+                                if (positions.contains(newPos.get(i)))
                                 {
                                     isNew = true;
                                 }//if

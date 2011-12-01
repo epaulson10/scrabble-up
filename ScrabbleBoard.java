@@ -35,10 +35,10 @@ public class ScrabbleBoard
 	 * */
 	public ScrabbleTile getTileAt (int row, int col)
 	{	
-		if(tilePositions[row][col] == null)
+		if(tilePositions[col][row] == null)
 			return null;
 		else
-			return tilePositions[row][col];
+			return tilePositions[col][row];
 	}
 
 	/** Returns the integer code of the bonus at the specified tile
@@ -51,7 +51,7 @@ nonValidBoardSpaceException is thrown */
 	public int getBonusAt (int row, int col)
 	{
 
-		return bonusPositions[row][col];
+		return bonusPositions[col][row];
 	}
 	
 	/** Sets the tile at the given location
@@ -63,7 +63,7 @@ nonValidBoardSpaceException is thrown */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
 		{
 			// if tilePosition == null
-			tilePositions[row][col] = sct;
+			tilePositions[col][row] = sct;
 			// CHANGED: Allow null positions without error
 			if (sct != null)
 			{
