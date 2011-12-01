@@ -10,7 +10,7 @@ import java.util.Vector;
 public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 
     public ScrabbleComputerPlayerEasy() {
-        
+        super();
     }
 
     /**  * Respond to a move request by making a move. */
@@ -21,6 +21,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Vector<ScrabbleTile> hand = getHand();
         game.applyAction(new ScrabbleDiscardAction(this, hand));
         ScrabbleTile[] handContainer = new ScrabbleTile[7];
         hand.toArray(handContainer);

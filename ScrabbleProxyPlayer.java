@@ -80,22 +80,4 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
         return ScrabbleProxyGame.PORT_NUM;
     }
 
-    /** Adds tiles to the player's hand.
-     * @param tilesToAdd  the tiles to add, contained in an array
-     */
-    public void updateHand (Vector<ScrabbleTile> tilesToAdd) 
-    {
-
-    }
-
-    /**
-     *  Retrieves the player's hand.
-     *  
-     *  @return a copy of player's hand
-     */
-    public Vector<ScrabbleTile> getHand()
-    {
-        return hand;
-    }
-
 }

@@ -6,5 +6,4 @@ import game.*;
 
 public interface ScrabbleGame extends Game
 {
-    public void drawInitialHand(ScrabblePlayer sp);
 }
