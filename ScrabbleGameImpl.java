@@ -361,22 +361,22 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// and make sure that there is another tile.
 			for(Point p : pos)
 			{
-				if(p.x-1 >0 && board.getTileAt(p.x-1, p.y) != null)
+				if(p.x-1 >0 && copyBoard.getTileAt(p.y, p.x-1) != null)
 				{	
 					valid = true;
 					break;
 				}
-				else if(p.x+1 <15 && board.getTileAt(p.x+1, p.y) != null)
+				else if(p.x+1 <15 && copyBoard.getTileAt(p.y, p.x+1) != null)
 				{
 					valid = true;
 					break;
 				}
-				else if(p.y-1 > 0 && board.getTileAt(p.x, p.y-1) != null)
+				else if(p.y-1 > 0 && copyBoard.getTileAt(p.y-1, p.x) != null)
 				{
 					valid = true;
 					break;
 				}
-				else if(p.y+1 < 15 && board.getTileAt(p.x, p.y+1) != null)
+				else if(p.y+1 < 15 && copyBoard.getTileAt(p.y+1, p.x) != null)
 				{
 					valid = true;
 					break;
@@ -388,7 +388,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// place the played word onto the copy of the board 
 		for(int i = 0; i < tiles.size(); i++)
 		{
-			copyBoard.putTileAt(pos.elementAt(i).x, pos.elementAt(i).y, tiles.elementAt(i));
+			copyBoard.putTileAt(pos.elementAt(i).y, pos.elementAt(i).x, tiles.elementAt(i));
 		}
 		
 		// check that all of the words on the board are still valid after
@@ -626,14 +626,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                     {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         Vector<Point> newPos = new Vector<Point>();
-                        newPos.add(new Point(row,col));
+                        newPos.add(new Point(col,row));
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dRow = 1; (row+dRow < ScrabbleBoard.BOARD_HEIGHT)
                                         && (newBoard.getTileAt(row+dRow, col) != null);
                                         dRow++)
                         {
-                            newPos.add(new Point(row+dRow, col));
+                            newPos.add(new Point(col, row+dRow));
                             word.add(newBoard.getTileAt(row+dRow, col));
                         }//for
                         
@@ -666,14 +666,14 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                     {
                         Vector<ScrabbleTile> word = new Vector<ScrabbleTile>();
                         Vector<Point> newPos = new Vector<Point>();
-                        newPos.add(new Point(row,col));
+                        newPos.add(new Point(col,row));
                         word.add(newBoard.getTileAt(row,col));
                         // Get rest of tiles in this word
                         for (int dCol = 1; (col+dCol < ScrabbleBoard.BOARD_WIDTH)
                                         && (newBoard.getTileAt(row, col+dCol) != null);
                                         dCol++)
                         {
-                            newPos.add(new Point(row, col+dCol));
+                            newPos.add(new Point(col+dCol, row));
                             word.add(newBoard.getTileAt(row, col+dCol));
                         }//for
                         
