@@ -62,7 +62,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
 	{
-	    
+	    ui.setModel((ScrabbleGame)this.game);
 	}
 
 	/** Gets the default title of the game window.

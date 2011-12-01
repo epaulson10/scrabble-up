@@ -199,6 +199,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			
 			// pass control to the other player
             playerToMove = 1 - playerToMove;
+            
+            notifyAllStateChanged();
 			
 			return true;
 		}
@@ -249,6 +251,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 				playerToMove = 1 - playerToMove;
 				
 				// move was legal
+				notifyAllStateChanged();
+				
 				return true;
 			}
 			return false;
