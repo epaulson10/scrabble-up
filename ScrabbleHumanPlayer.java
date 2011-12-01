@@ -63,6 +63,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	protected void setGameMore () 
 	{
 	    ui.setModel((ScrabbleGame)this.game);
+	    ui.putInHand(this.getHand());
 	}
 
 	/** Gets the default title of the game window.
@@ -85,8 +86,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	{
 	    super.stateChanged();
 	    ScrabbleGameState state = (ScrabbleGameState)game.getState(this, 0);
-	    p0score.setText(""+state.getScore(0));
-	    p1score.setText(""+ state.getScore(1));
+	    p0score.setText("Player 0: "+state.getScore(0));
+	    p1score.setText("Player 1: "+ state.getScore(1));
 		ui.updateState();
 		ui.repaint();
 		repaint();
@@ -94,6 +95,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	
 	/**
 	 * Get the player's hand
+	 * 
+	 * @return the player's current hand
 	 */
 	public Vector<ScrabbleTile> getHand()
 	{
@@ -252,7 +255,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
-	       ui.putInHand(getHand());
+	       ui.putInHand(this.getHand());
 	       ui.repaint();
 	   }
 	   else if (cmd.equals("Discard"))
