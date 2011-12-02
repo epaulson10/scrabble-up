@@ -35,10 +35,10 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 			{
 				if(boardState.getTileAt(i, j) != null)
 				{
-					boolean down = checkDown(boardState, i, j);
-					boolean right = checkRight(boardState, i, j);
-					if(down)
-					{
+					//boolean down = checkDown(boardState, i, j);
+					//boolean right = checkRight(boardState, i, j);
+					//if(down)
+					//{
 
 						for(int k = 0; k < handContainer.length; k++)
 						{
@@ -60,9 +60,9 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 									moves.add(move);
 							}
 						}
-					}
-					if(right)
-					{
+					//}
+					//if(right)
+					//{
 						for(int k = 0; k < handContainer.length; k++)
 						{
 							for(int l = 0; l < handContainer.length; l++)
@@ -83,7 +83,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 									moves.add(move);
 							}
 						}
-					}
+					//}
 				}
 			}
 		}

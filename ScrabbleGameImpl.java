@@ -196,7 +196,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// remove the tiles played and pick
 			// new tiles from the bag
 			updateHand(hand, discTiles, plr);
-			ScrabblePlayerUI.putInHand(((ScrabbleHumanPlayer)plr).getHand());
+			if (plr instanceof ScrabbleHumanPlayer)
+			{
+			    ScrabblePlayerUI.putInHand(
+			            ((ScrabbleHumanPlayer)plr).getHand());
+			}
 			
 			// pass control to the other player
             playerToMove = 1 - playerToMove;
@@ -227,7 +231,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			if(checkValidMove(pos, tiles))
 			{
 				updateHand(hand, tiles, plr);
-				ScrabblePlayerUI.putInHand(((ScrabbleHumanPlayer)plr).getHand());
+				if (plr instanceof ScrabbleHumanPlayer)
+	            {
+	                ScrabblePlayerUI.putInHand(
+	                        ((ScrabbleHumanPlayer)plr).getHand());
+	            }
 				
 				// get this move's score and add it to the appropriate
                 int moveScore = getMoveScore(mv);
@@ -490,6 +498,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                 newTile = new ScrabbleTile(thisTile.getLetter(),
                     thisTile.getValue(), thisTile.isBlank());
             }
+            if (copyBoard.getTileAt(pos.elementAt(i).y, pos.elementAt(i).x)
+                    != null)
+            {
+                return INVALID_MOVE;
+            }
 			copyBoard.putTileAt(pos.elementAt(i).y, pos.elementAt(i).x, newTile);
 		}
 		
@@ -520,6 +533,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 						
 						if(index > 1)
 						{
+						    System.out.println(testString);
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
@@ -548,12 +562,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 						if(index > 1)
 						{	
 							System.out.println(testString);
-							try{
-								Thread.sleep(5000);
-							}
-							catch(Exception e){
-								System.out.println("Sleep problems");
-							}
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
