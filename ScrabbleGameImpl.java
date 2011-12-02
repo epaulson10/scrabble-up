@@ -561,7 +561,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 						
 						if(index > 1)
 						{	
-							System.out.println(testString);
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{

@@ -35,62 +35,58 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 			{
 				if(boardState.getTileAt(i, j) != null)
 				{
-					//boolean down = checkDown(boardState, i, j);
-					//boolean right = checkRight(boardState, i, j);
-					//if(down)
-					//{
 
-						for(int k = 0; k < handContainer.length; k++)
+					for(int k = 0; k < handContainer.length; k++)
+					{
+						for(int l = 0; l < handContainer.length; l++)
 						{
-							for(int l = 0; l < handContainer.length; l++)
+							if(k == l)
 							{
-								if(k == l)
-								{
-									continue;
-								}
-								Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
-								play.add(handContainer[k]);
-								play.add(handContainer[l]);
-								Vector<Point> playSpots = new Vector<Point>(2);
-								playSpots.add(new Point(i,j+1));
-								playSpots.add(new Point(i,j+2));
-
-								ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-								if(ScrabbleGameImpl.checkValidMove(playSpots,play))
-									moves.add(move);
+								continue;
 							}
+							Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
+							play.add(handContainer[k]);
+							play.add(handContainer[l]);
+							Vector<Point> playSpots = new Vector<Point>(2);
+							playSpots.add(new Point(i,j+1));
+							playSpots.add(new Point(i,j+2));
+
+							ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
+							if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+								moves.add(move);
 						}
-					//}
-					//if(right)
-					//{
-						for(int k = 0; k < handContainer.length; k++)
+					}
+					for(int k = 0; k < handContainer.length; k++)
+					{
+						for(int l = 0; l < handContainer.length; l++)
 						{
-							for(int l = 0; l < handContainer.length; l++)
+							if(k == l)
 							{
-								if(k == l)
-								{
-									continue;
-								}
-								Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
-								play.add(handContainer[k]);
-								play.add(handContainer[l]);
-								Vector<Point> playSpots = new Vector<Point>(2);
-								playSpots.add(new Point(i,j+1));
-								playSpots.add(new Point(i,j+2));
-
-								ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-								if(ScrabbleGameImpl.checkValidMove(playSpots,play))
-									moves.add(move);
+								continue;
 							}
+							Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
+							play.add(handContainer[k]);
+							play.add(handContainer[l]);
+							Vector<Point> playSpots = new Vector<Point>(2);
+							playSpots.add(new Point(i,j+1));
+							playSpots.add(new Point(i,j+2));
+
+							ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
+							if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+								moves.add(move);
 						}
-					//}
+					}
 				}
 			}
 		}
-
-
-		 ScrabbleDiscardAction move = new ScrabbleDiscardAction(this, myState.getHand());
-		 moves.add(move);
+		Vector<ScrabbleTile> discard = new Vector<ScrabbleTile>();
+		for(ScrabbleTile s: myState.getHand()){
+			discard.add(s);
+		}
+		discard.remove(5);
+		discard.remove(3);
+		ScrabbleDiscardAction move = new ScrabbleDiscardAction(this, discard);
+		moves.add(move);
 
 
 		GameAction[] ga = new GameAction[0];
@@ -99,41 +95,4 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 		game.applyAction(ga[rand.nextInt(ga.length)]);
 		return;
 	}
-	private boolean checkRight(ScrabbleBoard boardState, int i, int j) {
-		int checkBounds = j+3;
-		if (checkBounds > ScrabbleBoard.BOARD_WIDTH-1)
-		{
-			checkBounds = ScrabbleBoard.BOARD_WIDTH-1;
-		}
-
-		for(int k = j; k<checkBounds; k++)
-		{
-			if(boardState.getTileAt(i,k) != null)
-			{
-				return false;
-			}
-		}
-
-		return true;
-
-	}
-
-	private boolean checkDown(ScrabbleBoard boardState, int i, int j) {
-		int checkBounds = i+3;
-		if (checkBounds > ScrabbleBoard.BOARD_HEIGHT-1)
-		{
-			checkBounds = ScrabbleBoard.BOARD_HEIGHT-1;
-		}
-
-		for(int k = i; k<checkBounds; k++)
-		{
-			if(boardState.getTileAt(k,j) != null)
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 }
