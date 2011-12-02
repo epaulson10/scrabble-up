@@ -336,6 +336,99 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             }
         }
 		
+        // Make sure played tiles are part of a contiguous row/column
+        boolean isRow = true;
+        boolean isColumn = true;
+        int lastX = -1;
+        int lastY = -1;
+        for (Point p : pos)
+        {
+            if (lastX == -1)
+            {
+                lastX = p.x;
+            }
+            else
+            {
+                if (p.x != lastX)
+                {
+                    isColumn = false;
+                }
+            }
+            if (lastY == -1)
+            {
+                lastY = p.y;
+            }
+            else
+            {
+                if (p.y != lastY)
+                {
+                    isRow = false;
+                }
+            }
+        }
+        
+        if (!(isRow || isColumn))
+        {
+            return false;
+        }
+        
+        if (isRow)
+        {
+            // Make sure there are no null spaces between the lowest-x tile
+            // and highest-x tile
+            int lowX = 14;
+            int highX = 0;
+            for (Point p : pos)
+            {
+                if (p.x < lowX)
+                {
+                    lowX = p.x;
+                }
+                if (p.x > highX)
+                {
+                    highX = p.x;
+                }
+            }
+            for (int i = lowX; i <= highX; i++)
+            {
+                // This should be either a tile on the board or a position
+                // played in this move
+                if (copyBoard.getTileAt(lastY, i) == null &&
+                    !pos.contains(new Point(i, lastY)))
+                {
+                    return INVALID_MOVE;
+                }
+            }
+        }
+        else if (isColumn)
+        {
+            // Make sure there are no null spaces between the lowest-y tile
+            // and highest-y tile
+            int lowY = 14;
+            int highY = 0;
+            for (Point p : pos)
+            {
+                if (p.y < lowY)
+                {
+                    lowY = p.y;
+                }
+                if (p.y > highY)
+                {
+                    highY = p.y;
+                }
+            }
+            for (int i = lowY; i <= highY; i++)
+            {
+                // This should be either a tile on the board or a position
+                // played in this move
+                if (copyBoard.getTileAt(i, lastX) == null &&
+                    !pos.contains(new Point(lastX, i)))
+                {
+                    return INVALID_MOVE;
+                }
+            }
+        }
+        
 		// string to test
 		String testString = "";
 		
