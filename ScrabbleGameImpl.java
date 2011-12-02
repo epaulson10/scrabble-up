@@ -547,6 +547,13 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 						
 						if(index > 1)
 						{	
+							System.out.println(testString);
+							try{
+								Thread.sleep(5000);
+							}
+							catch(Exception e){
+								System.out.println("Sleep problems");
+							}
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
