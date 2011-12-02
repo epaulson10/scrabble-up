@@ -1,6 +1,9 @@
 package scrabble;
 
 import java.awt.Point;
+import game.*;
+
+import java.util.Random;
 import java.util.Vector;
 
 /** * Class representing an unskilled AI player.
@@ -9,31 +12,26 @@ import java.util.Vector;
  * @version To be implemented*/
 public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 
-    public ScrabbleComputerPlayerEasy() {
-        super();
+    public ScrabbleComputerPlayerEasy() 
+    {
+        
     }
 
     /**  * Respond to a move request by making a move. */
-    protected void doRequestMove () {
-    	try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Vector<ScrabbleTile> hand = getHand();
-        game.applyAction(new ScrabbleDiscardAction(this, hand));
+    protected void doRequestMove ()
+    {
         ScrabbleTile[] handContainer = new ScrabbleTile[7];
-        hand.toArray(handContainer);
-        
+
         Vector<String> combinations = new Vector<String>();
+        Vector<GameMoveAction> moves = new Vector<GameMoveAction>();
         
         ScrabbleGameState myState = (ScrabbleGameState)game.getState(this, 0);
         ScrabbleBoard boardState = myState.getBoard();
+        handContainer = myState.getHand().toArray(handContainer);
         
-        for(int i = 2; i < ScrabbleBoard.BOARD_HEIGHT-2; i++)
+        for(int i = 2; i < ScrabbleBoard.BOARD_HEIGHT-3; i++)
         {
-        	for(int j = 2; j < ScrabbleBoard.BOARD_WIDTH-2; j++)
+        	for(int j = 2; j < ScrabbleBoard.BOARD_WIDTH-3; j++)
         	{
         		if(boardState.getTileAt(i, j) != null)
         		{
@@ -54,9 +52,10 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         						combinations.add(word);
         					}
         				}
+        				Dictionary dict = myState.getDictionary();
         				for(String s: combinations)
         				{
-        					if (Dictionary.wordList.contains(s))
+        					if (dict.isValidWord(s))
         					{
         						int loc1 = findTile(s.substring(1,2), handContainer);
         						int loc2 = findTile(s.substring(2), handContainer);
@@ -68,7 +67,8 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         						playSpots.add(new Point(i+2,j));
         						
         						ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-        						game.applyAction(move);
+        						if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+        						moves.add(move);
         						
         					}
         				}
@@ -102,7 +102,8 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         						playSpots.add(new Point(i,j+2));
         						
         						ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-        						game.applyAction(move);
+        						if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+        						moves.add(move);
         						
         					}
         				}
@@ -110,6 +111,16 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         		}
         	}
         }
+       
+        
+        ScrabbleDiscardAction move = new ScrabbleDiscardAction(this, myState.getHand());
+        moves.add(move);
+        
+        GameAction[] ga = new GameAction[0];
+        ga = moves.toArray(ga);
+        Random rand = new Random();
+        game.applyAction(ga[rand.nextInt(ga.length)]);
+        
     }
 
 	private int findTile(String s, ScrabbleTile[] hand) {
@@ -126,9 +137,9 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 
 	private boolean checkRight(ScrabbleBoard boardState, int i, int j) {
 		int checkBounds = j+3;
-		if (checkBounds > ScrabbleBoard.BOARD_WIDTH)
+		if (checkBounds > ScrabbleBoard.BOARD_WIDTH-1)
 		{
-			checkBounds = ScrabbleBoard.BOARD_WIDTH;
+			checkBounds = ScrabbleBoard.BOARD_WIDTH-1;
 		}
 		
 		for(int k = j; k<checkBounds; k++)
@@ -145,9 +156,9 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 
 	private boolean checkDown(ScrabbleBoard boardState, int i, int j) {
 		int checkBounds = i+3;
-		if (checkBounds > ScrabbleBoard.BOARD_WIDTH)
+		if (checkBounds > ScrabbleBoard.BOARD_HEIGHT-1)
 		{
-			checkBounds = ScrabbleBoard.BOARD_WIDTH;
+			checkBounds = ScrabbleBoard.BOARD_HEIGHT-1;
 		}
 		
 		for(int k = i; k<checkBounds; k++)
