@@ -524,7 +524,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					if(col == 0 || copyBoard.getTileAt(rowCount, colCount-1) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(rowCount,colCount) != null)
+						while(colCount < ScrabbleBoard.BOARD_WIDTH &&
+						      copyBoard.getTileAt(rowCount,colCount) != null)
 						{
 							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							colCount++;
@@ -533,7 +534,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 						
 						if(index > 1)
 						{
-						    System.out.println(testString);
 							// check to see if word is valid
 							if(!dictionary.isValidWord(testString))
 							{
@@ -552,7 +552,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					if(row == 0 || copyBoard.getTileAt(rowCount-1, colCount) == null)
 					{
 						// get the whole word
-						while(copyBoard.getTileAt(rowCount, colCount) != null)
+						while(rowCount < ScrabbleBoard.BOARD_WIDTH &&
+						      copyBoard.getTileAt(rowCount, colCount) != null)
 						{
 							testString += Character.toString(copyBoard.getTileAt(rowCount, colCount).getLetter());
 							rowCount++;
