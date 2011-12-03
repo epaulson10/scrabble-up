@@ -21,73 +21,92 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 	protected void doRequestMove ()
 	{
 		ScrabbleTile[] handContainer = new ScrabbleTile[7];
-
-		Vector<String> combinations = new Vector<String>();
 		Vector<GameMoveAction> moves = new Vector<GameMoveAction>();
 
 		ScrabbleGameState myState = (ScrabbleGameState)game.getState(this, 0);
 		ScrabbleBoard boardState = myState.getBoard();
 		handContainer = myState.getHand().toArray(handContainer);
 
+		for(int i = 0; i < 7; i++){
+			System.out.print(handContainer[i]);
+		}
+		System.out.println();
+		System.out.println();
 		for(int i = 2; i < ScrabbleBoard.BOARD_HEIGHT-3; i++)
 		{
 			for(int j = 2; j < ScrabbleBoard.BOARD_WIDTH-3; j++)
 			{
-				if(boardState.getTileAt(i, j) != null)
+				for(int k = 0; k < handContainer.length; k++)
 				{
-
-					for(int k = 0; k < handContainer.length; k++)
+					for(int l = 0; l < handContainer.length; l++)
 					{
-						for(int l = 0; l < handContainer.length; l++)
+						if(k == l)
 						{
-							if(k == l)
-							{
-								continue;
-							}
-							Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
-							play.add(handContainer[k]);
-							play.add(handContainer[l]);
-							Vector<Point> playSpots = new Vector<Point>(2);
-							playSpots.add(new Point(i,j+1));
-							playSpots.add(new Point(i,j+2));
-
-							ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-							if(ScrabbleGameImpl.checkValidMove(playSpots,play))
-								moves.add(move);
+							continue;
 						}
+						Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
+						play.add(handContainer[k]);
+						play.add(handContainer[l]);
+						Vector<Point> playSpots = new Vector<Point>(2);
+						playSpots.add(new Point(i,j));
+						playSpots.add(new Point(i,j+1));
+						if(j+1 > ScrabbleBoard.BOARD_HEIGHT-1){
+							continue;
+						}
+						ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
+						if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+							moves.add(move);
 					}
-					for(int k = 0; k < handContainer.length; k++)
+				}
+				for(int k = 0; k < handContainer.length; k++)
+				{
+					for(int l = 0; l < handContainer.length; l++)
 					{
-						for(int l = 0; l < handContainer.length; l++)
+						if(k == l)
 						{
-							if(k == l)
-							{
-								continue;
-							}
-							Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
-							play.add(handContainer[k]);
-							play.add(handContainer[l]);
-							Vector<Point> playSpots = new Vector<Point>(2);
-							playSpots.add(new Point(i,j+1));
-							playSpots.add(new Point(i,j+2));
-
-							ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
-							if(ScrabbleGameImpl.checkValidMove(playSpots,play))
-								moves.add(move);
+							continue;
 						}
+						Vector<ScrabbleTile> play = new Vector<ScrabbleTile>(2);
+						play.add(handContainer[k]);
+						play.add(handContainer[l]);
+						Vector<Point> playSpots = new Vector<Point>(2);
+						playSpots.add(new Point(i,j));
+						playSpots.add(new Point(i+1,j));
+						if(i+1 > ScrabbleBoard.BOARD_WIDTH-1){
+							continue;
+						}
+
+						ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
+						if(ScrabbleGameImpl.checkValidMove(playSpots,play))
+							moves.add(move);
+					}
+				}
+
+				{
+					for(int k = 0; i < handContainer.length; i++)
+					{
+						Vector<ScrabbleTile> tile = new Vector<ScrabbleTile>(1);
+						tile.add(handContainer[k]);
+						Vector<Point> spot = new Vector<Point>(1);
+						spot.add(new Point(i,j));
+						ScrabbleMoveAction move = new ScrabbleMoveAction(this, tile, spot);
+						if(ScrabbleGameImpl.checkValidMove(spot, tile))
+							moves.add(move);
 					}
 				}
 			}
 		}
-		Vector<ScrabbleTile> discard = new Vector<ScrabbleTile>();
-		for(ScrabbleTile s: myState.getHand()){
-			discard.add(s);
+		if(moves.isEmpty())
+		{
+			Vector<ScrabbleTile> discard = new Vector<ScrabbleTile>();
+			for(ScrabbleTile s: myState.getHand()){
+				discard.add(s);
+			}
+			discard.remove(5);
+			discard.remove(3);
+			ScrabbleDiscardAction move = new ScrabbleDiscardAction(this, discard);
+			moves.add(move);
 		}
-		discard.remove(5);
-		discard.remove(3);
-		ScrabbleDiscardAction move = new ScrabbleDiscardAction(this, discard);
-		moves.add(move);
-
 
 		GameAction[] ga = new GameAction[0];
 		ga = moves.toArray(ga);
