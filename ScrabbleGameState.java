@@ -11,7 +11,6 @@ class ScrabbleGameState extends GameState
 	private int p0Score;
 	private int p1Score;
 	private int playerToMove;
-	private Dictionary dictionary;
 
 	/**
 	 * Constructor- initializes the instance variables for the GameState
@@ -24,7 +23,7 @@ class ScrabbleGameState extends GameState
 	public ScrabbleGameState (ScrabbleBoard initBoard,
 	                          Vector<ScrabbleTile> initHand,
 	                          int initPlayerToMove, int initP0Score,
-	                          int initP1Score, Dictionary initDictionary)
+	                          int initP1Score)
 	{
 		// Initialize instance vars
 	    board = initBoard;
@@ -32,7 +31,6 @@ class ScrabbleGameState extends GameState
 	    playerToMove = initPlayerToMove;
 	    p0Score = initP0Score;
 	    p1Score = initP1Score;
-	    dictionary = initDictionary;
 	}
 	
 	/**
@@ -84,16 +82,6 @@ class ScrabbleGameState extends GameState
 	public int whoseMove()
 	{
 	    return playerToMove;
-	}
-	
-	/**
-	 * Retrieves a pointer to the dictionary.
-	 * 
-	 * @return a pointer to the dictionary
-	 */
-	public Dictionary getDictionary()
-	{
-	    return dictionary;
 	}
 
 }

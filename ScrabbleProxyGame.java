@@ -92,7 +92,7 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new ScrabbleGameState(theBoard,hand,whoseMove,p0score,p1score,theDict);
+        return new ScrabbleGameState(theBoard,hand,whoseMove,p0score,p1score);
 	}
 
 	/** 
