@@ -133,7 +133,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	    }
 	    
 	    
-		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score, dictionary);
+		return new ScrabbleGameState(newBoard, curHand, playerToMove, p0Score, p1Score);
 	}
 
 	/** Initializes the starting state of the game */
