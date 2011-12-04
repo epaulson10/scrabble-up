@@ -233,7 +233,7 @@ public class ScrabblePlayerUI extends JPanel
         for (ScrabbleTile tile : player.getHand())
         {
             Point loc = tile.getLocation();
-            if (loc.x > 0 && loc.x < UI_SIZE && loc.y > 0 && loc.y < UI_SIZE)
+            if (loc.x >= 0 && loc.x < UI_SIZE && loc.y >= 0 && loc.y < UI_SIZE)
             {
                 return true;
             }
