@@ -65,7 +65,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	protected void setGameMore () 
 	{
 	    ui.setModel((ScrabbleGame)this.game);
-	    ui.putInHand(this.getHand());
+	    ScrabblePlayerUI.putInHand(this.getHand());
 	}
 
 	/** Gets the default title of the game window.
@@ -269,13 +269,13 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
-	       ui.putInHand(this.getHand());
+	       ScrabblePlayerUI.putInHand(this.getHand());
 	       ui.repaint();
 	   }
 	   else if (cmd.equals("Discard"))
 	   {
 	       game.applyAction(new ScrabbleDiscardAction(this,ui.tilesToDiscard()));
-	       ui.putInHand(this.getHand());
+	       ScrabblePlayerUI.putInHand(this.getHand());
 	       ui.repaint();
 	      
 	   }
@@ -293,7 +293,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	   {
 	       Vector<ScrabbleTile> myHand = getHand();
 	       Collections.shuffle(myHand);
-	       ui.putInHand(myHand);
+	       ScrabblePlayerUI.putInHand(myHand);
 	       ui.repaint();
 	   }
 	}
