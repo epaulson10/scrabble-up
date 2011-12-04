@@ -18,7 +18,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	private int playerToMove;
 	private int winner;
 	private static Dictionary dictionary;
-	private boolean handIsEmpty;
 	private static final boolean INVALID_MOVE = false;
 	private static final boolean VALID_MOVE = true;
 
@@ -37,7 +36,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		p1Hand = new Vector<ScrabbleTile>();
 		playerToMove = 0;
 		winner = -1;
-		handIsEmpty = false;
 		
 		// Populate bag with tiles:
         bag.removeAllElements();
@@ -301,12 +299,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			}
 		}
 		
-		// Check if game-over conditions are met
-		if (bag.size() == 0 && hand.size() == 0)
-		{
-		    handIsEmpty = true;
-		}
-		
 		if (plr.getId() == 0)
 		{
 		    p0Hand = hand;
@@ -315,6 +307,42 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		{
 		    p1Hand = hand;
 		}
+		
+		// Check if game-over conditions are met
+        if (!gameOver() && checkWinner())
+        {
+            for (ScrabbleTile tile : p0Hand)
+            {
+                p0Score -= tile.getValue();
+                if (bag.size() == 0)
+                {
+                    // Award points to opponent
+                    p1Score += tile.getValue();
+                }
+            }
+            for (ScrabbleTile tile : p1Hand)
+            {
+                p1Score -= tile.getValue();
+                if (bag.size() == 0)
+                {
+                    // Award points to opponent
+                    p0Score += tile.getValue();
+                }
+            }
+            
+            if (p0Score > p1Score)
+            {
+                winner = 0;
+            }
+            else if (p1Score > p0Score)
+            {
+                winner = 1;
+            }
+            else
+            {
+                winner = 2;
+            }
+        }
 	}
 
 	/**
@@ -830,20 +858,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 @return true if someone has won, false otherwise */
 	protected boolean checkWinner()
 	{
-		if (bag.size() == 0 && handIsEmpty)
+		if (bag.size() == 0 && (p0Hand.size() == 0 || p1Hand.size() == 0))
 		{
-		    if (p0Score > p1Score)
-		    {
-		        winner = 0;
-		    }
-		    else if (p1Score > p0Score)
-		    {
-		        winner = 1;
-		    }
-		    else
-		    {
-		        winner = 2;
-		    }
 		    return true;
 		}
 		else
