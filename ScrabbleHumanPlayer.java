@@ -11,6 +11,7 @@ import java.util.Vector;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**Class representing a human Scrabble player.*/
 public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener
@@ -26,7 +27,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	private JLabel p0score;
 	private JLabel p1score;
 	
-	public Vector<ScrabbleTile> foo;
 	
 	// Player's hand
 	//private Vector<ScrabbleTile> hand;
@@ -106,10 +106,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    return curState.getHand();
 	}
 	
-	public void mouseClicked (MouseEvent me) 
-	{
-
-	}
+	public void mouseClicked (MouseEvent me) {}
 
 	/**
 	 * When the mouse is dragged and there is a tile being pressed on
@@ -126,10 +123,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 		
 	}
 
-	public void mouseMoved (MouseEvent me) 
-	{
-
-	}
+	public void mouseMoved (MouseEvent me) {}
+	
 	/**
 	 * When the mouse is pressed, get a reference to the tile it was pressed on
 	 * @param me the MouseEvent being processed
@@ -152,6 +147,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    {
 	        ui.snapTileToGrid(moveTile);
 	        ui.snapToRack(getHand());
+	        if (moveTile instanceof ScrabbleBlankTile)
+	            assignBlankValue(moveTile);
 	        ui.repaint();
 	        moveTile = null;
 	    }
@@ -164,6 +161,20 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	        playPassButton.setText("Pass");
 	}
 
+	private void assignBlankValue(ScrabbleTile tile)
+	{
+	    String answer;
+	    do{
+	        answer = JOptionPane.showInputDialog("What letter should this tile be?");
+	    }
+	    while (answer.length() > 1 || !Character.isLetter(answer.charAt(0)));
+	    ScrabbleTile temp = new ScrabbleTile(answer.charAt(0),0,true);
+	    int x = moveTile.getLocation().x;
+	    int y = moveTile.getLocation().y;
+	    temp.setLocation(x, y);
+	    this.getHand().remove(moveTile);
+	    this.getHand().add(temp);
+	}
 
 	/** Creates the graphical component of the application.
 	 * 
@@ -258,7 +269,6 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	           
 	       }
 	       game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
-	       foo = this.getHand();
 	       ui.putInHand(this.getHand());
 	       ui.repaint();
 	   }

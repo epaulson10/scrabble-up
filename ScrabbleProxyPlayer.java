@@ -1,6 +1,8 @@
 package scrabble;
 
 import game.*;
+
+import java.awt.Point;
 import java.util.*;
 
 /**Class representing a player playing over the network.*/
@@ -20,10 +22,44 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
      */
     protected GameAction decodeAction (String s) 
     {
-        int player = Integer.parseInt(s.substring(0,1));
+        int playerID = Integer.parseInt(s.substring(0,1));
         int i = 2;
+        Vector<ScrabbleTile> actionTiles = new Vector<ScrabbleTile>();
+        Vector<Point> positions = new Vector<Point>();
         
-        return null;
+        while (s.charAt(i) != '|' || i < s.length())
+        {
+            boolean isBlank;
+            int value;
+            char letter;
+            if (s.charAt(i) == '+')
+                isBlank = false;
+            else
+                isBlank = true;
+            letter = s.charAt(i+1);
+            int scoreEndIndex = s.indexOf('+', i); //This doesn't work with blank tiles I don't think
+            value = Integer.parseInt(s.substring(i+2, scoreEndIndex));
+            if (value > 9) //If a double digit number, move forward past both digits
+                i += 4;
+            else
+                i += 3;
+            actionTiles.add(new ScrabbleTile(letter,value,isBlank));
+        }
+        
+        if (i > s.length())
+            return new ScrabbleDiscardAction(this, actionTiles);
+        
+        i = s.indexOf('(') + 1;
+        
+        while(i < s.length())
+        {
+            int x = i;
+            int y = i + 2;
+            positions.add(new Point(x,y));
+        }
+        
+       
+            return new ScrabbleMoveAction(this, actionTiles, positions);
     }
 
     /** Encodes the updated game state after a network player makes a move
