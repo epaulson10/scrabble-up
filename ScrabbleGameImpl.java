@@ -289,7 +289,21 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// remove that tile from the bag
 		for(ScrabbleTile tile : tiles)
 		{
-			hand.remove(tile);
+		    if (!(plr instanceof ScrabbleProxyPlayer))
+		    {
+			    hand.remove(tile);
+		    }
+		    else
+		    {
+		        for (ScrabbleTile handTile : hand)
+		        {
+		            if (tile.getLetter() == handTile.getLetter() && tile.isBlank() == handTile.isBlank())
+		            {
+		                hand.remove(handTile);
+		                break;
+		            }
+		        }
+		    }
 			// if bag is not empty
 			if(bag.size() != 0)
 			{
