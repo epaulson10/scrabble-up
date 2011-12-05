@@ -27,7 +27,7 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
         Vector<ScrabbleTile> actionTiles = new Vector<ScrabbleTile>();
         Vector<Point> positions = new Vector<Point>();
         
-        while (s.charAt(i) != '|' || i < s.length())
+        while (s.charAt(i) != '|' && i < s.length())
         {
             boolean isBlank;
             int value;
@@ -37,8 +37,9 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
             else
                 isBlank = true;
             letter = s.charAt(i+1);
-            int scoreEndIndex = s.indexOf('+', i); //This doesn't work with blank tiles I don't think
-            value = Integer.parseInt(s.substring(i+2, scoreEndIndex));
+            if (s.charAt(i + 3) != '+' && s.charAt(i+3) != '-')
+                value = Integer.parseInt(s.substring(i+2, i+4));
+            value = Integer.parseInt(s.substring(i+2, i+3));
             if (value > 9) //If a double digit number, move forward past both digits
                 i += 4;
             else
@@ -56,10 +57,12 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
             int x = i;
             int y = i + 2;
             positions.add(new Point(x,y));
+            i += 5; //move to the next point
         }
         
        
             return new ScrabbleMoveAction(this, actionTiles, positions);
+      
     }
 
     /** Encodes the updated game state after a network player makes a move
@@ -75,7 +78,16 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
         String str = "[";
         for (ScrabbleTile tile : state.getHand())
         {
-            str += tile.getLetter();
+            if (tile.isBlank() || tile instanceof ScrabbleBlankTile)
+                str += "-";
+            else
+                str += "+";
+            //asterisks represent blank tiles
+            if (tile instanceof ScrabbleBlankTile)
+                str += "*";
+            else
+                str += tile.getLetter();
+            str += tile.getValue();
         }
         str += "]";
         str += "[";
@@ -86,14 +98,15 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
                 ScrabbleTile tile = state.getBoard().getTileAt(i, k);
                 if (tile != null)
                 {
-                    str += tile.getLetter();
-                    str += tile.getValue();
                     if (tile.isBlank())
                     {
                         str+= "-";
                     }
                     else
                         str+="+";
+                    str += tile.getLetter();
+                    str += tile.getValue();
+                    
                 }
                 else
                     str += "|"; //represent an empty board space with this character

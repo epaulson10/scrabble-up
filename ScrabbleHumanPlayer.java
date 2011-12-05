@@ -148,7 +148,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	        ui.snapTileToGrid(moveTile);
 	        ui.snapToRack(getHand());
 	        if (moveTile instanceof ScrabbleBlankTile)
-	            assignBlankValue(moveTile);
+	            assignBlankValue();
 	        ui.repaint();
 	        moveTile = null;
 	    }
@@ -161,13 +161,21 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	        playPassButton.setText("Pass");
 	}
 
-	private void assignBlankValue(ScrabbleTile tile)
+	/**
+	 * Asks the user what a blank tile should be played as and changes the moveTile
+	 * to that letter.
+	 */
+	private void assignBlankValue()
 	{
 	    String answer;
-	    do{
+	    do
+	    {
 	        answer = JOptionPane.showInputDialog("What letter should this tile be?");
+	        if (answer == null)
+	            return;
 	    }
 	    while (answer.length() > 1 || !Character.isLetter(answer.charAt(0)));
+	    
 	    ScrabbleTile temp = new ScrabbleTile(answer.charAt(0),0,true);
 	    int x = moveTile.getLocation().x;
 	    int y = moveTile.getLocation().y;
@@ -294,6 +302,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	       Vector<ScrabbleTile> myHand = getHand();
 	       Collections.shuffle(myHand);
 	       ScrabblePlayerUI.putInHand(myHand);
+	       playPassButton.setText("Pass");
 	       ui.repaint();
 	   }
 	}
