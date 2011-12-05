@@ -90,7 +90,7 @@ public class ScrabblePlayerUI extends JPanel
         
         drawBoard(g,board);
         drawHand(g,player.getHand());
-        g.dispose();
+        
     }
     
     /**
