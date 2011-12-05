@@ -8,7 +8,7 @@ import game.*;
 
 /**ScrabbleProxyGame*/
 public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
-	public static final int PORT_NUM = 8734;
+	public static final int PORT_NUM = 60035;
 
 	/** Initializes all of the variables.
 @param hostname A String containing the hostname of the game. */

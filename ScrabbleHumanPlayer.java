@@ -27,6 +27,11 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	private JLabel p0score;
 	private JLabel p1score;
 	
+	// Variables for use in case this is a network client:
+	// Copy of the last detected hand
+	private Vector<ScrabbleTile> proxyHand;
+	// Whether the hand has changed since we last updated proxyHand
+	private boolean proxyHandChanged;
 	
 	// Player's hand
 	//private Vector<ScrabbleTile> hand;
@@ -64,8 +69,11 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	/** Actions to be taken after the game is initialized */
 	protected void setGameMore () 
 	{
+	    proxyHand = new Vector<ScrabbleTile>();
 	    ui.setModel((ScrabbleGame)this.game);
-	    ScrabblePlayerUI.putInHand(this.getHand());
+	    if (!(game instanceof ScrabbleProxyGame))
+	        ScrabblePlayerUI.putInHand(this.getHand());
+	    proxyHandChanged = true;
 	}
 
 	/** Gets the default title of the game window.
@@ -92,6 +100,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	    p1score.setText("Player 1: "+ state.getScore(1));
 		ui.updateState();
 		ui.repaint();
+		proxyHandChanged = true;
+		ScrabblePlayerUI.putInHand(getHand());
 		repaint();
 	}
 	
@@ -102,8 +112,19 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	 */
 	public Vector<ScrabbleTile> getHand()
 	{
+        // Get tiles from game state
 	    ScrabbleGameState curState = (ScrabbleGameState)game.getState(this, 0);
-	    return curState.getHand();
+	    if (game instanceof ScrabbleProxyGame && proxyHandChanged)
+	    {
+	        proxyHandChanged = false;
+            proxyHand = curState.getHand();
+            return proxyHand;
+	    }
+	    else if (!(game instanceof ScrabbleProxyGame))
+	    {
+	        return curState.getHand();
+	    }
+	    else return proxyHand;
 	}
 	
 	public void mouseClicked (MouseEvent me) {}
