@@ -27,7 +27,7 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
         Vector<ScrabbleTile> actionTiles = new Vector<ScrabbleTile>();
         Vector<Point> positions = new Vector<Point>();
         
-        while (s.charAt(i) != '|' && i < s.length())
+        while (i < s.length() && s.charAt(i) != '|')
         {
             boolean isBlank;
             int value;
@@ -37,27 +37,51 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
             else
                 isBlank = true;
             letter = s.charAt(i+1);
-            if (s.charAt(i + 3) != '+' && s.charAt(i+3) != '-')
+            if (s.length() >= i+4 && s.charAt(i + 3) != '+' && s.charAt(i+3) != '-' && s.charAt(i+3) != '|')
                 value = Integer.parseInt(s.substring(i+2, i+4));
             value = Integer.parseInt(s.substring(i+2, i+3));
             if (value > 9) //If a double digit number, move forward past both digits
                 i += 4;
             else
                 i += 3;
-            actionTiles.add(new ScrabbleTile(letter,value,isBlank));
+            if (letter == '*')
+                actionTiles.add(new ScrabbleBlankTile());
+            else
+                actionTiles.add(new ScrabbleTile(letter,value,isBlank));
         }
         
-        if (i > s.length())
+        if (i >= s.length())
             return new ScrabbleDiscardAction(this, actionTiles);
         
-        i = s.indexOf('(') + 1;
+        i = s.indexOf("(") + 1;
+        
         
         while(i < s.length())
         {
-            int x = i;
-            int y = i + 2;
+            int x, y;
+            if (s.charAt(i+1) == ',')
+            {
+                x = Integer.parseInt(s.substring(i,i+1));
+                i += 2;
+            }
+            else
+            {
+                x = Integer.parseInt(s.substring(i,i+2));
+                i += 3;
+            }
+            if (s.charAt(i+1) == ')')
+            {
+                y = Integer.parseInt(s.substring(i,i+1));
+                i += 3;
+            }
+            else
+            {
+                y = Integer.parseInt(s.substring(i,i+2));
+                i += 4;
+            }
             positions.add(new Point(x,y));
-            i += 5; //move to the next point
+            
+    
         }
         
        
