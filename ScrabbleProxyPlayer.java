@@ -22,6 +22,9 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
      */
     protected GameAction decodeAction (String s) 
     {
+        if (s.equals("!!!"))
+            return new ScrabbleResignAction(this);
+        
         int playerID = Integer.parseInt(s.substring(0,1));
         int i = 2;
         Vector<ScrabbleTile> actionTiles = new Vector<ScrabbleTile>();

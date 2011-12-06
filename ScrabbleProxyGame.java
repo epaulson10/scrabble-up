@@ -175,6 +175,10 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
 	        return str;
 
 	    }
+	    else if (ga instanceof ScrabbleResignAction)
+	    {
+	        return "!!!";
+	    }
 	    else
 	        return null;
 	   
