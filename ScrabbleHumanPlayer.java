@@ -316,7 +316,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 	   }
 	   else if (cmd.equals("Resign"))
 	   {
-	       
+	       game.applyAction(new ScrabbleResignAction(this));
+	       ui.repaint();
 	   }
 	   else if (cmd.equals("Shuffle"))
 	   {

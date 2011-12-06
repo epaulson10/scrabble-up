@@ -265,6 +265,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			}
 			return false;
 		}
+		else if (move instanceof ScrabbleResignAction)
+		{
+		    winner = 1-thePlayer.getId();
+		    notifyAllStateChanged();
+		    return true;
+		}
 		return false;
 	}
 	
