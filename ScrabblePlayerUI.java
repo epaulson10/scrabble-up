@@ -16,10 +16,10 @@ public class ScrabblePlayerUI extends JPanel
     public final static int BOARD_SIZE = 15;
     public final static int TILE_SIZE = 35;
     public final static int UI_SIZE = BOARD_SIZE*TILE_SIZE+1;
-    
+
     //The amount of space between the board and the hand.
     public final static int SPACE = 20;
-    
+
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
@@ -48,7 +48,7 @@ public class ScrabblePlayerUI extends JPanel
         state = (ScrabbleGameState)model.getState(player, 0);
         board = state.getBoard();
     }
-    
+
     /**  * Set the canvas to model the given game.
      *
      * @param game The ScrabbleGame this canvas to model.
@@ -66,7 +66,7 @@ public class ScrabblePlayerUI extends JPanel
         //Clear the board
         g.setColor(Color.white);
         g.fillRect(0, 0, UI_SIZE, UI_SIZE+SPACE+TILE_SIZE);
-        
+
         g.setColor(Color.black);
         //Draw the vertical lines of the grid
         for (int i = 0; i <= BOARD_SIZE; i++)
@@ -78,7 +78,7 @@ public class ScrabblePlayerUI extends JPanel
         {
             g.drawLine(0, TILE_SIZE*i, UI_SIZE, TILE_SIZE*i);
         }
-        
+
         //Draw Hand rack
         g.drawLine(4*TILE_SIZE, TILE_SIZE*15+SPACE, TILE_SIZE*11, TILE_SIZE*15+SPACE);
         g.drawLine(4*TILE_SIZE, TILE_SIZE*16+SPACE, TILE_SIZE*11, TILE_SIZE*16+SPACE);
@@ -87,12 +87,12 @@ public class ScrabblePlayerUI extends JPanel
             g.drawLine(TILE_SIZE*i, TILE_SIZE*15+SPACE, TILE_SIZE*i, TILE_SIZE*16+SPACE);
         }
         g.fillOval((BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4,(BOARD_SIZE/2)*TILE_SIZE + TILE_SIZE/4, TILE_SIZE/2, TILE_SIZE/2);
-        
+
         drawBoard(g,board);
         drawHand(g,player.getHand());
-        
+
     }
-    
+
     /**
      * Draws the tiles on the board from the given ScrabbleBoard
      * @param g Graphics context that's being drawn to
@@ -112,7 +112,7 @@ public class ScrabblePlayerUI extends JPanel
             }
         }
     }
-    
+
     /**
      * Gives a vector of tiles from the hand which are on the board
      * @return a vector of tiles from the player's hand which are now on the board
@@ -130,7 +130,7 @@ public class ScrabblePlayerUI extends JPanel
         }
         return playedTiles;
     }
-    
+
     /**
      * Draws the tiles in the players "hand"
      * 
@@ -146,7 +146,7 @@ public class ScrabblePlayerUI extends JPanel
             g.drawImage(tile.getPicture(),tile.getLocation().x,tile.getLocation().y,TILE_SIZE, TILE_SIZE,null,null);
         }
     }
-    
+
     /**
      * Assigns each tile in the hand a x,y coordinate
      * @param hand The player's hand
@@ -154,14 +154,20 @@ public class ScrabblePlayerUI extends JPanel
     public static void putInHand(Vector<ScrabbleTile> hand)
     {
         int count = 4;
-        for (ScrabbleTile tile : hand)
+        for (int i = 0; i < hand.size(); i++)
         {
+            if (hand.get(i).isBlank())
+            {
+                // If this is a blank tile, reset it
+                hand.setElementAt(new ScrabbleBlankTile(), i);
+            }
+            ScrabbleTile tile = hand.get(i);
             tile.setLocation(TILE_SIZE*count,TILE_SIZE*15+SPACE);
             count++;
         }
-        
+
     }
-    
+
     /**
      * Snaps a tile from the rack to its position on the rack
      * 
@@ -171,20 +177,21 @@ public class ScrabblePlayerUI extends JPanel
     {
         int count = 4;
         int rackLoc;
-        for (ScrabbleTile tile : hand)
+        for (int i = 0; i < hand.size(); i++)
         {
+            ScrabbleTile tile = hand.get(i);
             Point loc = tile.getLocation();
             rackLoc = TILE_SIZE*count;
             if (loc.x +TILE_SIZE/2 >= rackLoc && loc.x+TILE_SIZE/2 < rackLoc+TILE_SIZE &&
                     loc.y+TILE_SIZE/2 >= TILE_SIZE*15+SPACE && loc.y+TILE_SIZE/2 < TILE_SIZE*16+SPACE)
                 tile.setLocation(rackLoc,TILE_SIZE*15+SPACE);
             count++;
-            
+
         }
     }
 
 
-    
+
     /**
      * Returns the ScrabbleTile that was clicked on
      * 
@@ -208,7 +215,7 @@ public class ScrabblePlayerUI extends JPanel
         }
         return null;
     }
-    
+
     /**
      * Determines if a point is on a tile that is in the hand
      * @param p the point being processed
@@ -240,7 +247,7 @@ public class ScrabblePlayerUI extends JPanel
         }
         return false;
     }
-    
+
     /**
      * Determines if tiles should be discarded
      * 
@@ -263,11 +270,11 @@ public class ScrabblePlayerUI extends JPanel
             else
                 toDiscard.add(tile); 
         }
-        
+
         return toDiscard;
-        
+
     }
-    
+
     /**
      * "Snaps" the tile image to the board grid when released.
      * 
@@ -278,7 +285,7 @@ public class ScrabblePlayerUI extends JPanel
         Point location = st.getLocation();
         int x = location.x+TILE_SIZE/2;
         int y = location.y+TILE_SIZE/2;
-        
+
         for (int row = 0; row < BOARD_SIZE; row++)
         {
             for (int col = 0; col < BOARD_SIZE; col++)
@@ -291,6 +298,22 @@ public class ScrabblePlayerUI extends JPanel
             }
         }
 
+    }
+
+    /**
+     * Determines if the given screen position is on the board.
+     * 
+     * @param x  x-coordinate of position to test.
+     * @param y  y-coordinate of position to test.
+     * @return true if given point is on the board 
+     */
+    public static boolean onBoard(int x, int y)
+    {
+        if (x < 0 || y < 0 || x >= UI_SIZE || y >= UI_SIZE)
+        {
+            return false;
+        }
+        else return true;
     }
 
 }
