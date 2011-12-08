@@ -154,8 +154,14 @@ public class ScrabblePlayerUI extends JPanel
     public static void putInHand(Vector<ScrabbleTile> hand)
     {
         int count = 4;
-        for (ScrabbleTile tile : hand)
+        for (int i = 0; i < hand.size(); i++)
         {
+            if (hand.get(i).isBlank())
+            {
+                // If this is a blank tile, reset it
+                hand.setElementAt(new ScrabbleBlankTile(), i);
+            }
+            ScrabbleTile tile = hand.get(i);
             tile.setLocation(TILE_SIZE*count,TILE_SIZE*15+SPACE);
             count++;
         }
@@ -171,8 +177,9 @@ public class ScrabblePlayerUI extends JPanel
     {
         int count = 4;
         int rackLoc;
-        for (ScrabbleTile tile : hand)
+        for (int i = 0; i < hand.size(); i++)
         {
+            ScrabbleTile tile = hand.get(i);
             Point loc = tile.getLocation();
             rackLoc = TILE_SIZE*count;
             if (loc.x +TILE_SIZE/2 >= rackLoc && loc.x+TILE_SIZE/2 < rackLoc+TILE_SIZE &&
