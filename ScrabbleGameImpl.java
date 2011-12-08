@@ -42,7 +42,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
         // letters to add to bag; pipe chars separate letters of different
         // value
-        String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+        String letterDist = "                        |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
                 + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
                 + "mmpp|ffhhvvwwyy|k|||jx||qz";
         int curValue = 0;
