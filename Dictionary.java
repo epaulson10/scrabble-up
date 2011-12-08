@@ -40,9 +40,12 @@ public class Dictionary
 	 */
 	public boolean isValidWord (String word) 
 	{
-		String testWord = word.toLowerCase();
-		if(wordList.contains(word.toLowerCase())) return true;
-		else return false;
+		if(word != null)
+		{
+			String testWord = word.toLowerCase();
+			if(wordList.contains(word.toLowerCase())) return true;
+		}
+		return false;
 	}
 
 }
