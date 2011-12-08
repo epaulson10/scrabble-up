@@ -32,45 +32,45 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
 		Random rand = new Random();
 
 
-//		moves = get7s(handContainer);
-//		if(!moves.isEmpty())
-//		{
-//			ga = moves.toArray(ga);
-//			game.applyAction(ga[rand.nextInt(ga.length)]);
-//			return;
-//		}
-//
-//		moves = get6s(handContainer);
-//		if(!moves.isEmpty())
-//		{
-//			ga = moves.toArray(ga);
-//			game.applyAction(ga[rand.nextInt(ga.length)]);
-//			return;
-//		}
-//
-//		moves = get5s(handContainer);
-//		if(!moves.isEmpty())
-//		{
-//			ga = moves.toArray(ga);
-//			game.applyAction(ga[rand.nextInt(ga.length)]);
-//			return;
-//		}
-//
-//		moves = get4s(handContainer);
-//		if(!moves.isEmpty())
-//		{
-//			ga = moves.toArray(ga);
-//			game.applyAction(ga[rand.nextInt(ga.length)]);
-//			return;
-//		}
-//
-//		moves = get3s(handContainer);
-//		if(!moves.isEmpty())
-//		{
-//			ga = moves.toArray(ga);
-//			game.applyAction(ga[rand.nextInt(ga.length)]);
-//			return;
-//		}
+		//		moves = get7s(handContainer);
+		//		if(!moves.isEmpty())
+		//		{
+		//			ga = moves.toArray(ga);
+		//			game.applyAction(ga[rand.nextInt(ga.length)]);
+		//			return;
+		//		}
+
+		//		moves = get6s(handContainer);
+		//		if(!moves.isEmpty())
+		//		{
+		//			ga = moves.toArray(ga);
+		//			game.applyAction(ga[rand.nextInt(ga.length)]);
+		//			return;
+		//		}
+		//
+		moves = get5s(handContainer);
+		if(!moves.isEmpty())
+		{
+			ga = moves.toArray(ga);
+			game.applyAction(ga[rand.nextInt(ga.length)]);
+			return;
+		}
+
+		moves = get4s(handContainer);
+		if(!moves.isEmpty())
+		{
+			ga = moves.toArray(ga);
+			game.applyAction(ga[rand.nextInt(ga.length)]);
+			return;
+		}
+
+		moves = get3s(handContainer);
+		if(!moves.isEmpty())
+		{
+			ga = moves.toArray(ga);
+			game.applyAction(ga[rand.nextInt(ga.length)]);
+			return;
+		}
 
 		moves = get2s(handContainer);
 		if(!moves.isEmpty())
@@ -551,6 +551,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
 											play.add(hand[n]);
 											play.add(hand[o]);
 											play.add(hand[p]);
+											play.add(hand[q]);
 											if(j+6 < ScrabbleBoard.BOARD_HEIGHT)
 											{
 												Vector<Point> place = new Vector<Point>(3);
