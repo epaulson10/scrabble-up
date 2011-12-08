@@ -292,6 +292,21 @@ public class ScrabblePlayerUI extends JPanel
         }
 
     }
+    /**
+     * Determines if the given screen position is on the board.
+     *
+     * @param x  x-coordinate of position to test.
+     * @param y  y-coordinate of position to test.
+     * @return true if given point is on the board
+     */
+     public static boolean onBoard(int x, int y)
+     {
+         if (x < 0 || y < 0 || x >= UI_SIZE || y >= UI_SIZE)
+         {
+             return false;
+         }
+         else return true;
+     }
 
 }
 

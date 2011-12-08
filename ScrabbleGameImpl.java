@@ -42,7 +42,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
         // letters to add to bag; pipe chars separate letters of different
         // value
-        String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+        String letterDist = " |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
                 + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
                 + "mmpp|ffhhvvwwyy|k|||jx||qz";
         int curValue = 0;
@@ -171,7 +171,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		}
 		
 		// get the 0/1 id of our player
-		int playerID = indexOf(thePlayer);
+		int playerID = plr.getId();
 
 		// if the player is not a player for our game, indicate an illegal
 		// move
@@ -488,6 +488,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
 		// string to test
 		String testString = "";
+		
+		// Make sure points are on the board
+		for (Point p : pos)
+		{
+		    if (p.x < 0 || p.x >= 15 || p.y < 0 || p.y >= 15)
+		    {
+		        return INVALID_MOVE;
+		    }
+		}
 		
 		// counters to iterate through the characters of the word to check
 		int rowCount;
