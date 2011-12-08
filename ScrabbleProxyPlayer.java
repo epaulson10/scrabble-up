@@ -42,7 +42,8 @@ class ScrabbleProxyPlayer extends ProxyPlayer implements ScrabblePlayer {
             letter = s.charAt(i+1);
             if (s.length() >= i+4 && s.charAt(i + 3) != '+' && s.charAt(i+3) != '-' && s.charAt(i+3) != '|')
                 value = Integer.parseInt(s.substring(i+2, i+4));
-            value = Integer.parseInt(s.substring(i+2, i+3));
+            else
+                value = Integer.parseInt(s.substring(i+2, i+3));
             if (value > 9) //If a double digit number, move forward past both digits
                 i += 4;
             else

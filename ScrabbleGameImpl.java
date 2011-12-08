@@ -39,11 +39,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		
 		// Populate bag with tiles:
         bag.removeAllElements();
+        
         // letters to add to bag; pipe chars separate letters of different
         // value
-        String letterDist = " |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
-                          + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
-                          + "mmpp|ffhhvvwwyy|k|||jx||qz";
+        String letterDist = "  |eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooo"
+                + "nnnnnnrrrrrrttttttllllssssuuuu|ddddggg|bbcc"
+                + "mmpp|ffhhvvwwyy|k|||jx||qz";
         int curValue = 0;
         
         for (int i = 0; i < letterDist.length(); i++)
@@ -170,7 +171,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		}
 		
 		// get the 0/1 id of our player
-		int playerID = plr.getId();
+		int playerID = indexOf(thePlayer);
 
 		// if the player is not a player for our game, indicate an illegal
 		// move
@@ -234,7 +235,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	                ScrabblePlayerUI.putInHand(
 	                        ((ScrabbleHumanPlayer)plr).getHand());
 	            }
-				
+							
 				// get this move's score and add it to the appropriate
                 int moveScore = getMoveScore(mv);
                 // player's score
@@ -364,8 +365,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             }
         }
 	}
-	
-	
 
 	/**
 	 * Checks if the move made by a player is valid
@@ -495,14 +494,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int colCount;
 		Boolean valid = false;
 		
-		// Make sure points are on the board
-		for (Point p : pos)
-		{
-		    if (p.x < 0 || p.x >= 15 || p.y < 0 || p.y >= 15)
-		    {
-		        return INVALID_MOVE;
-		    }
-		}
 		
 		// if first turn (when space 7,7 is empty)
 		if(copyBoard.getTileAt(7, 7) == null)
