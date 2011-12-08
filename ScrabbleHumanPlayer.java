@@ -26,6 +26,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     //Labels representing the score
     private JLabel p0score;
     private JLabel p1score;
+    
+    private JLabel whoseTurn;
 
     // Variables for use in case this is a network client:
     // Copy of the last detected hand
@@ -96,8 +98,14 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     {
         super.stateChanged();
         ScrabbleGameState state = (ScrabbleGameState)game.getState(this, 0);
-        p0score.setText("Player 0: "+state.getScore(0));
-        p1score.setText("Player 1: "+ state.getScore(1));
+        p0score.setText("Player 1: "+state.getScore(0));
+        p1score.setText("Player 2: "+ state.getScore(1));
+        
+        if (state.whoseMove() == getId())
+            whoseTurn.setText("It's your turn!");
+        else
+            whoseTurn.setText("It's your opponent's turn!");
+        
         ui.updateState();
         ui.repaint();
         proxyHandChanged = true;
@@ -228,8 +236,10 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
      */
     protected Component createApplComponent () 
     {
-        p0score = new JLabel("Player 0: 0");
-        p1score = new JLabel("Player 1: 0");
+        p0score = new JLabel("Player 1: 0");
+        p1score = new JLabel("Player 2: 0");
+        whoseTurn = new JLabel("Welcome to Scrabble!");
+        
         JButton resignButton = new JButton("Resign");
         JButton discardButton = new JButton("Discard");
         JButton passButton = new JButton("Pass");
@@ -284,6 +294,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         hBoxBot.add(shuffleButton);
         hBoxBot.add(Box.createHorizontalGlue());
         hBoxScore.add(p0score);
+        hBoxScore.add(Box.createHorizontalGlue());
+        hBoxScore.add(whoseTurn);
         hBoxScore.add(Box.createHorizontalGlue());
         hBoxScore.add(p1score);
 
