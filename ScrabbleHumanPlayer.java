@@ -327,7 +327,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
 
             }
             game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
-            ScrabblePlayerUI.putInHand(this.getHand());
+            // TODO remove this once bug is confirmed to be squashed
+            //ScrabblePlayerUI.putInHand(this.getHand());
             ui.repaint();
         }
         else if (cmd.equals("Discard"))
