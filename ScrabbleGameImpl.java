@@ -644,6 +644,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int score = 0;
 		Point pos = positions.elementAt(0);
 		
+		// Bingo bonus
+		if (positions.size() == 7)
+		{
+		    score += 50;
+		}
+		
 		// if there is only one tile played
 		if(positions.size() == 1)
 		{
