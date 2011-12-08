@@ -24,7 +24,6 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 		Vector<GameMoveAction> moves = new Vector<GameMoveAction>();
 
 		ScrabbleGameState myState = (ScrabbleGameState)game.getState(this, 0);
-		ScrabbleBoard boardState = myState.getBoard();
 		handContainer = myState.getHand().toArray(handContainer);
 
 		for(int i = 0; i < 7; i++){
@@ -32,9 +31,9 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 		}
 		System.out.println();
 		System.out.println();
-		for(int i = 2; i < ScrabbleBoard.BOARD_HEIGHT-3; i++)
+		for(int i = 0; i < ScrabbleBoard.BOARD_HEIGHT-3; i++)
 		{
-			for(int j = 2; j < ScrabbleBoard.BOARD_WIDTH-3; j++)
+			for(int j = 0; j < ScrabbleBoard.BOARD_WIDTH-3; j++)
 			{
 				for(int k = 0; k < handContainer.length; k++)
 				{
@@ -50,9 +49,6 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
 						Vector<Point> playSpots = new Vector<Point>(2);
 						playSpots.add(new Point(i,j));
 						playSpots.add(new Point(i,j+1));
-						if(j+1 > ScrabbleBoard.BOARD_HEIGHT-1){
-							continue;
-						}
 						ScrabbleMoveAction move = new ScrabbleMoveAction(this, play, playSpots);
 						if(ScrabbleGameImpl.checkValidMove(playSpots,play))
 							moves.add(move);
