@@ -489,7 +489,15 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		// string to test
 		String testString = "";
 
-		
+		// Make sure points are on the board
+        for (Point p : pos)
+        {
+            if (p.x < 0 || p.x >= 15 || p.y < 0 || p.y >= 15)
+            {
+                return INVALID_MOVE;
+            }
+        }
+        
 		// counters to iterate through the characters of the word to check
 		int rowCount;
 		int colCount;
@@ -749,10 +757,6 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
                 ScrabbleTile thisTile = board.getTileAt(row, col);
-                if(thisTile == null)
-                {
-                    return -1;
-                }
                 ScrabbleTile newTile = null;
                 if (thisTile != null)
                 {
@@ -782,6 +786,10 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
                 return -1;
             }
             ScrabbleTile thisTile = tiles.get(i);
+            if(thisTile == null)
+            {
+                return -1;
+            }
             ScrabbleTile newTile = new ScrabbleTile(thisTile.getLetter(),
                     thisTile.getValue(), thisTile.isBlank());
             newBoard.putTileAt(row, col, newTile);
