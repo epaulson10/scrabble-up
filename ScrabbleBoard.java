@@ -67,7 +67,8 @@ nonValidBoardSpaceException is thrown */
 			// CHANGED: Allow null positions without error
 			if (sct != null)
 			{
-			    sct.setLocation(row*ScrabblePlayerUI.TILE_SIZE, col*ScrabblePlayerUI.TILE_SIZE);
+			    //EDIT: Switched row and col in the following line
+			    sct.setLocation(col*ScrabblePlayerUI.TILE_SIZE, row*ScrabblePlayerUI.TILE_SIZE);
 			}
 		}
 	

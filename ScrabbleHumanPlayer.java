@@ -160,7 +160,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
      */
     public void mousePressed (MouseEvent me)
     {
-        moveTile = ui.tileOnPosition(me.getPoint());
+        //Delted this because there's never a reason to move a tile that's not in your hand
+       // moveTile = ui.tileOnPosition(me.getPoint());
         if (moveTile == null)
             moveTile = ui.tileInHand(me.getPoint());
     }
