@@ -749,7 +749,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
      * @param move The ScrabbleMoveAction being analyzed
      * @return the score of the move, or -1 if move is invalid
      */
-	public int getMoveScore (ScrabbleMoveAction move)
+	public static int getMoveScore (ScrabbleMoveAction move)
 	{
 	    // make copy of master board
         ScrabbleBoard newBoard = new ScrabbleBoard();
@@ -758,6 +758,10 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
             for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
             {
                 ScrabbleTile thisTile = board.getTileAt(row, col);
+                if(thisTile == null)
+                {
+                    return -1;
+                }
                 ScrabbleTile newTile = null;
                 if (thisTile != null)
                 {
