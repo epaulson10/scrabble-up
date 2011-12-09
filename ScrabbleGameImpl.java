@@ -488,21 +488,12 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
 		// string to test
 		String testString = "";
-		
-		// Make sure points are on the board
-		for (Point p : pos)
-		{
-		    if (p.x < 0 || p.x >= 15 || p.y < 0 || p.y >= 15)
-		    {
-		        return INVALID_MOVE;
-		    }
-		}
+
 		
 		// counters to iterate through the characters of the word to check
 		int rowCount;
 		int colCount;
 		Boolean valid = false;
-		
 		
 		// if first turn (when space 7,7 is empty)
 		if(copyBoard.getTileAt(7, 7) == null)
@@ -522,7 +513,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			// and make sure that there is another tile.
 			for(Point p : pos)
 			{
-				if(p.x-1 >0 && copyBoard.getTileAt(p.y, p.x-1) != null)
+				if(p.x-1 >=0 && copyBoard.getTileAt(p.y, p.x-1) != null)
 				{	
 					valid = true;
 					break;
@@ -532,7 +523,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 					valid = true;
 					break;
 				}
-				else if(p.y-1 > 0 && copyBoard.getTileAt(p.y-1, p.x) != null)
+				else if(p.y-1 >= 0 && copyBoard.getTileAt(p.y-1, p.x) != null)
 				{
 					valid = true;
 					break;
@@ -702,7 +693,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int score = 0;
 		int x = pos.x - 1;;
 		int y = pos.y;
-		while(x > 0 && board.getTileAt(x, y) != null)
+		while(x >= 0 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			x--;
@@ -728,7 +719,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		int score = 0;
 		int x = pos.x;
 		int y = pos.y -1;
-		while(y > 0 && board.getTileAt(x, y) != null)
+		while(y >= 0 && board.getTileAt(x, y) != null)
 		{
 			score += board.getTileAt(x,y).getValue();
 			y--;

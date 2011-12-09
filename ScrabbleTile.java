@@ -99,8 +99,8 @@ class ScrabbleTile {
 	 */
 	public boolean pointInside(int x, int y)
 	{
-	    if (x > location.x && x < location.x + ScrabblePlayerUI.TILE_SIZE &&
-	        y > location.y && y < location.y+ ScrabblePlayerUI.TILE_SIZE)
+	    if (x >= location.x && x < location.x + ScrabblePlayerUI.TILE_SIZE &&
+	        y >= location.y && y < location.y+ ScrabblePlayerUI.TILE_SIZE)
 	    {
 	        return true;
 	    }
