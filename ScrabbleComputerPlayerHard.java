@@ -22,7 +22,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         Vector<ScrabbleTile> hand = myState.getHand();
         int numOfTiles = hand.size();
 
-        ScrabbleTile[] handContainer = new ScrabbleTile[7];
+        ScrabbleTile[] handContainer = new ScrabbleTile[numOfTiles];
         hand.toArray(handContainer);
 
 
@@ -31,7 +31,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         GameAction[] ga = new GameAction[0];
 
         ScrabbleMoveAction myMove = null;
-        for(int i = 0; (i < 7 && handContainer[i] != null); i++)
+        for(int i = 0; (i < handContainer.length && handContainer[i] != null); i++)
         {
             if(handContainer[i].getValue() == 0)
             {
