@@ -9,12 +9,6 @@ public class ScrabbleBoardTest {
 	private ScrabbleBoard testBoard;
 	public static final int BOARD_HEIGHT = 15;
 	public static final int BOARD_WIDTH = 15;
-	
-	
-	@Test
-	public void testScrabbleBoard() {
-
-	}
 
 	/**
 	 * Just tests the constructor
@@ -49,6 +43,7 @@ public class ScrabbleBoardTest {
 		}
 	}
 
+	// tests putTileAt and getTileAt
 	@Test
 	public void testPutTileAt() {
 		testBoard = new ScrabbleBoard();
