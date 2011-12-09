@@ -2,6 +2,8 @@ package scrabble;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.*;
 import game.*;
 
@@ -45,5 +47,22 @@ public class ScrabbleDriverTest
         
         testPlayer = testDriver.createLocalPlayer("incorrect player");
         assertTrue("Didn't return null for bad string", testPlayer == null);
+    }
+    
+    @Test
+    public void testCreateRemotePlayer()
+    {
+        GamePlayer testPlayer = testDriver.createRemotePlayer();
+        assertTrue("Didn't create a proxy player",
+                testPlayer instanceof ScrabbleProxyPlayer);
+    }
+    
+    @Test
+    public void testLocalPlayerChoices()
+    {
+        String[] expectedNames = {"human", "AI player (easy)", "AI player (hard)"};
+        String[] actualNames = testDriver.localPlayerChoices();
+        assertTrue("Local player names incorrect",
+                Arrays.equals(expectedNames, actualNames));
     }
 }
