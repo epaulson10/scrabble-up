@@ -299,4 +299,15 @@ public class ScrabbleGameImplTest
     	
     }
     
+    @Test
+    public void testPlayersAllowed()
+    {
+        assertTrue("Max number of players is incorrect",
+                testImpl.maxPlayersAllowed() == 2);
+        assertTrue("Min number of players is incorrect",
+                testImpl.minPlayersAllowed() == 2);
+        assertTrue("Null players are allowed",
+                !testImpl.nullPlayersAllowed());
+    }
+    
 }
