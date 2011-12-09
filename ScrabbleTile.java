@@ -65,7 +65,8 @@ class ScrabbleTile {
 	public String getFileName ()
 	{
 		if(!fromBlank)
-			return "./src/scrabble/Tiles/ScrabbleTile"+letter+".gif";
+			//return "./Scrabble/Tiles/ScrabbleTile"+letter+".gif";
+		    return "./src/scrabble/Tiles/ScrabbleTile"+letter+".gif";
 		else
 			return "./src/scrabble/Tiles/ScrabbleTile"+letter+"blank.gif";
 	}
