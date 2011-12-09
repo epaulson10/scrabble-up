@@ -80,10 +80,10 @@ public class ScrabbleTileTest {
 
 	@Test
 	public void testToString() {
-//		// test blank
-//		a = new ScrabbleTile(' ', 1, true);
-//		String test = a.toString();
-//		assertTrue("test blank", test.equals(null));
+		// test blank
+		a = new ScrabbleTile(' ', 1, true);
+		String test = a.toString();
+		assertTrue("test blank", test.equals(" "));
 		
 		// test valid letter
 		b = new ScrabbleTile('b', 1, true);
