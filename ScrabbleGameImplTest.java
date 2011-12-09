@@ -61,6 +61,18 @@ public class ScrabbleGameImplTest
     }
     
     @Test
+    public void testInitializeGame()
+    {
+        testImpl.initializeGame();
+        // get a state so we can make sure it worked
+        ScrabbleGameState testState =
+            (ScrabbleGameState)testImpl.getState(testPlayer0, 0);
+        assertTrue("Player 0's score not initialized", testState.getScore(0) == 0);
+        assertTrue("Player 1's score not initialized", testState.getScore(1) == 0);
+        assertTrue("not Player 0's turn", testState.whoseMove() == 0);
+    }
+    
+    @Test
     public void testCanQuit()
     {
         assertTrue("Player 0 is blocked from quitting",
