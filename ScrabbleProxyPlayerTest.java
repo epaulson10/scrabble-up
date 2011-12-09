@@ -2,11 +2,18 @@ package scrabble;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests the encode/decoding algorithms within ScrabbleProxyPlayer
+ * 
+ * @author Erik Paulson
+ *
+ */
 public class ScrabbleProxyPlayerTest
 {
     ScrabbleBoard board;
@@ -28,6 +35,8 @@ public class ScrabbleProxyPlayerTest
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" +
             "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" +
             "|||||||||||][0:9][1]";
+    
+    ScrabbleMoveAction moveAction;
     
     @Before
     public void setup() throws Exception
@@ -56,6 +65,17 @@ public class ScrabbleProxyPlayerTest
         hand1.add(new ScrabbleTile('X', 8, true));
         hand1.add(new ScrabbleTile('Q', 10, false));
         state1 = new ScrabbleGameState(board1,hand1,1,0,9);
+        
+        Vector<ScrabbleTile> moveTiles = new Vector<ScrabbleTile>();
+        moveTiles.add(new ScrabbleTile('A',1,false));
+        moveTiles.add(new ScrabbleTile('X',8,false));
+        moveTiles.add(new ScrabbleTile('E',0,true));
+        Vector<Point> positions = new Vector<Point>();
+        positions.add(new Point(0,0));
+        positions.add(new Point(0,1));
+        positions.add(new Point(0,2));
+        
+        moveAction = new ScrabbleMoveAction(thePlayer,moveTiles, positions);
     }
   
     @Test
@@ -71,7 +91,26 @@ public class ScrabbleProxyPlayerTest
     @Test
     public void testDecodeAction()
     {
-        fail("Not yet implemented");
+        String moveString = "0|+A1+X8-E0|(0,0)(0,1)(0,2)";
+        ScrabbleMoveAction decodedAction = (ScrabbleMoveAction) thePlayer.decodeAction(moveString);
+        assertEquals(decodedAction.getSource(), moveAction.getSource());
+        Vector<ScrabbleTile> tiles = decodedAction.getTiles();
+        Vector<ScrabbleTile> compTiles = moveAction.getTiles();
+        for (int i = 0; i < tiles.size(); i++)
+        {
+            assertTrue(tiles.get(i).getLetter() == compTiles.get(i).getLetter());
+            assertTrue(tiles.get(i).getValue() == compTiles.get(i).getValue());
+            assertTrue(tiles.get(i).isBlank() == compTiles.get(i).isBlank());
+        }
+        
+        Vector<Point> positions = decodedAction.getPositions();
+        Vector<Point> positionsToCompare = moveAction.getPositions();
+        for (Point x : positions)
+        {
+            assertTrue(positionsToCompare.contains(x));
+        }
+        
+        
     }
 
 }
