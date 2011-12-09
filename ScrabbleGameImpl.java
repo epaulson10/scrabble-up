@@ -312,7 +312,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		        }
 		    }
 			// if bag is not empty
-			if(bag.size() != 0)
+			if(bag.size() != 0 && hand.size() < 7)
 			{
 				index = ran.nextInt(bag.size());
 				hand.add(bag.elementAt(index));
