@@ -799,6 +799,11 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
         // Move's score so far
         int score = 0;
+        // Bingo bonus
+        if (tiles.size() == 7)
+        {
+            score += 50;
+        }
         for (int row = 0; row < ScrabbleBoard.BOARD_HEIGHT; row++)
         {
             for (int col = 0; col < ScrabbleBoard.BOARD_WIDTH; col++)
