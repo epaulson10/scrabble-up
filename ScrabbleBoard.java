@@ -35,7 +35,8 @@ public class ScrabbleBoard
 	 * */
 	public ScrabbleTile getTileAt (int row, int col)
 	{	
-		if(tilePositions[col][row] == null)
+		if((row < 0 || col < 0) || (row > 14 || col > 14) || 
+				tilePositions[col][row] == null)
 			return null;
 		else
 			return tilePositions[col][row];
@@ -61,16 +62,18 @@ nonValidBoardSpaceException is thrown */
 	 * @throws NonValidBoardSpaceException
 	 */
 	public void putTileAt(int row, int col, ScrabbleTile sct) 
+	{
+		if(row >= 0 && row < BOARD_HEIGHT && 
+				col >= 0 && col <= BOARD_WIDTH)
 		{
-			// if tilePosition == null
-			tilePositions[col][row] = sct;
 			// CHANGED: Allow null positions without error
-			if (sct != null)
+			if ((tilePositions[col][row] = sct) != null)
 			{
-			    //EDIT: Switched row and col in the following line
-			    sct.setLocation(col*ScrabblePlayerUI.TILE_SIZE, row*ScrabblePlayerUI.TILE_SIZE);
+				//EDIT: Switched row and col in the following line
+				sct.setLocation(col*ScrabblePlayerUI.TILE_SIZE, row*ScrabblePlayerUI.TILE_SIZE);
 			}
 		}
+	}
 	
 	/**Returns an array of strings to locate the tile image folders
 @return a two dimensional array of Strings with the file locations of the
