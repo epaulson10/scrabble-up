@@ -71,6 +71,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     /** Actions to be taken after the game is initialized */
     protected void setGameMore () 
     {
+        JOptionPane.showMessageDialog(this, "Welcome to Scrabble! \n Standard rules apply, minus tile bonuses. " +
+                "\n To discard, drag tiles so that they are not on the tile rack or board and click \"Discard\"." +
+                "\n Enjoy!");
         proxyHand = new Vector<ScrabbleTile>();
         ui.setModel((ScrabbleGame)this.game);
         if (!(game instanceof ScrabbleProxyGame))
@@ -144,7 +147,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
      */
     public void mouseDragged (MouseEvent me) 
     {
-        if (moveTile != null)
+        if (moveTile != null && me.getX() >= 0 && me.getX() < ScrabblePlayerUI.UI_SIZE 
+                && me.getY() >= 0 && me.getY() < ScrabblePlayerUI.UI_SIZE +
+                ScrabblePlayerUI.SPACE +ScrabblePlayerUI.TILE_SIZE)
         {
             moveTile.setLocation(me.getX()-ScrabblePlayerUI.TILE_SIZE/2, me.getY()-ScrabblePlayerUI.TILE_SIZE/2);
             ui.repaint();

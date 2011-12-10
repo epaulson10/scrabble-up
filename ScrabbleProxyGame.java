@@ -6,12 +6,19 @@ import java.util.Vector;
 
 import game.*;
 
-/**ScrabbleProxyGame*/
+/**
+* ScrabbleProxyGame
+* 
+* The only thing wrong with network play is that you can't perform an action
+* which makes a popup box appear. When this happens, we're pretty sure a race condition
+* occurs which we nor Nux have been able to find.
+*/
 public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
     public static final int PORT_NUM = 60035;
 
     /** Initializes all of the variables.
-@param hostname A String containing the hostname of the game. */
+     * @param hostname A String containing the hostname of the game. 
+     */
     public ScrabbleProxyGame (String hostname) {
         super(hostname);
     }
