@@ -230,6 +230,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 			if(checkValidMove(pos, tiles))
 			{
 				updateHand(hand, tiles, plr);
+				// Once hand has been updated, place tiles in the rack if this
+				// is a human player
 				if (plr instanceof ScrabbleHumanPlayer)
 	            {
 	                ScrabblePlayerUI.putInHand(
@@ -237,8 +239,8 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 	            }
 							
 				// get this move's score and add it to the appropriate
+				// player's score
                 int moveScore = getMoveScore(mv);
-                // player's score
                 if (playerID == 0)
                 {
                     p0Score += moveScore;
@@ -268,6 +270,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
 		}
 		else if (move instanceof ScrabbleResignAction)
 		{
+		    // end game immediately and award the win to the opponent
 		    winner = 1-thePlayer.getId();
 		    notifyAllStateChanged();
 		    return true;
@@ -398,6 +401,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         boolean isColumn = true;
         int lastX = -1;
         int lastY = -1;
+        // Determine if this play is horizontal, vertical, or neither (illegal)
         for (Point p : pos)
         {
             if (lastX == -1)
@@ -426,6 +430,7 @@ public class ScrabbleGameImpl extends GameImpl implements ScrabbleGame {
         
         if (!(isRow || isColumn))
         {
+            // tiles weren't in the same row or column
             return false;
         }
         

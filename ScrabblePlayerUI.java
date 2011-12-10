@@ -34,6 +34,7 @@ public class ScrabblePlayerUI extends JPanel
     {
         //Tell the parent constructor to double buffer this
         super(true);
+        
         player = initPlayer;
         this.setSize(UI_SIZE, UI_SIZE+TILE_SIZE+SPACE+1);
         this.setPreferredSize(this.getSize());
