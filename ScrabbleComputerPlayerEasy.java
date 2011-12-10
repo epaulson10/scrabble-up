@@ -26,6 +26,8 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
         ScrabbleGameState myState = (ScrabbleGameState)game.getState(this, 0);
         handContainer = myState.getHand().toArray(handContainer);
         
+        
+        //Discards any of the blank tiles in the hand
         for(int i = 0; (i < 7 && handContainer[i] != null); i++)
         {
             if(handContainer[i].getValue() == 0)
@@ -41,6 +43,8 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
             }
         }
         
+        
+        //Builds all valid combinations for plays.
         if(myState.getHand().size() > 1)
         {
             for(int i = 0; i < 7; i++){
@@ -56,6 +60,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
                     {
                         for(int l = 0; l < handContainer.length; l++)
                         {
+                        	//makes sure the same tile isn't being used in two locations.
                             if(k == l)
                             {
                                 continue;
@@ -94,7 +99,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
                                 moves.add(move);
                         }
                     }
-
+                    //Makes single tile moves
                     {
                         for(int k = 0; i < handContainer.length; i++)
                         {
@@ -110,6 +115,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
                 }
             }
         }
+        //Discards tiles from hand if there are no available moves
         if(moves.isEmpty())
         {
             Vector<ScrabbleTile> discard = new Vector<ScrabbleTile>();
@@ -129,6 +135,7 @@ public class ScrabbleComputerPlayerEasy extends ScrabbleComputerPlayer {
             moves.add(move);
         }
 
+        //Chooses a random valid move to make.
         GameAction[] ga = new GameAction[0];
         ga = moves.toArray(ga);
         Random rand = new Random();

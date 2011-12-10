@@ -29,7 +29,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         Vector<GameMoveAction> moves = new Vector<GameMoveAction>();
 
         GameAction[] ga = new GameAction[0];
-
+        //Removes blank tiles from hand.
         ScrabbleMoveAction myMove = null;
         for(int i = 0; (i < handContainer.length && handContainer[i] != null); i++)
         {
@@ -45,7 +45,7 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
                 
             }
         }
-
+        //All commented code is implemented but took too long to execute.
         //      moves = get7s(handContainer);
         //      if(!moves.isEmpty())
         //      {
@@ -144,7 +144,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         game.applyAction(move);
     }
 
-
+/**
+ * 
+ * @param ga an array of valid game actions
+ * @return a game action from ga that is worth the most points
+ */
     private GameAction highestScore(GameAction[] ga) {
         int highestCurScore = 0;
         GameAction highestScoringMove = null;
@@ -163,6 +167,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return highestScoringMove;
     }
 
+    /**
+     * 
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 1 tiles
+     */
     private Vector<GameMoveAction> get1s(ScrabbleTile[] hand)
     {
         Vector<GameMoveAction> legalMoves = new Vector<GameMoveAction>();
@@ -188,6 +197,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    /**
+     * 
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 2 tiles
+     */
     private Vector<GameMoveAction> get2s(ScrabbleTile[] hand)
     {
         Vector<GameMoveAction> legalMoves = new Vector<GameMoveAction>();
@@ -236,6 +250,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    /**
+     * 
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 3 tiles
+     */
 
     private Vector<GameMoveAction> get3s(ScrabbleTile[] hand)
     {
@@ -297,6 +316,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    /**
+     * 
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 4 tiles
+     */
 
     private Vector<GameMoveAction> get4s(ScrabbleTile[] hand)
     {
@@ -370,6 +394,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    /**
+     *        Unused because of constraints on run time.
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 5 tiles
+     */
     private Vector<GameMoveAction> get5s(ScrabbleTile[] hand)
     {
         Vector<GameMoveAction> legalMoves = new Vector<GameMoveAction>();
@@ -452,6 +481,11 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    /**
+     *        Unused because of constraints on run time.
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use only 6 tiles
+     */
 
     private Vector<GameMoveAction> get6s(ScrabbleTile[] hand)
     {
@@ -547,6 +581,12 @@ public class ScrabbleComputerPlayerHard extends ScrabbleComputerPlayer {
         return legalMoves;
     }
 
+    
+    /**
+     *        Unused because of constraints on run time.
+     * @param hand the array of tiles in the player's hand
+     * @return a vector of all valid game moves from the hand that use all 7 tiles
+     */
     private Vector<GameMoveAction> get7s(ScrabbleTile[] hand)
     {
         Vector<GameMoveAction> legalMoves = new Vector<GameMoveAction>();
