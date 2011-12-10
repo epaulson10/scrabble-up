@@ -7,12 +7,13 @@ import java.util.Vector;
 
 /** A canvas that draws a Scrabble Game State
  * @author Aaron Dobbe, Steven Beyer, Erik Paulson, and Andrew Meyer
- * @version Yet to be implemented
+ * @version 12-9-11
  * 
- * NOTE: Find x,y values of where you clicked and divide by 15 = position
+ * 
  */
 public class ScrabblePlayerUI extends JPanel
 {
+    //Board size constants
     public final static int BOARD_SIZE = 15;
     public final static int TILE_SIZE = 35;
     public final static int UI_SIZE = BOARD_SIZE*TILE_SIZE+1;
@@ -20,6 +21,7 @@ public class ScrabblePlayerUI extends JPanel
     //The amount of space between the board and the hand.
     public final static int SPACE = 20;
     
+    //References to certain game objects
     private ScrabbleGame model;
     private ScrabbleHumanPlayer player;
     private ScrabbleGameState state;
@@ -36,21 +38,24 @@ public class ScrabblePlayerUI extends JPanel
         super(true);
         
         player = initPlayer;
+        
+        //Set up the window
         this.setSize(UI_SIZE, UI_SIZE+TILE_SIZE+SPACE+1);
         this.setPreferredSize(this.getSize());
         this.setMinimumSize(this.getSize());
         this.setBackground(Color.lightGray);
+        
         board = new ScrabbleBoard();
     }
 
-    /**  * Updates the stored game state. */
+    /** Updates the stored game state. */
     protected void updateState ()
     {
         state = (ScrabbleGameState)model.getState(player, 0);
         board = state.getBoard();
     }
     
-    /**  * Set the canvas to model the given game.
+    /** Set the canvas to model the given game.
      *
      * @param game The ScrabbleGame this canvas to model.
      */
@@ -58,8 +63,10 @@ public class ScrabblePlayerUI extends JPanel
     {
         model = game;
     }
+    
     /** 
-     * Paints the game state
+     * Paints the game state for the human player
+     * 
      * @param g The graphics object to be used 
      */
     public void paint (Graphics g) 
@@ -96,6 +103,7 @@ public class ScrabblePlayerUI extends JPanel
     
     /**
      * Draws the tiles on the board from the given ScrabbleBoard
+     * 
      * @param g Graphics context that's being drawn to
      * @param board The scrabble board for a given player
      */
@@ -116,6 +124,7 @@ public class ScrabblePlayerUI extends JPanel
     
     /**
      * Gives a vector of tiles from the hand which are on the board
+     * 
      * @return a vector of tiles from the player's hand which are now on the board
      */
     public Vector<ScrabbleTile> tilesToPlay()
@@ -123,12 +132,14 @@ public class ScrabblePlayerUI extends JPanel
         Vector<ScrabbleTile> playedTiles = new Vector<ScrabbleTile>();
         for (ScrabbleTile tile : player.getHand())
         {
+            //Check to see if the tiles in the players hand are on the board
             Point p = tile.getLocation();
             if (p.x >= 0 && p.x < UI_SIZE && p.y >= 0 && p.y < UI_SIZE)
             {
                 playedTiles.add(tile);
             }
         }
+        //Return all tiles which are on the board
         return playedTiles;
     }
     

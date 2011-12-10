@@ -13,7 +13,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-/**Class representing a human Scrabble player.*/
+/**
+ * Class representing a human Scrabble player.
+ * 
+ * @author Erik Paulson (Primary), Aaaron Dobbe, Steven Beyer, Andrew Meyer
+ * @version 12-9-11
+ */
+
 public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlayer, MouseMotionListener
 {
     private final static int GUI_HEIGHT = 720;
@@ -27,6 +33,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     private JLabel p0score;
     private JLabel p1score;
     
+    //JLabel describing whose turn it is
     private JLabel whoseTurn;
 
     // Variables for use in case this is a network client:
@@ -74,6 +81,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         JOptionPane.showMessageDialog(this, "Welcome to Scrabble! \n Standard rules apply, minus tile bonuses. " +
                 "\n To discard, drag tiles so that they are not on the tile rack or board and click \"Discard\"." +
                 "\n Enjoy!");
+        
+        //Proxy hand items below eliminate a race condition
         proxyHand = new Vector<ScrabbleTile>();
         ui.setModel((ScrabbleGame)this.game);
         if (!(game instanceof ScrabbleProxyGame))
@@ -84,7 +93,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     /** Gets the default title of the game window.
      * @return the initial window title 
      */
-    protected String defaultTitle () {
+    protected String defaultTitle () 
+    {
         return "Scrabble";
     }
 
@@ -101,9 +111,11 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     {
         super.stateChanged();
         ScrabbleGameState state = (ScrabbleGameState)game.getState(this, 0);
+        //Update scores
         p0score.setText("Player 1: "+state.getScore(0));
         p1score.setText("Player 2: "+ state.getScore(1));
         
+        //Update whoseTurn label
         if (state.whoseMove() == getId())
             whoseTurn.setText("It's your turn!");
         else
@@ -125,6 +137,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     {
         // Get tiles from game state
         ScrabbleGameState curState = (ScrabbleGameState)game.getState(this, 0);
+        //The Proxy game elements here help eliminate a race condition
         if (game instanceof ScrabbleProxyGame && proxyHandChanged)
         {
             proxyHandChanged = false;
@@ -138,6 +151,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
         else return proxyHand;
     }
 
+    //unimplemented
     public void mouseClicked (MouseEvent me) {}
 
     /**
@@ -147,6 +161,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
      */
     public void mouseDragged (MouseEvent me) 
     {
+        //The conditions inside the if statement do not allow a player to drag the tile
+        //outside of the board
         if (moveTile != null && me.getX() >= 0 && me.getX() < ScrabblePlayerUI.UI_SIZE 
                 && me.getY() >= 0 && me.getY() < ScrabblePlayerUI.UI_SIZE +
                 ScrabblePlayerUI.SPACE +ScrabblePlayerUI.TILE_SIZE)
@@ -165,8 +181,7 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
      */
     public void mousePressed (MouseEvent me)
     {
-        //Delted this because there's never a reason to move a tile that's not in your hand
-       // moveTile = ui.tileOnPosition(me.getPoint());
+        //If you press on a tile in your hand, get a reference to it
         if (moveTile == null)
             moveTile = ui.tileInHand(me.getPoint());
     }
@@ -180,8 +195,11 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     {
         if (moveTile != null)
         {
+            //make the gui look pretty
             ui.snapTileToGrid(moveTile);
             ui.snapToRack(getHand());
+            
+            //assign values to blank tiles
             if (moveTile instanceof ScrabbleBlankTile &&
                     ScrabblePlayerUI.onBoard(me.getX(), me.getY()))
                 assignBlankValue();
@@ -193,6 +211,8 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
                 }
                 else
                 {
+                    //When returned from the board (i.e. wasn't played)
+                    //convert tiles from blanks back into blanks
                     int x = moveTile.getLocation().x;
                     int y = moveTile.getLocation().y;
                     ScrabbleBlankTile temp = new ScrabbleBlankTile();
@@ -320,10 +340,15 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
     protected void moreActionPerformed(ActionEvent ae)
     {
         String cmd = ae.getActionCommand();
+        
+        //submit a move
         if (cmd.equals("Play"))
         {
+            //Get tiles played on board
             Vector<ScrabbleTile> tiles = ui.tilesToPlay();
+            
             Vector<Point> positions = new Vector<Point>();
+            //Find the locations of played tiles
             for (ScrabbleTile tile : tiles)
             {
                 Point p = tile.getLocation();
@@ -334,10 +359,9 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
             }
             game.applyAction(new ScrabbleMoveAction(this,tiles, positions));
             playPassButton.setText("Pass");
-            // TODO remove this once bug is confirmed to be squashed
-            //ScrabblePlayerUI.putInHand(this.getHand());
             ui.repaint();
         }
+        //Discard some tiles
         else if (cmd.equals("Discard"))
         {
             game.applyAction(new ScrabbleDiscardAction(this,ui.tilesToDiscard()));
@@ -345,17 +369,20 @@ public class ScrabbleHumanPlayer extends GameHumanPlayer implements ScrabblePlay
             ui.repaint();
 
         }
+        //Give up play to the other player
         else if (cmd.equals("Pass"))
         {
             Vector<ScrabbleTile> blankHand = new Vector<ScrabbleTile>();
             game.applyAction(new ScrabbleDiscardAction(this, blankHand));
             ui.repaint();
         }
+        //Give up
         else if (cmd.equals("Resign"))
         {
             game.applyAction(new ScrabbleResignAction(this));
             ui.repaint();
         }
+        //Shufle the hand
         else if (cmd.equals("Shuffle"))
         {
             Vector<ScrabbleTile> myHand = getHand();
