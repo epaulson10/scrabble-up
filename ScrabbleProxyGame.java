@@ -34,7 +34,6 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
      *  The * character represents a blank tile, they have a minus sign in front of them just to keep the spacing equal
      *  The board follows the same format as the hand except that the | character represents a blank space on the board
      * 
-     * TODO: Test this
      * @param str A string that represents the gamestate
      * @return returns the gamestate
      */
@@ -131,6 +130,17 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
 
     /** 
      * Encodes the action
+     * 
+     * Actions look like this as a string:
+     * playActions: playerID|+A1+X8+Q10|(0,0)(0,1)(0,2)
+     * discardActions: playerID|+A1+X8+Z10
+     * resignActions: !!!
+     *
+     *  The values inside parens represent x,y positions on the board
+     *  
+     *  The plus sign in front of a tile means it did not come from a blank.
+     *  THe - sign infront of a tile means it did come from a blank
+     *  The * character represents a blank tile, they have a minus sign in front of them just to keep the spacing equal
      *
      * @param ga the game action to encode
      * @return returns a string representing the game action 
@@ -138,12 +148,15 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
     protected String encodeAction (GameAction ga) 
     {
         String str = "";
+        
+        //Add player id
         int player = ga.getSource().getId();
         str += player;
         str += "|"; //Delimit
 
         if (ga instanceof ScrabbleMoveAction)
         {
+            //Add tile representations
             Vector<ScrabbleTile> playedTiles = ((ScrabbleMoveAction)ga).getTiles();
             for (ScrabbleTile tile : playedTiles)
             {
@@ -155,6 +168,7 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
                 str += tile.getValue();
             }
             str += "|";//delimit
+            //Add point representations
             Vector<Point> positions = ((ScrabbleMoveAction) ga).getPositions();
             for (Point p : positions)
             {
@@ -165,6 +179,7 @@ public class ScrabbleProxyGame extends ProxyGame implements ScrabbleGame {
         }
         else if (ga instanceof ScrabbleDiscardAction)
         {
+            //Add tile representations
             Vector<ScrabbleTile> playedTiles = ((ScrabbleDiscardAction)ga).getTiles();
             for (ScrabbleTile tile : playedTiles)
             {
